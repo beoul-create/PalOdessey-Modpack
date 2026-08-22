@@ -1,7 +1,7 @@
 ﻿; PalOdyssey Base Modpack - Enabled Mods List
 ; UE4SS core mods
-BPModLoaderMod : 1
-BPML_GenericFunctions : 1
+BPModLoaderMod : 0
+BPML_GenericFunctions : 0
 ConsoleCommandsMod : 0
 ConsoleEnablerMod : 0
 
@@ -14,10 +14,10 @@ LevelLock : 1
 WeaponProficiency : 1
 PalworldBorealisEngineFix : 1
 PalworldTuner : 1
-RamTrimMod : 1
+RamTrimMod : 0
 PalOlympicsFPSBooster : 1
 RawMouseInput : 1
 PlayerCustomizationSuite : 1
 
-; Built-in keybinds, do not move up!
-Keybinds : 1
+; Built-in keybinds
+Keybinds : 0
