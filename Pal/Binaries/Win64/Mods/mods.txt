@@ -6,14 +6,14 @@ ConsoleCommandsMod : 0
 ConsoleEnablerMod : 0
 
 ; PalOdyssey Custom Gameplay Mods
-PalSchema : 1
+PalSchema : 0
 ExpeditionXP : 1
 DarnMenu : 1
 DarnToasts : 1
 LevelLock : 1
 WeaponProficiency : 1
 PalworldBorealisEngineFix : 1
-PalworldTuner : 1
+PalworldTuner : 0
 RamTrimMod : 0
 PalOlympicsFPSBooster : 1
 RawMouseInput : 1
@@ -21,3 +21,4 @@ PlayerCustomizationSuite : 1
 
 ; Built-in keybinds
 Keybinds : 0
+
