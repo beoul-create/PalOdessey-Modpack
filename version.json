@@ -1,5 +1,5 @@
 ﻿{
-    "manifestVersion":  "1.5.2",
+    "manifestVersion":  "1.5.3",
     "baseDownloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/",
     "lastUpdated":  "2026-08-22T00:32:37Z",
     "serverName":  "PalOdyssey Official Expedition Server",
@@ -111,19 +111,6 @@
                      "sizeBytes":  95213
                  },
                  {
-                     "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/WeaponStatsCustomizer.lua",
-                     "id":  "weapon-stats-customizer",
-                     "version":  "1.0.0",
-                     "isRequired":  true,
-                     "description":  "Custom weapon damage attributes, durability scaling, and ballistic tuners.",
-                     "author":  "Odyssey Modders",
-                     "name":  "Weapon Stats Customizer",
-                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\WeaponStatsCustomizer\\Scripts\\main.lua",
-                     "sha256":  "1E458C57115C8F950AF2446760B23DA9030ABCD52F7DD2E5E3E65E3B0AA34DFE",
-                     "changelog":  "v1.0.0: Initial release for PalOdyssey expedition weapons.",
-                     "sizeBytes":  53435
-                 },
-                 {
                      "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/LevelLock.lua",
                      "id":  "level-lock",
                      "version":  "2.3.3",
@@ -215,6 +202,6 @@
                      "sizeBytes":  2276
                  }
              ],
-    "newsAnnouncement":  "PalOdyssey Modpack (v1.5.2): Added Player Customization Suite (Expanded character sliders, unlocked NPC hairstyles \u0026 custom wardrobe).",
+    "newsAnnouncement":  "PalOdyssey Modpack (v1.5.3): Cleaned WeaponStatsCustomizer; includes 1:1 Raw Mouse Input \u0026 Player Customization Suite.",
     "serverAddress":  "beoul.duckdns.org"
 }

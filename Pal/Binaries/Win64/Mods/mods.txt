@@ -1,4 +1,4 @@
-; PalOdyssey Base Modpack - Enabled Mods List
+﻿; PalOdyssey Base Modpack - Enabled Mods List
 ; UE4SS core mods
 BPModLoaderMod : 1
 BPML_GenericFunctions : 1
@@ -12,7 +12,6 @@ DarnMenu : 1
 DarnToasts : 1
 LevelLock : 1
 WeaponProficiency : 1
-WeaponStatsCustomizer : 1
 PalworldBorealisEngineFix : 1
 PalworldTuner : 1
 RamTrimMod : 1
