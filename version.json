@@ -1,5 +1,5 @@
 ﻿{
-    "manifestVersion":  "1.5.1",
+    "manifestVersion":  "1.5.2",
     "baseDownloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/",
     "lastUpdated":  "2026-08-22T00:32:37Z",
     "serverName":  "PalOdyssey Official Expedition Server",
@@ -200,8 +200,21 @@
                      "sha256":  "932BDBBBA6445D0A294AA65531020B82598FA107C95EF316692ADF8CA34C0677",
                      "changelog":  "v1.0.0: Disables mouse smoothing, view acceleration, and normalizes AxisConfig.",
                      "sizeBytes":  2830
+                 },
+                 {
+                     "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/PlayerCustomizationSuite.lua",
+                     "id":  "player-customization-suite",
+                     "version":  "1.0.0",
+                     "isRequired":  false,
+                     "description":  "Expands character creation slider limits, unlocks all NPC hairstyles (Zoe, Lily, Saya, Axel, Marcus), and enables in-game wardrobe.",
+                     "author":  "PalOdyssey Team",
+                     "name":  "Player Customization \u0026 Character Creator Suite",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PlayerCustomizationSuite\\Scripts\\main.lua",
+                     "sha256":  "9AF336D143B05A4C0984FC7767AFD0FDD0D466ADEE49019096785B802A0C09DD",
+                     "changelog":  "v1.0.0: Unlocks expanded body proportions, unrestricted colors, and NPC hairstyles.",
+                     "sizeBytes":  2276
                  }
              ],
-    "newsAnnouncement":  "PalOdyssey Modpack (v1.5.1): Added 1:1 Raw Mouse Input \u0026 Linear Sensitivity Fix (Zero mouse smoothing, zero acceleration, true 1:1 X/Y aiming).",
+    "newsAnnouncement":  "PalOdyssey Modpack (v1.5.2): Added Player Customization Suite (Expanded character sliders, unlocked NPC hairstyles \u0026 custom wardrobe).",
     "serverAddress":  "beoul.duckdns.org"
 }
