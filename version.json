@@ -15,9 +15,9 @@
                      "author":  "UE4SS Team",
                      "name":  "UE4SS 3.0.1 Core Modding Framework",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\dwmapi.dll",
-                     "sha256":  "6c6e7151c206628445eb69c3dfee702b31bc51208df13a5cc15c2118c413cde1",
+                     "sha256":  "CE596412BEFA68C30B7F88F65BEB77D9BDAD55E9B96A276A5A9CF690C63F24BB",
                      "changelog":  "v3.0.1: Native UE5/UE4 hooking and async Lua environment.",
-                     "sizeBytes":  61952
+                     "sizeBytes":  58368
                  },
                  {
                      "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/PalSchema.dll",
@@ -28,7 +28,7 @@
                      "author":  "PalSchema Community",
                      "name":  "PalSchema Data Engine",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalSchema\\dlls\\main.dll",
-                     "sha256":  "05f2583f6d0e06b494a5734f64ccaa0344290b68ee916cef686e57b1ddc4bf66",
+                     "sha256":  "05F2583F6D0E06B494A5734F64CCAA0344290B68EE916CEF686E57B1DDC4BF66",
                      "changelog":  "v1.2.0: Core engine support for APSE and Combat Tuner.",
                      "sizeBytes":  2001408
                  },
@@ -41,7 +41,7 @@
                      "author":  "Azomer",
                      "name":  "Azomer Passive Skill Expansion (APSE)",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalSchema\\mods\\APSE\\raw\\APSE.json",
-                     "sha256":  "6a134ebecdeada934f38f1c4204e9bda4624c262cd61acfb04d8f0986d7ea681",
+                     "sha256":  "6A134EBECDEADA934F38F1C4204E9BDA4624C262CD61ACFB04D8F0986D7EA681",
                      "changelog":  "v1.0.9a: Added custom Pal drop tables and Silvegis spawn hooks.",
                      "sizeBytes":  490918
                  },
@@ -54,7 +54,7 @@
                      "author":  "APSE Team",
                      "name":  "APSE Forces Of Palpagos",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalSchema\\mods\\APSE-FoP\\raw\\APSE_FoP.json",
-                     "sha256":  "5e875b0718848618b80811cd33730d663db20cb1fa715dc2fbbde9ad94ae2de0",
+                     "sha256":  "5E875B0718848618B80811CD33730D663DB20CB1FA715DC2FBBDE9AD94AE2DE0",
                      "changelog":  "v1.0.2: Rebalanced Syndicate and PIDF patrol squads.",
                      "sizeBytes":  86183
                  },
@@ -67,7 +67,7 @@
                      "author":  "Darn",
                      "name":  "DarnMenu In-Game UI Suite",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\DarnMenu\\Scripts\\main.lua",
-                     "sha256":  "b9a56855f7c3a86494e2a2d9d92a1821f22a35a1e898636478a67545eabd19b6",
+                     "sha256":  "B9A56855F7C3A86494E2A2D9D92A1821F22A35A1E898636478A67545EABD19B6",
                      "changelog":  "v1.8.11: Enhanced toast notifications and overlay stability.",
                      "sizeBytes":  175961
                  },
@@ -80,7 +80,7 @@
                      "author":  "A New Darn",
                      "name":  "DarnToasts + Panels",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\DarnToasts\\Scripts\\main.lua",
-                     "sha256":  "d85303a0b23446857de7f7ee9ce62da941df779ac38946e2e4f0fd145dd4bb3f",
+                     "sha256":  "D85303A0B23446857DE7F7EE9CE62DA941DF779AC38946E2E4F0FD145DD4BB3F",
                      "changelog":  "v2.7.1: Configurable toast positions and restyling.",
                      "sizeBytes":  6086
                  },
@@ -93,7 +93,7 @@
                      "author":  "PalOdyssey Team",
                      "name":  "Expedition XP \u0026 Level Balancer",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\ExpeditionXP\\Scripts\\main.lua",
-                     "sha256":  "1ac251872c730612a481cff33c2770ba75cad2391cb40166f76f477bce6ee88a",
+                     "sha256":  "1AC251872C730612A481CFF33C2770BA75CAD2391CB40166F76F477BCE6EE88A",
                      "changelog":  "v1.6.3: Adjusted boss dungeon experience scaling.",
                      "sizeBytes":  81379
                  },
@@ -106,7 +106,7 @@
                      "author":  "Living Arsenal Group",
                      "name":  "Living Arsenal - Weapon Proficiency",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\WeaponProficiency\\Scripts\\main.lua",
-                     "sha256":  "61686bd98800a79b0c09b506f6b97a9064e0f4650a5f996523e38ff7683282c0",
+                     "sha256":  "61686BD98800A79B0C09B506F6B97A9064E0F4650A5F996523E38FF7683282C0",
                      "changelog":  "v2.1.7: Added prestige UI and server durability sync.",
                      "sizeBytes":  95213
                  },
@@ -119,7 +119,7 @@
                      "author":  "Odyssey Modders",
                      "name":  "Weapon Stats Customizer",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\WeaponStatsCustomizer\\Scripts\\main.lua",
-                     "sha256":  "1e458c57115c8f950af2446760b23da9030abcd52f7dd2e5e3e65e3b0aa34dfe",
+                     "sha256":  "1E458C57115C8F950AF2446760B23DA9030ABCD52F7DD2E5E3E65E3B0AA34DFE",
                      "changelog":  "v1.0.0: Initial release for PalOdyssey expedition weapons.",
                      "sizeBytes":  53435
                  },
@@ -132,7 +132,7 @@
                      "author":  "LevelLock Team",
                      "name":  "LevelLock Progression Gating",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\LevelLock\\Scripts\\main.lua",
-                     "sha256":  "de5404eeaeffda583854d60b6a3683f2f080541f1556b231932adf0422469eb4",
+                     "sha256":  "DE5404EEAEFFDA583854D60B6A3683F2F080541F1556B231932ADF0422469EB4",
                      "changelog":  "v2.3.3: Fixed milestone triggers in multiplayer.",
                      "sizeBytes":  98696
                  },
@@ -145,7 +145,7 @@
                      "author":  "Combat Overhaul Group",
                      "name":  "Palworld Gameplay \u0026 Combat Tuner",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalworldTuner\\Scripts\\main.lua",
-                     "sha256":  "9826921d75351daba4388552fd7ef441d91ddeed7b353aaecb243e9fc65bc20c",
+                     "sha256":  "9826921D75351DABA4388552FD7EF441D91DDEED7B353AAECB243E9FC65BC20C",
                      "changelog":  "v1.9.0: 50x stack sizes and faster mount speeds.",
                      "sizeBytes":  2315
                  },
@@ -158,7 +158,7 @@
                      "author":  "Borealis Group",
                      "name":  "Palworld Borealis Visual Overhaul",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalworldBorealisEngineFix\\Scripts\\main.lua",
-                     "sha256":  "5e6891fcf36bae93958717210f0b687673776c5e919ceedfdefe333f51c178dd",
+                     "sha256":  "5E6891FCF36BAE93958717210F0B687673776C5E919CEEDFDEFE333F51C178DD",
                      "changelog":  "v1.1.0: Custom aurora shaders and fog depth overhaul.",
                      "sizeBytes":  3703
                  },
@@ -171,7 +171,7 @@
                      "author":  "Performance Team",
                      "name":  "RamTrimMod Memory Optimizer",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\RamTrimMod\\dlls\\main.dll",
-                     "sha256":  "82a74c2dd58b957cc9f12b62304d1bbb3770f099c97b098e85762c3a7f44fdc4",
+                     "sha256":  "82A74C2DD58B957CC9F12B62304D1BBB3770F099C97B098E85762C3A7F44FDC4",
                      "changelog":  "v1.2.0: Background trimming during base building.",
                      "sizeBytes":  309248
                  },
@@ -184,7 +184,7 @@
                      "author":  "PalOlympics Performance Team",
                      "name":  "PalOlympics FPS \u0026 Performance Booster",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalOlympicsFPSBooster\\Scripts\\main.lua",
-                     "sha256":  "51b6ef050f387da3734a73ba4d7ea38848a896eb161fb7b94aa334bb6cdc9dc5",
+                     "sha256":  "51B6EF050F387DA3734A73BA4D7EA38848A896EB161FB7B94AA334BB6CDC9DC5",
                      "changelog":  "v0.1.8: 4GB texture streaming pool, parallel mesh dispatch, and fast travel GC.",
                      "sizeBytes":  12538
                  }
