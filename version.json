@@ -1,7 +1,7 @@
 ﻿{
     "manifestVersion":  "1.5.0",
     "baseDownloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/",
-    "lastUpdated":  "2026-08-22T00:16:19Z",
+    "lastUpdated":  "2026-08-22T00:32:37Z",
     "serverName":  "PalOdyssey Official Expedition Server",
     "serverPort":  8211,
     "gameVersion":  "0.3.x",
@@ -93,9 +93,9 @@
                      "author":  "PalOdyssey Team",
                      "name":  "Expedition XP \u0026 Level Balancer",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\ExpeditionXP\\Scripts\\main.lua",
-                     "sha256":  "1dc8523240aefe79f7c2577bf0f495150ce1049c1ed78f470a28337d2be10a72",
+                     "sha256":  "1ac251872c730612a481cff33c2770ba75cad2391cb40166f76f477bce6ee88a",
                      "changelog":  "v1.6.3: Adjusted boss dungeon experience scaling.",
-                     "sizeBytes":  81356
+                     "sizeBytes":  81379
                  },
                  {
                      "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/WeaponProficiency.lua",
@@ -145,9 +145,9 @@
                      "author":  "Combat Overhaul Group",
                      "name":  "Palworld Gameplay \u0026 Combat Tuner",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalworldTuner\\Scripts\\main.lua",
-                     "sha256":  "a620bb8b3aa18810c2ddf8b9ad4f78c52319fbd679742a14699b1ae0f3c3b40b",
+                     "sha256":  "9826921d75351daba4388552fd7ef441d91ddeed7b353aaecb243e9fc65bc20c",
                      "changelog":  "v1.9.0: 50x stack sizes and faster mount speeds.",
-                     "sizeBytes":  1741
+                     "sizeBytes":  2315
                  },
                  {
                      "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/Borealis.lua",
@@ -192,4 +192,3 @@
     "newsAnnouncement":  "PalOdyssey Base Modpack (v1.5.0): Added PalOlympics FPS \u0026 Performance Booster (4GB texture streaming, CPU parallel mesh dispatch, and fast travel acceleration).",
     "serverAddress":  "127.0.0.1"
 }
-
