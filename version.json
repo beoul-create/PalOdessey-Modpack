@@ -190,5 +190,6 @@
                  }
              ],
     "newsAnnouncement":  "PalOdyssey Base Modpack (v1.5.0): Added PalOlympics FPS \u0026 Performance Booster (4GB texture streaming, CPU parallel mesh dispatch, and fast travel acceleration).",
-    "serverAddress":  "127.0.0.1"
+    "serverAddress":  "beoul.duckdns.org"
 }
+
