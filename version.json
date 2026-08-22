@@ -1,5 +1,5 @@
 ﻿{
-    "manifestVersion":  "1.5.0",
+    "manifestVersion":  "1.5.1",
     "baseDownloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/",
     "lastUpdated":  "2026-08-22T00:32:37Z",
     "serverName":  "PalOdyssey Official Expedition Server",
@@ -187,9 +187,21 @@
                      "sha256":  "51B6EF050F387DA3734A73BA4D7EA38848A896EB161FB7B94AA334BB6CDC9DC5",
                      "changelog":  "v0.1.8: 4GB texture streaming pool, parallel mesh dispatch, and fast travel GC.",
                      "sizeBytes":  12538
+                 },
+                 {
+                     "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/RawMouseInput.lua",
+                     "id":  "raw-mouse-input",
+                     "version":  "1.0.0",
+                     "isRequired":  true,
+                     "description":  "Disables UE5 mouse smoothing/acceleration and equalizes horizontal (X) and vertical (Y) aim sensitivity to true 1:1.",
+                     "author":  "PalOdyssey Team",
+                     "name":  "1:1 Raw Mouse Input \u0026 Linear Sensitivity",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\RawMouseInput\\Scripts\\main.lua",
+                     "sha256":  "932BDBBBA6445D0A294AA65531020B82598FA107C95EF316692ADF8CA34C0677",
+                     "changelog":  "v1.0.0: Disables mouse smoothing, view acceleration, and normalizes AxisConfig.",
+                     "sizeBytes":  2830
                  }
              ],
-    "newsAnnouncement":  "PalOdyssey Base Modpack (v1.5.0): Added PalOlympics FPS \u0026 Performance Booster (4GB texture streaming, CPU parallel mesh dispatch, and fast travel acceleration).",
+    "newsAnnouncement":  "PalOdyssey Modpack (v1.5.1): Added 1:1 Raw Mouse Input \u0026 Linear Sensitivity Fix (Zero mouse smoothing, zero acceleration, true 1:1 X/Y aiming).",
     "serverAddress":  "beoul.duckdns.org"
 }
-
