@@ -145,9 +145,9 @@
                      "author":  "Borealis Group",
                      "name":  "Palworld Borealis Visual Overhaul",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalworldBorealisEngineFix\\Scripts\\main.lua",
-                     "sha256":  "5E6891FCF36BAE93958717210F0B687673776C5E919CEEDFDEFE333F51C178DD",
+                     "sha256":  "00CAC64651A2A98DC4C7AD0E011C7453D20BF1BF27BBEF884944CB79312C2F8B",
                      "changelog":  "v1.1.0: Custom aurora shaders and fog depth overhaul.",
-                     "sizeBytes":  3703
+                     "sizeBytes":  394
                  },
                  {
                      "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/RamTrimMod.dll",
@@ -171,9 +171,9 @@
                      "author":  "PalOlympics Performance Team",
                      "name":  "PalOlympics FPS \u0026 Performance Booster",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalOlympicsFPSBooster\\Scripts\\main.lua",
-                     "sha256":  "2669822CE232D7C87AF8610DAE4E061B4C54E2401B7D4EA417CD9A02764241D2",
+                     "sha256":  "7D7FD078B8EBF81AC31806B5427F0DB52DE122E107B4C5C254F4FB937D954D79",
                      "changelog":  "v0.1.8: 4GB texture streaming pool, parallel mesh dispatch, and fast travel GC.",
-                     "sizeBytes":  10265
+                     "sizeBytes":  1945
                  },
                  {
                      "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/RawMouseInput.lua",

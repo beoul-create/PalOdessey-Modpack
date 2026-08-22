@@ -2,8 +2,8 @@
 ; UE4SS core mods
 BPModLoaderMod : 1
 BPML_GenericFunctions : 1
-ConsoleCommandsMod : 1
-ConsoleEnablerMod : 1
+ConsoleCommandsMod : 0
+ConsoleEnablerMod : 0
 
 ; PalOdyssey Custom Gameplay Mods
 PalSchema : 1
