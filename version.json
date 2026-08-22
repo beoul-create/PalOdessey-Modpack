@@ -171,9 +171,9 @@
                      "author":  "PalOlympics Performance Team",
                      "name":  "PalOlympics FPS \u0026 Performance Booster",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalOlympicsFPSBooster\\Scripts\\main.lua",
-                     "sha256":  "CD7E61930C349BC4D24107F02DD9DD0A8D752D5E96A7361E9CB67B75AA459655",
+                     "sha256":  "2669822CE232D7C87AF8610DAE4E061B4C54E2401B7D4EA417CD9A02764241D2",
                      "changelog":  "v0.1.8: 4GB texture streaming pool, parallel mesh dispatch, and fast travel GC.",
-                     "sizeBytes":  14014
+                     "sizeBytes":  10265
                  },
                  {
                      "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/RawMouseInput.lua",
@@ -197,9 +197,9 @@
                      "author":  "PalOdyssey Team",
                      "name":  "Player Customization \u0026 Character Creator Suite",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PlayerCustomizationSuite\\Scripts\\main.lua",
-                     "sha256":  "9AF336D143B05A4C0984FC7767AFD0FDD0D466ADEE49019096785B802A0C09DD",
+                     "sha256":  "7A149121B22F5BB0774DD24FCC8BF218FE3186E311242D4E5E4F61605409DF7F",
                      "changelog":  "v1.0.0: Unlocks expanded body proportions, unrestricted colors, and NPC hairstyles.",
-                     "sizeBytes":  2276
+                     "sizeBytes":  1902
                  }
              ],
     "newsAnnouncement":  "PalOdyssey Modpack (v1.5.4): Auto-bypasses in-game Mod Guideline \u0026 Mod Caution warnings on launch.",

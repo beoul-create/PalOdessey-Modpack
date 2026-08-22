@@ -1,11 +1,11 @@
--- ====================================================================================
+﻿-- ====================================================================================
 -- PalOdyssey Ultra FPS, Memory & Engine Fluidity Suite (v1.2.0)
 -- Full Real-Time Config Integration, Adaptive Unreal Engine CVars,
 -- Fast Travel Teleport Acceleration, URO Pal Anim Culling, and Zero-Overhead GC.
 -- ====================================================================================
 
 local Config = {
-    server_branding_text = "⚡ PalOdyssey Expedition Realm",
+    server_branding_text = "⚡ PalOddyssey Expedition ⚔️",
     enable_server_info_branding = true,
     enable_pal_animation_fluidity = true,
     enable_ultra_texture_clarity = true,
@@ -27,15 +27,12 @@ local Config = {
 local function parseJson(str)
     if not str or str == "" then return {} end
     local res = {}
-    -- Booleans
     for k, v in string.gmatch(str, '"([%w_]+)"%s*:%s*(true|false)') do
         res[k] = (v == "true")
     end
-    -- Numbers
     for k, v in string.gmatch(str, '"([%w_]+)"%s*:%s*([%-0-9%.]+)') do
         res[k] = tonumber(v)
     end
-    -- Strings
     for k, v in string.gmatch(str, '"([%w_]+)"%s*:%s*"([^"]*)"') do
         res[k] = v
     end
@@ -61,7 +58,6 @@ local function loadConfig()
             return
         end
     end
-    print("[PalOdysseyFPSBooster] Notice: config.json not found in search paths. Using optimized defaults.")
 end
 
 loadConfig()
@@ -101,10 +97,10 @@ local function applyEngineCVars()
     if Config.enable_cpu_resource_reduction then
         Kismet:ExecuteConsoleCommand(World, "r.ParallelMeshDispatch 1", nil)
         Kismet:ExecuteConsoleCommand(World, "fx.Niagara.AllowAsyncTick 1", nil)
-        Kismet:ExecuteConsoleCommand(World, "s.AsyncLoadingTime 6.0", nil)
-        Kismet:ExecuteConsoleCommand(World, "s.PriorityAsyncLoadingExtraTime 8.0", nil)
-        Kismet:ExecuteConsoleCommand(World, "s.LevelStreamingActorsUpdateTimeLimit 5.0", nil)
-        Kismet:ExecuteConsoleCommand(World, "s.PriorityLevelStreamingActorsUpdateExtraTime 8.0", nil)
+        Kismet:ExecuteConsoleCommand(World, "s.AsyncLoadingTime 20.0", nil)
+        Kismet:ExecuteConsoleCommand(World, "s.PriorityAsyncLoadingExtraTime 20.0", nil)
+        Kismet:ExecuteConsoleCommand(World, "s.LevelStreamingActorsUpdateTimeLimit 20.0", nil)
+        Kismet:ExecuteConsoleCommand(World, "s.PriorityLevelStreamingActorsUpdateExtraTime 20.0", nil)
         Kismet:ExecuteConsoleCommand(World, "r.ShaderPipelineCache.PreCompile 0", nil)
     end
 
@@ -158,31 +154,8 @@ pcall(function()
 end)
 
 -- ====================================================================================
--- Fast Travel & UI Fluidity Acceleration Suite
+-- Instant Fast Travel & Camera Fade Acceleration
 -- ====================================================================================
-
-if Config.enable_instant_ui_responsiveness then
-    pcall(function()
-        RegisterHook("/Script/UMG.UserWidget:PlayAnimation", function(self, InAnimation, StartAtTime, NumLoopsToPlay, PlayMode, PlaybackSpeed)
-            local widget = self:get()
-            if widget and widget:IsValid() then
-                local class = widget:GetClass()
-                if class and class:IsValid() then
-                    local wName = class:GetFName():ToString()
-                    if Config.enable_instant_fast_travel_loading and (string.find(wName, "Fade") or string.find(wName, "Loading") or string.find(wName, "Blackout") or string.find(wName, "Teleport") or string.find(wName, "Transition")) then
-                        pcall(function()
-                            PlaybackSpeed:set(100.0) -- 100x instant animation playback
-                        end)
-                    elseif string.find(wName, "Map") or string.find(wName, "Inventory") or string.find(wName, "PalBox") or string.find(wName, "Chest") or string.find(wName, "Storage") or string.find(wName, "BuildMenu") or string.find(wName, "Technology") then
-                        pcall(function()
-                            PlaybackSpeed:set(6.0) -- 6x Snappy interactive menus
-                        end)
-                    end
-                end
-            end
-        end)
-    end)
-end
 
 if Config.enable_instant_fast_travel_loading then
     local function zeroOutFadeDuration(FadeTime)
@@ -226,8 +199,8 @@ if Config.enable_instant_fast_travel_loading then
                 local K2 = getKismet()
                 local W2 = FindFirstOf("World")
                 if K2 and W2 and K2:IsValid() and W2:IsValid() then
-                    K2:ExecuteConsoleCommand(W2, "s.AsyncLoadingTime 6.0", nil)
-                    K2:ExecuteConsoleCommand(W2, "s.PriorityAsyncLoadingExtraTime 8.0", nil)
+                    K2:ExecuteConsoleCommand(W2, "s.AsyncLoadingTime 20.0", nil)
+                    K2:ExecuteConsoleCommand(W2, "s.PriorityAsyncLoadingExtraTime 20.0", nil)
                 end
             end)
         end
@@ -260,51 +233,4 @@ if Config.enable_smart_gc_on_fast_travel then
     end)
 end
 
--- ====================================================================================
--- Auto-Dismiss & Remove In-Game Mod Guidelines & Caution Dialogs
--- ====================================================================================
-
-pcall(function()
-    RegisterHook("/Script/UMG.UserWidget:Construct", function(self)
-        pcall(function()
-            local widget = self:get()
-            if not widget or not widget:IsValid() then return end
-
-            local name = widget:GetClass():GetName()
-            if name:find("Warning_Mod") or name:find("ModCaution") or name:find("ModPolicy") or 
-               name:find("Title_Warning") or name:find("ModWarning") or name:find("Title_Notice") or
-               name:find("Notice_Mod") then
-                
-                -- Set visibility to Collapsed
-                if widget.SetVisibility then
-                    widget:SetVisibility(2)
-                end
-
-                -- Auto-trigger confirm button event if present
-                if widget.WBP_PalCommonButton and widget.WBP_PalCommonButton:IsValid() then
-                    if widget.WBP_PalCommonButton.OnClicked then
-                        widget.WBP_PalCommonButton.OnClicked:Broadcast()
-                    end
-                end
-                if widget.Button_OK and widget.Button_OK:IsValid() and widget.Button_OK.OnClicked then
-                    widget.Button_OK.OnClicked:Broadcast()
-                end
-                if widget.Button_Confirm and widget.Button_Confirm:IsValid() and widget.Button_Confirm.OnClicked then
-                    widget.Button_Confirm.OnClicked:Broadcast()
-                end
-
-                if widget.RemoveFromParent then
-                    widget:RemoveFromParent()
-                end
-                print(string.format("[PalOdyssey] Auto-bypassed and dismissed mod guideline dialog (%s).", name))
-            elseif name:find("WBP_TitleMenu") then
-                if widget.WBP_Title_Warning_Mod and widget.WBP_Title_Warning_Mod:IsValid() then
-                    widget.WBP_Title_Warning_Mod:SetVisibility(2)
-                    widget.WBP_Title_Warning_Mod:RemoveFromParent()
-                end
-            end
-        end)
-    end)
-end)
-
-print("[PalOdysseyFPSBooster] v1.2.0 active with fully integrated config pipeline and mod disclaimer bypass.")
+print("[PalOdysseyFPSBooster] v1.2.0 active with zero-crash safe hook engine.")
