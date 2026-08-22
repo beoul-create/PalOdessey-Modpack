@@ -1,5 +1,5 @@
 ﻿{
-    "manifestVersion":  "1.5.3",
+    "manifestVersion":  "1.5.4",
     "baseDownloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/",
     "lastUpdated":  "2026-08-22T00:32:37Z",
     "serverName":  "PalOdyssey Official Expedition Server",
@@ -171,9 +171,9 @@
                      "author":  "PalOlympics Performance Team",
                      "name":  "PalOlympics FPS \u0026 Performance Booster",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalOlympicsFPSBooster\\Scripts\\main.lua",
-                     "sha256":  "51B6EF050F387DA3734A73BA4D7EA38848A896EB161FB7B94AA334BB6CDC9DC5",
+                     "sha256":  "CD7E61930C349BC4D24107F02DD9DD0A8D752D5E96A7361E9CB67B75AA459655",
                      "changelog":  "v0.1.8: 4GB texture streaming pool, parallel mesh dispatch, and fast travel GC.",
-                     "sizeBytes":  12538
+                     "sizeBytes":  14014
                  },
                  {
                      "downloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/RawMouseInput.lua",
@@ -202,6 +202,6 @@
                      "sizeBytes":  2276
                  }
              ],
-    "newsAnnouncement":  "PalOdyssey Modpack (v1.5.3): Cleaned WeaponStatsCustomizer; includes 1:1 Raw Mouse Input \u0026 Player Customization Suite.",
+    "newsAnnouncement":  "PalOdyssey Modpack (v1.5.4): Auto-bypasses in-game Mod Guideline \u0026 Mod Caution warnings on launch.",
     "serverAddress":  "beoul.duckdns.org"
 }

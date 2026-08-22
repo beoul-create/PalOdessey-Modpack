@@ -261,21 +261,50 @@ if Config.enable_smart_gc_on_fast_travel then
 end
 
 -- ====================================================================================
--- Configurable In-Game HUD Watermark / Realm Display
+-- Auto-Dismiss & Remove In-Game Mod Guidelines & Caution Dialogs
 -- ====================================================================================
 
-if Config.enable_server_info_branding then
-    pcall(function()
-        RegisterHook("/Script/Pal.PalHUD:ReceiveDrawHUD", function(self)
-            pcall(function()
-                local hud = self:get()
-                if hud and hud:IsValid() and hud.DrawText then
-                    local text = Config.server_branding_text or "⚡ PalOdyssey Expedition Realm"
-                    hud:DrawText(text, { R = 0.35, G = 0.85, B = 1.0, A = 0.70 }, 18.0, 14.0, nil, 0.85, false)
+pcall(function()
+    RegisterHook("/Script/UMG.UserWidget:Construct", function(self)
+        pcall(function()
+            local widget = self:get()
+            if not widget or not widget:IsValid() then return end
+
+            local name = widget:GetClass():GetName()
+            if name:find("Warning_Mod") or name:find("ModCaution") or name:find("ModPolicy") or 
+               name:find("Title_Warning") or name:find("ModWarning") or name:find("Title_Notice") or
+               name:find("Notice_Mod") then
+                
+                -- Set visibility to Collapsed
+                if widget.SetVisibility then
+                    widget:SetVisibility(2)
                 end
-            end)
+
+                -- Auto-trigger confirm button event if present
+                if widget.WBP_PalCommonButton and widget.WBP_PalCommonButton:IsValid() then
+                    if widget.WBP_PalCommonButton.OnClicked then
+                        widget.WBP_PalCommonButton.OnClicked:Broadcast()
+                    end
+                end
+                if widget.Button_OK and widget.Button_OK:IsValid() and widget.Button_OK.OnClicked then
+                    widget.Button_OK.OnClicked:Broadcast()
+                end
+                if widget.Button_Confirm and widget.Button_Confirm:IsValid() and widget.Button_Confirm.OnClicked then
+                    widget.Button_Confirm.OnClicked:Broadcast()
+                end
+
+                if widget.RemoveFromParent then
+                    widget:RemoveFromParent()
+                end
+                print(string.format("[PalOdyssey] Auto-bypassed and dismissed mod guideline dialog (%s).", name))
+            elseif name:find("WBP_TitleMenu") then
+                if widget.WBP_Title_Warning_Mod and widget.WBP_Title_Warning_Mod:IsValid() then
+                    widget.WBP_Title_Warning_Mod:SetVisibility(2)
+                    widget.WBP_Title_Warning_Mod:RemoveFromParent()
+                end
+            end
         end)
     end)
-end
+end)
 
-print("[PalOdysseyFPSBooster] v1.2.0 active with fully integrated config pipeline.")
+print("[PalOdysseyFPSBooster] v1.2.0 active with fully integrated config pipeline and mod disclaimer bypass.")
