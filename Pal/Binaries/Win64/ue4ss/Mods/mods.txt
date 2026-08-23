@@ -1,0 +1,29 @@
+KismetDebuggerMod : 0
+EventViewerMod : 0
+CheatManagerEnablerMod : 0
+ActorDumperMod : 0
+ConsoleCommandsMod : 0
+ConsoleEnablerMod : 0
+SplitScreenMod : 0
+LineTraceMod : 0
+BPML_GenericFunctions : 1
+BPModLoaderMod : 1
+jsbLuaProfilerMod : 0
+
+PalSchema : 1
+RamTrimMod : 1
+PalworldTuner : 1
+ExpeditionXP : 1
+DarnMenu : 1
+DarnToasts : 1
+LevelLock : 1
+WeaponProficiency : 1
+PalOdysseyOptimizer : 1
+StuckPalRescuer : 1
+RemoveModWarning : 1
+QuickDeposit : 1
+PalClearVision : 1
+
+; Built-in keybinds, do not move up!
+Keybinds : 1
+
