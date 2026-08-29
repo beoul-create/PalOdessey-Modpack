@@ -1,14 +1,17 @@
 {
-  "preset": "ultra_optimal",
+  "preset": "balanced",
   "rawInput": {
     "enabled": true,
     "disableSmoothing": true,
-    "disableAcceleration": true
+    "disableAcceleration": true,
+    "highPollingRateSupport": true,
+    "hardwareMenuCursor": true,
+    "zeroLatencyMenuCursor": true
   },
   "network": {
     "enabled": true,
-    "maxBandwidth": 2097152,
-    "minBandwidth": 131072,
+    "maxBandwidth": 1048576,
+    "minBandwidth": 65536,
     "maxNetSerializePerFrame": 10000,
     "reliableRetryDelay": 0.03
   },
@@ -20,18 +23,18 @@
     "optimizeNaniteLumen": true,
     "shadowBudgetOptimization": true,
     "texturePoolStreamingDefrag": true,
-    "asyncCompute": true
+    "asyncCompute": false
   },
   "cpu": {
     "enabled": true,
     "limitBackgroundCpu": false,
-    "taskGraphTasksPerTick": 120,
-    "gcIntervalSeconds": 90
+    "taskGraphTasksPerTick": 80,
+    "gcIntervalSeconds": 60
   },
   "memory": {
     "enabled": true,
     "autoTrimWorkingSet": true,
-    "trimIntervalMinutes": 3,
+    "trimIntervalMinutes": 4,
     "defragTexturePool": true
   },
   "server": {
@@ -41,4 +44,3 @@
     "adaptiveReplication": true
   }
 }
-

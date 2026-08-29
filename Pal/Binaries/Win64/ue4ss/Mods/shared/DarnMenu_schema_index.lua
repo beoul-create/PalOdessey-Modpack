@@ -1,8 +1,12 @@
 return {
-  "StuckPalRescuer",
   "PalClearVision",
+  "PalOdysseyOptimizer",
+  "CleanHUD",
+  "DarnToasts",
+  "ShiningLuckies",
   "QuickDeposit",
-  "PalworldTuner",
-  "WeaponProficiency",
-  "PalOdysseyOptimizer"
+  "PalboxSearchPlus",
+  "StuckPalRescuer",
+  "PalOdysseyShop",
+  "CS2Crosshair"
 }

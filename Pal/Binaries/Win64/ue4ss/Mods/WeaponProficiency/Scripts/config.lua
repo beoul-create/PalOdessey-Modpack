@@ -13,10 +13,11 @@ local Config = {
   applyDamage   = true,  -- true = weapons hit harder as they level. false = level & show progress only.
   dmgMult       = 1.0,   -- scales the damage BONUS (not base damage): 0.5 = half growth,
                          -- 2 = double, 0 = flat damage forever. Editable in-game (Mod Options).
+  recoilMult    = 0.5,   -- global weapon recoil scale (0.5 = 50% reduced recoil across all guns)
   xpMult        = 1.0,   -- weapon XP gain multiplier: 2 = level twice as fast. In-game too.
   applyDurability = true, -- weapons last longer as they level (cap = durabilityMaxMult)
-  progressScope = "instance", -- "instance" = each physical weapon its own career (GUID);
-                              -- "model" = all copies of a weapon share one career
+  progressScope = "family", -- "family" = all copies & rarities share career (fully compatible with dedicated servers);
+                              -- "model" = all copies share career; "instance" = each physical weapon its own career (GUID)
 
   -- Keep a weapon boosted after you put it away, instead of restoring vanilla on swap.
   -- AttackValue is a per-MODEL asset shared by every copy of a weapon, so this is what
@@ -418,7 +419,7 @@ local Config = {
   -- so turning this on behaves sensibly -- it is off by default, not unimplemented.
   applyUnsupported   = false,
   unsupportedAllow   = {},         -- enable specific modded models: { ["YakushimaBlade005"] = true }
-  skipUntestedWeapons = true,      -- master safety. Set to FALSE to apply to EVERY weapon in the library (old behavior).
+  skipUntestedWeapons = false,     -- master safety. Set to FALSE to apply to EVERY weapon in the library (old behavior).
   untestedAllow      = {},         -- enable specific models: { ["Musket_3"] = true, ["Musket_4"] = true }
   untestedAllowTypes = {},         -- enable a whole type:    { Musket = true }
 
