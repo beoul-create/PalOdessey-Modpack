@@ -1,7 +1,7 @@
 ﻿{
-  "Version": "2026.08.29.085518",
-  "GeneratedAt": "2026-08-29T13:55:18Z",
-  "TotalFiles": 312,
+  "Version": "2026.08.29.090358",
+  "GeneratedAt": "2026-08-29T14:03:58Z",
+  "TotalFiles": 309,
   "Files": [
     {
       "RelativePath": "Pal/Binaries/Win64/dwmapi.dll",
@@ -20,24 +20,6 @@
       "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "Size": 0,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/enabled.txt"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/PalworldBorealisEngineFix/enabled.txt",
-      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "Size": 0,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/PalworldBorealisEngineFix/enabled.txt"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/PalworldBorealisEngineFix/Scripts/config.lua",
-      "Hash": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
-      "Size": 1,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/PalworldBorealisEngineFix/Scripts/config.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/PalworldBorealisEngineFix/Scripts/main.lua",
-      "Hash": "5fb9b4dd94632aade48e29b1dd2471aa911d9704c945fbaf773c8be43234460c",
-      "Size": 3702,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/PalworldBorealisEngineFix/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/Scripts/config.lua",
