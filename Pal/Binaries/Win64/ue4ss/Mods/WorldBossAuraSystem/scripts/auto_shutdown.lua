@@ -1,6 +1,6 @@
 local AutoShutdown = {}
 
-local IDLE_TIMEOUT_SECONDS = 900 -- 15 minutes
+local IDLE_TIMEOUT_SECONDS = 900 -- 15 minutes (900 seconds)
 local IdleAccumulator = 0
 local IsShuttingDown = false
 
@@ -13,7 +13,6 @@ function AutoShutdown.Init()
         local Delta = DeltaSeconds:get()
         local World = GetWorldContext()
 
-        -- Query connected players
         local GameplayStatics = StaticFindObject("/Script/Engine.GameplayStatics")
         local PlayerStateClass = StaticFindObject("/Script/Pal.PalPlayerState")
         
@@ -28,7 +27,6 @@ function AutoShutdown.Init()
         if PlayerCount == 0 then
             IdleAccumulator = IdleAccumulator + Delta
 
-            -- Periodic log every 3 minutes while idling
             if math.floor(IdleAccumulator) % 180 == 0 and math.floor(IdleAccumulator) > 0 then
                 print(string.format("[AutoShutdown] Server empty. Idle: %ds / %ds", math.floor(IdleAccumulator), IDLE_TIMEOUT_SECONDS))
             end
@@ -38,7 +36,6 @@ function AutoShutdown.Init()
                 AutoShutdown.ExecuteGracefulShutdown()
             end
         else
-            -- Reset accumulator when a player is active
             if IdleAccumulator > 0 then
                 print("[AutoShutdown] Player detected online. Resetting idle watchdog.")
                 IdleAccumulator = 0
@@ -50,21 +47,18 @@ end
 function AutoShutdown.ExecuteGracefulShutdown()
     print("[AutoShutdown] 15 minutes of zero player activity reached. Initiating graceful shutdown...")
 
-    -- 1. Update liveboard state to OFFLINE
     local File = io.open("Pal/Saved/liveboard_state.json", "w")
     if File then
         File:write('{"ServerOnline":false,"PlayerCount":0,"MaxPlayers":32,"Players":[],"ActiveBosses":[],"Timestamp":' .. os.time() .. '}')
         File:close()
     end
 
-    -- 2. Trigger World Save
     local SaveSubsystem = StaticFindObject("/Script/Pal.PalSaveSubsystem")
     if SaveSubsystem:IsValid() then
         SaveSubsystem:SaveWorld()
         print("[AutoShutdown] World save completed.")
     end
 
-    -- 3. Graceful Process Termination
     ExecuteWithDelay(3000, function()
         local KismetSystem = StaticFindObject("/Script/Engine.KismetSystemLibrary")
         if KismetSystem:IsValid() then
