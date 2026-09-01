@@ -15,6 +15,7 @@ PalClearVision : 1
 FastConnect : 1
 WorldBossAuraSystem : 1
 EconomySystem : 1
+TechPointShopBridge : 1
 GuildBuildingLimits : 1
 
 ; Built-in keybinds, do not move up!
