@@ -1,5 +1,5 @@
 {
-  "MusicMasterVolume": 0.15,
+  "MusicMasterVolume": 0.5,
   "MusicLocationScanIntervalSeconds": 5,
   "BaseScanIntervalSeconds": 30,
   "MajorBossCombatTimeoutSeconds": 20,

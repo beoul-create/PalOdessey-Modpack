@@ -637,11 +637,11 @@ function BossMusic.Init(config)
         end)
     end)
 
-    pcall(function()
-        NotifyOnNewObject("/Script/Engine.NetConnection", function()
-            OnConnectingToServer()
-        end)
-    end)
+    -- pcall(function()
+    -- NotifyOnNewObject("/Script/Engine.NetConnection", function()
+    -- OnConnectingToServer()
+    -- end)
+    -- end)
 
     pcall(RegisterHook, "/Script/Engine.PlayerController:ClientTravel", function(Context)
         OnConnectingToServer()
@@ -794,10 +794,15 @@ function BossMusic.Init(config)
                             end
                         end
                     end
-                elseif not IsConnecting then
+                else
                     local title = nil
                     pcall(function() title = FindFirstOf("PalGameStateInTitle") end)
-                    IsInTitle = title and title:IsValid() or false
+                    if title and title:IsValid() then
+                        IsInTitle = true
+                        IsConnecting = false
+                    else
+                        IsInTitle = false
+                    end
                 end
 
                 UpdateMusicState()
