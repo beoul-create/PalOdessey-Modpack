@@ -1,6 +1,6 @@
 {
-  "Version": "20260902224925",
-  "GeneratedAt": "2026-09-02T22:49:25.274Z",
+  "Version": "20260902225128",
+  "GeneratedAt": "2026-09-02T22:51:28.900Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -1556,14 +1556,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/MythicAuras/metadata.json",
-      "Hash": "1ab2d9c2d421160577a23297027ec6a1d78e61d02b9a222ef325b1412c7787bb",
-      "Size": 232,
+      "Hash": "8d3c3fd7fb031a10c44d2d26a98df308a70d01121e91624a3c20710a18ab4524",
+      "Size": 231,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/MythicAuras/metadata.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/MythicAuras/raw/MythicAuras.json",
-      "Hash": "0d9e5f73ac78b7e7309146185768834126f400a01e75ad5e8485acdce4e66c1d",
-      "Size": 1381,
+      "Hash": "7a8156b454f2b4ce92e14dc16eeaa146c258b3c08b08d06ea96aabbdafc03c15",
+      "Size": 1380,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/MythicAuras/raw/MythicAuras.json"
     },
     {
@@ -2078,8 +2078,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.deps.json",
-      "Hash": "a7a20322489bce4107c4efe991aa31ccbff8e00234547b5a19f786b1ba14598e",
-      "Size": 35998,
+      "Hash": "260751e2f7b4ddab633c673d29c5d83b67cc75a30fbce4e8d925073986fe1bbf",
+      "Size": 35000,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.deps.json"
     },
     {
@@ -2096,8 +2096,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.runtimeconfig.json",
-      "Hash": "8a9af36fd8f6c0a07a84cd58c559a65b9fec515f4265bc75ccbe7b531a3a197f",
-      "Size": 468,
+      "Hash": "076fe6a2bccd2cb8cf62a06f2bf9dd765cb78addbfa14d43cf02a0d564464c5f",
+      "Size": 450,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.runtimeconfig.json"
     },
     {
@@ -2156,8 +2156,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/aura_system.lua",
-      "Hash": "fd4338e2c5ef504ad875954bb2936ea0aeefff51f6c20ed059147a2594a84422",
-      "Size": 8196,
+      "Hash": "5c2e0a5e502ed3af041f47d47fa66b5a95d025a2af7351e679957a9d91e9dd23",
+      "Size": 8006,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/aura_system.lua"
     },
     {
@@ -2168,38 +2168,38 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua",
-      "Hash": "f91928ce4f180280f390bacf8915c11be832f29df03a35afb6148b07fbaa9e5c",
-      "Size": 31234,
+      "Hash": "4f0b6684ffaf07fcdc44f471b9a6d83d4c3a27457fb0d4d2761fb7d7f1e2a5ad",
+      "Size": 30415,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/liveboard_export.lua",
-      "Hash": "a0c16933b73ad363c3f049c848d2d69056c8cd5a6d6ed6cea993692d00518047",
-      "Size": 6739,
+      "Hash": "577284f739f14d0c2382ed32bd9db909f490a3079710d71b52817743f66e81fa",
+      "Size": 6551,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/liveboard_export.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/main.lua",
-      "Hash": "0355c98635d9562930896a64ea5e3d854663f4af3131511d26138520a1e53f55",
-      "Size": 6726,
+      "Hash": "5abf4771708ee34e4c36b0c83391b040db9c3fa4d51b3594f2a2da88872a2b09",
+      "Size": 6554,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/performance.lua",
-      "Hash": "b0dfa5f0d4b3b685e425d4432671482599e675d3323c2a4bec61a37f6a0aaf93",
-      "Size": 2402,
+      "Hash": "df3dda34d78a73e9724cd02345b6dd2b163951d11a8781519cac083046c5a66f",
+      "Size": 2320,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/performance.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/sao_death.lua",
-      "Hash": "af40250de4d0cab0bfce999e44999acbb7e6b3883aa91a80b445ed42b79f2932",
-      "Size": 18462,
+      "Hash": "750d18771436b0555a2cbb6f30ef15797263299664c2552ee106defdfa1dfc61",
+      "Size": 18066,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/sao_death.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/world_boss.lua",
-      "Hash": "b7e87989e4340ecb644f7eeb2d43cf774ad5b2c0f5d9f3d09c13069c0ddf0fcb",
-      "Size": 37264,
+      "Hash": "e285cd2c3689d7acabe374ce6c3c0009fa4dc314b11d7b59540bd4599eb48392",
+      "Size": 36665,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/world_boss.lua"
     },
     {
@@ -3746,14 +3746,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/MythicAuras/metadata.json",
-      "Hash": "1ab2d9c2d421160577a23297027ec6a1d78e61d02b9a222ef325b1412c7787bb",
-      "Size": 232,
+      "Hash": "8d3c3fd7fb031a10c44d2d26a98df308a70d01121e91624a3c20710a18ab4524",
+      "Size": 231,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/MythicAuras/metadata.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/MythicAuras/raw/MythicAuras.json",
-      "Hash": "0d9e5f73ac78b7e7309146185768834126f400a01e75ad5e8485acdce4e66c1d",
-      "Size": 1381,
+      "Hash": "7a8156b454f2b4ce92e14dc16eeaa146c258b3c08b08d06ea96aabbdafc03c15",
+      "Size": 1380,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/MythicAuras/raw/MythicAuras.json"
     },
     {
@@ -4268,8 +4268,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.deps.json",
-      "Hash": "a7a20322489bce4107c4efe991aa31ccbff8e00234547b5a19f786b1ba14598e",
-      "Size": 35998,
+      "Hash": "260751e2f7b4ddab633c673d29c5d83b67cc75a30fbce4e8d925073986fe1bbf",
+      "Size": 35000,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.deps.json"
     },
     {
@@ -4286,8 +4286,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.runtimeconfig.json",
-      "Hash": "8a9af36fd8f6c0a07a84cd58c559a65b9fec515f4265bc75ccbe7b531a3a197f",
-      "Size": 468,
+      "Hash": "076fe6a2bccd2cb8cf62a06f2bf9dd765cb78addbfa14d43cf02a0d564464c5f",
+      "Size": 450,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.runtimeconfig.json"
     },
     {
@@ -4346,8 +4346,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/aura_system.lua",
-      "Hash": "fd4338e2c5ef504ad875954bb2936ea0aeefff51f6c20ed059147a2594a84422",
-      "Size": 8196,
+      "Hash": "5c2e0a5e502ed3af041f47d47fa66b5a95d025a2af7351e679957a9d91e9dd23",
+      "Size": 8006,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/aura_system.lua"
     },
     {
@@ -4358,38 +4358,38 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua",
-      "Hash": "f91928ce4f180280f390bacf8915c11be832f29df03a35afb6148b07fbaa9e5c",
-      "Size": 31234,
+      "Hash": "4f0b6684ffaf07fcdc44f471b9a6d83d4c3a27457fb0d4d2761fb7d7f1e2a5ad",
+      "Size": 30415,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/liveboard_export.lua",
-      "Hash": "a0c16933b73ad363c3f049c848d2d69056c8cd5a6d6ed6cea993692d00518047",
-      "Size": 6739,
+      "Hash": "577284f739f14d0c2382ed32bd9db909f490a3079710d71b52817743f66e81fa",
+      "Size": 6551,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/liveboard_export.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua",
-      "Hash": "0355c98635d9562930896a64ea5e3d854663f4af3131511d26138520a1e53f55",
-      "Size": 6726,
+      "Hash": "5abf4771708ee34e4c36b0c83391b040db9c3fa4d51b3594f2a2da88872a2b09",
+      "Size": 6554,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/performance.lua",
-      "Hash": "b0dfa5f0d4b3b685e425d4432671482599e675d3323c2a4bec61a37f6a0aaf93",
-      "Size": 2402,
+      "Hash": "df3dda34d78a73e9724cd02345b6dd2b163951d11a8781519cac083046c5a66f",
+      "Size": 2320,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/performance.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua",
-      "Hash": "af40250de4d0cab0bfce999e44999acbb7e6b3883aa91a80b445ed42b79f2932",
-      "Size": 18462,
+      "Hash": "750d18771436b0555a2cbb6f30ef15797263299664c2552ee106defdfa1dfc61",
+      "Size": 18066,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua",
-      "Hash": "b7e87989e4340ecb644f7eeb2d43cf774ad5b2c0f5d9f3d09c13069c0ddf0fcb",
-      "Size": 37264,
+      "Hash": "e285cd2c3689d7acabe374ce6c3c0009fa4dc314b11d7b59540bd4599eb48392",
+      "Size": 36665,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua"
     },
     {
