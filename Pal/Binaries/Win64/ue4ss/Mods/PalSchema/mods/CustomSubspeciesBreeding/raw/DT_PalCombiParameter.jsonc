@@ -51,7 +51,7 @@
             "Child": "EPalTribeID::Foxparks_Aqua"
         },
         "Fuack_Ignis_Combi": {
-            "TribeA": "EPalTribeID::BluePlatypus",
+            "TribeA": "EPalTribeID::Blueplatypus",
             "TribeB": "EPalTribeID::Kitsunebi",
             "Child": "EPalTribeID::Fuack_Ignis"
         },
@@ -101,7 +101,7 @@
             "Child": "EPalTribeID::Pengullet_Ignis"
         },
         "Penking_Lux_Combi": {
-            "TribeA": "EPalTribeID::KingPenguin",
+            "TribeA": "EPalTribeID::CaptainPenguin",
             "TribeB": "EPalTribeID::ElecCat",
             "Child": "EPalTribeID::Penking_Lux"
         },
@@ -161,7 +161,7 @@
             "Child": "EPalTribeID::Hoocrates_Lux"
         },
         "Teafant_Ignis_Combi": {
-            "TribeA": "EPalTribeID::WaterMammoth",
+            "TribeA": "EPalTribeID::MopBaby",
             "TribeB": "EPalTribeID::Kitsunebi",
             "Child": "EPalTribeID::Teafant_Ignis"
         },
@@ -221,7 +221,7 @@
             "Child": "EPalTribeID::Fuddler_Aqua"
         },
         "Killamari_Ignis_Combi": {
-            "TribeA": "EPalTribeID::Gryphon",
+            "TribeA": "EPalTribeID::BlackGriffon",
             "TribeB": "EPalTribeID::Kitsunebi",
             "Child": "EPalTribeID::Killamari_Ignis"
         },
@@ -271,7 +271,7 @@
             "Child": "EPalTribeID::Mozzarina_Ignis"
         },
         "Bristla_Ignis_Combi": {
-            "TribeA": "EPalTribeID::GrassCactus",
+            "TribeA": "EPalTribeID::CactusDoll",
             "TribeB": "EPalTribeID::Kitsunebi",
             "Child": "EPalTribeID::Bristla_Ignis"
         },
@@ -411,7 +411,7 @@
             "Child": "EPalTribeID::Ragnahawk_Cryst"
         },
         "Dumud_Cryst_Combi": {
-            "TribeA": "EPalTribeID::MouthFish",
+            "TribeA": "EPalTribeID::LazyCatfish",
             "TribeB": "EPalTribeID::IceFox",
             "Child": "EPalTribeID::Dumud_Cryst"
         },
@@ -531,7 +531,7 @@
             "Child": "EPalTribeID::Swee_Ignis"
         },
         "Sweepa_Ignis_Combi": {
-            "TribeA": "EPalTribeID::KingWoolFox",
+            "TribeA": "EPalTribeID::MopKing",
             "TribeB": "EPalTribeID::Kitsunebi",
             "Child": "EPalTribeID::Sweepa_Ignis"
         },
@@ -711,7 +711,7 @@
             "Child": "EPalTribeID::Kingpaca_Lux"
         },
         "Wumpo_Ignis_Combi": {
-            "TribeA": "EPalTribeID::YukiyamaSaru",
+            "TribeA": "EPalTribeID::Yeti",
             "TribeB": "EPalTribeID::Kitsunebi",
             "Child": "EPalTribeID::Wumpo_Ignis"
         },
@@ -721,7 +721,7 @@
             "Child": "EPalTribeID::Wumpo_Ignis"
         },
         "Wumpo_Cryst_Combi": {
-            "TribeA": "EPalTribeID::YukiyamaSaru_Grass",
+            "TribeA": "EPalTribeID::Yeti_Grass",
             "TribeB": "EPalTribeID::IceFox",
             "Child": "EPalTribeID::Wumpo_Cryst"
         },
@@ -731,7 +731,7 @@
             "Child": "EPalTribeID::Wumpo_Cryst"
         },
         "Fenglope_Ignis_Combi": {
-            "TribeA": "EPalTribeID::Fenglope",
+            "TribeA": "EPalTribeID::FengyunDeeper",
             "TribeB": "EPalTribeID::Kitsunebi",
             "Child": "EPalTribeID::Fenglope_Ignis"
         },
@@ -881,7 +881,7 @@
             "Child": "EPalTribeID::Necromus_Cryst"
         },
         "Paladius_Ignis_Combi": {
-            "TribeA": "EPalTribeID::WhiteCentaur",
+            "TribeA": "EPalTribeID::SaintCentaur",
             "TribeB": "EPalTribeID::Kitsunebi",
             "Child": "EPalTribeID::Paladius_Ignis"
         },
@@ -1001,7 +1001,7 @@
             "Child": "EPalTribeID::Selyne_Ignis"
         },
         "Xenogard_Aqua_Combi": {
-            "TribeA": "EPalTribeID::MeteorDragon",
+            "TribeA": "EPalTribeID::BlackFurDragon",
             "TribeB": "EPalTribeID::Kelpie",
             "Child": "EPalTribeID::Xenogard_Aqua"
         },
