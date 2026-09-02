@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.233627",
-  "GeneratedAt": "2026-09-01T23:36:27.556Z",
+  "Version": "2026.09.02.051908",
+  "GeneratedAt": "2026-09-02T05:19:08.562Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -2048,8 +2048,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/config.json",
-      "Hash": "ed21e2b1e65f6499a495cc44792bd33be5b323ef3a983827e7bd520d17c6828e",
-      "Size": 694,
+      "Hash": "3f00a5449b33bfcd3269c6458b2fae4063d234fc78e102b4a7122cf32d43065d",
+      "Size": 723,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/config.json"
     },
     {
@@ -4130,8 +4130,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json",
-      "Hash": "ed21e2b1e65f6499a495cc44792bd33be5b323ef3a983827e7bd520d17c6828e",
-      "Size": 694,
+      "Hash": "3f00a5449b33bfcd3269c6458b2fae4063d234fc78e102b4a7122cf32d43065d",
+      "Size": 723,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json"
     },
     {

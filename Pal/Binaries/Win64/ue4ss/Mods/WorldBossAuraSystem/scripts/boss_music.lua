@@ -4,10 +4,12 @@ local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "
 local AudioDir = ScriptDir .. "../audio/"
 local StateFile = AudioDir .. "music_state.json"
 local JukeboxExe = AudioDir .. "PalBossJukebox.exe"
+local HeartbeatFile = AudioDir .. "jukebox_heartbeat.txt"
 
 local CurrentTrack = ""
 local CurrentState = "idle"
 local JukeboxStarted = false
+local LastJukeboxStartAttempt = 0
 local VictoryTimer = 0
 
 -- State tracking
@@ -16,18 +18,57 @@ local IsConnecting = false
 local ActiveMajorBossCombat = false
 local ActiveFieldBossCombat = false
 local ActiveNearBoss = false
+local LastMajorBossCombatTime = 0
+local LastFieldBossCombatTime = 0
+local LastHeadshotSfxTime = 0
+
+local MAJOR_BOSS_COMBAT_TIMEOUT = 20
+local FIELD_BOSS_COMBAT_TIMEOUT = 15
+
+local function WriteState(content)
+    local ok, err = pcall(function()
+        local f = assert(io.open(StateFile, "w"))
+        f:write(content)
+        f:flush()
+        f:close()
+    end)
+    if not ok then
+        print(string.format("[WorldBossAuraSystem] Music state write failed: %s", tostring(err)))
+    end
+    return ok
+end
 
 local function EnsureJukeboxRunning()
-    if JukeboxStarted then return end
+    local heartbeat = io.open(HeartbeatFile, "r")
+    if heartbeat then
+        local heartbeatTime = tonumber(heartbeat:read("*all")) or 0
+        heartbeat:close()
+        local heartbeatAge = os.time() - heartbeatTime
+        if heartbeatAge >= 0 and heartbeatAge <= 12 then
+            JukeboxStarted = true
+            return true
+        end
+    end
+    JukeboxStarted = false
+
+    local now = os.time()
+    if now - LastJukeboxStartAttempt < 5 then return false end
+    LastJukeboxStartAttempt = now
+
     -- Verify executable exists before invoking Windows shell
     local f = io.open(JukeboxExe, "rb")
-    if not f then return end
+    if not f then
+        print("[WorldBossAuraSystem] PalBossJukebox.exe was not found; custom music is disabled.")
+        return false
+    end
     f:close()
 
-    pcall(function()
-        os.execute(string.format('start "" /B "%s"', JukeboxExe:gsub("/", "\\")))
-        JukeboxStarted = true
-    end)
+    local ok, result, _, exitCode = pcall(os.execute, string.format('start "" /B "%s"', JukeboxExe:gsub("/", "\\")))
+    JukeboxStarted = ok and (result == true or result == 0 or exitCode == 0)
+    if not JukeboxStarted then
+        print("[WorldBossAuraSystem] PalBossJukebox.exe could not be started; retrying later.")
+    end
+    return JukeboxStarted
 end
 
 local CurrentMasterVolume = 0.15
@@ -74,16 +115,10 @@ function BossMusic.SetMasterVolume(vol)
     end)
 
     -- 2. Immediately update playing volume in music_state.json
-    pcall(function()
-        if CurrentTrack ~= "" and CurrentState == "play" then
-            local finalVol = math.max(0.0, math.min(1.0, CurrentBaseVolume * vol))
-            local f = io.open(StateFile, "w")
-            if f then
-                f:write(string.format('{"state":"play","track":"%s","loop":%s,"volume":%.2f}', CurrentTrack, CurrentLoop and "true" or "false", finalVol))
-                f:close()
-            end
-        end
-    end)
+    if CurrentTrack ~= "" and CurrentState == "play" then
+        local finalVol = math.max(0.0, math.min(1.0, CurrentBaseVolume * vol))
+        WriteState(string.format('{"state":"play","track":"%s","loop":%s,"volume":%.2f}', CurrentTrack, CurrentLoop and "true" or "false", finalVol))
+    end
 
     print(string.format("[WorldBossAuraSystem] 🎵 Master Volume set to: %d%%", math.floor(vol * 100 + 0.5)))
 end
@@ -97,23 +132,23 @@ function BossMusic.ToggleMute()
 end
 
 function BossMusic.SetTrack(trackName, loop, volume)
-    if CurrentTrack == trackName and CurrentState == "play" then return end
     EnsureJukeboxRunning()
+    local requestedBaseVolume = volume or 0.65
+    local requestedLoop = loop and true or false
+    if CurrentTrack == trackName and CurrentState == "play" and
+       CurrentBaseVolume == requestedBaseVolume and CurrentLoop == requestedLoop then
+        return
+    end
+
     CurrentTrack = trackName
     CurrentState = "play"
-    CurrentBaseVolume = volume or 0.65
-    CurrentLoop = loop and true or false
+    CurrentBaseVolume = requestedBaseVolume
+    CurrentLoop = requestedLoop
 
     local master = GetMasterVolume()
     local finalVol = math.max(0.0, math.min(1.0, CurrentBaseVolume * master))
 
-    pcall(function()
-        local f = io.open(StateFile, "w")
-        if f then
-            f:write(string.format('{"state":"play","track":"%s","loop":%s,"volume":%.2f}', trackName, loop and "true" or "false", finalVol))
-            f:close()
-        end
-    end)
+    WriteState(string.format('{"state":"play","track":"%s","loop":%s,"volume":%.2f}', trackName, CurrentLoop and "true" or "false", finalVol))
     print(string.format("[WorldBossAuraSystem] 🎵 Jukebox playing: %s (Loop: %s, Vol: %.2f [Master: %.2f])", trackName, tostring(loop), finalVol, master))
 end
 
@@ -122,24 +157,24 @@ function BossMusic.FadeOut()
     CurrentTrack = ""
     CurrentState = "fade_out"
 
-    pcall(function()
-        local f = io.open(StateFile, "w")
-        if f then
-            f:write('{"state":"fade_out"}')
-            f:close()
-        end
-    end)
+    WriteState('{"state":"fade_out"}')
     print("[WorldBossAuraSystem] 🎵 Jukebox fading out.")
 end
 
 function BossMusic.PlayVictoryFanfare()
     ActiveMajorBossCombat = false
     ActiveFieldBossCombat = false
+    ActiveNearBoss = false
+    LastMajorBossCombatTime = 0
+    LastFieldBossCombatTime = 0
     VictoryTimer = os.time() + 6 -- 6 seconds fanfare
     BossMusic.SetTrack("victory_fanfare.mp3", false, 0.75)
 end
 
 function BossMusic.PlayHeadshotSFX()
+    local now = os.clock()
+    if now - LastHeadshotSfxTime < 0.15 then return end
+    LastHeadshotSfxTime = now
     pcall(function()
         EnsureJukeboxRunning()
         local pipe = io.open([[\.\pipe\PalHeadshotPipe]], "w")
@@ -149,27 +184,6 @@ function BossMusic.PlayHeadshotSFX()
             pipe:close()
         end
     end)
-end
-
-local function OnTitleScreen()
-    IsInTitle = true
-    IsConnecting = false
-    ActiveMajorBossCombat = false
-    ActiveFieldBossCombat = false
-    BossMusic.SetTrack("title_perfect_time.mp3", true, 0.70)
-end
-
-local function OnConnectingToServer()
-    if IsConnecting then return end
-    IsConnecting = true
-    IsInTitle = false
-    print("[WorldBossAuraSystem] 🌐 Connecting to server... fading title music.")
-    BossMusic.FadeOut()
-end
-
-local function OnJoinedWorld()
-    IsConnecting = false
-    IsInTitle = false
 end
 
 local function GetLocalPlayer()
@@ -188,8 +202,55 @@ local function GetLocalPlayer()
     return player
 end
 
+local function ClassifyBoss(actor)
+    local isMajor = false
+    local isField = false
+    pcall(function()
+        if not actor or not actor:IsValid() then return end
+        if type(actor.IsTowerBoss) == "function" and actor:IsTowerBoss() then
+            isMajor = true
+            return
+        end
+        if type(actor.IsBoss) == "function" and actor:IsBoss() then
+            local level = 1
+            if actor.CharacterParameterComponent and actor.CharacterParameterComponent:IsValid() then
+                level = actor.CharacterParameterComponent:GetLevel() or 1
+            end
+            if level >= 50 then isMajor = true else isField = true end
+            return
+        end
+        if type(actor.IsRarePal) == "function" and actor:IsRarePal() then
+            isField = true
+        end
+    end)
+    return isMajor, isField
+end
+
+local function IsNearLocalPlayer(actor, radius)
+    local near = false
+    pcall(function()
+        local player = GetLocalPlayer()
+        if not player or not player:IsValid() or not actor or not actor:IsValid() then return end
+        local playerLoc = player:K2_GetActorLocation()
+        local actorLoc = actor:K2_GetActorLocation()
+        if not playerLoc or not actorLoc then return end
+        local dx = playerLoc.X - actorLoc.X
+        local dy = playerLoc.Y - actorLoc.Y
+        local dz = playerLoc.Z - actorLoc.Z
+        near = (dx*dx + dy*dy + dz*dz) <= (radius * radius)
+    end)
+    return near
+end
+
 local CachedBases = {}
 local LastBaseScan = 0
+local CachedTimeManager = nil
+
+local function ClearWorldCaches()
+    CachedBases = {}
+    LastBaseScan = 0
+    CachedTimeManager = nil
+end
 
 local function RefreshBaseCaches()
     pcall(function()
@@ -215,9 +276,7 @@ local function RefreshBaseCaches()
                 end
             end
         end
-        if #list > 0 then
-            CachedBases = list
-        end
+        CachedBases = list
     end)
 end
 
@@ -229,14 +288,9 @@ local function DetermineRegionTrack(playerLoc, player)
 
     -- 2. Base Camp Detection (Checks cached coordinates without hitching)
     local inBase = false
-    local nowClock = os.clock()
-    if #CachedBases == 0 then
-        if (nowClock - LastBaseScan > 2.0) then
-            LastBaseScan = nowClock
-            RefreshBaseCaches()
-        end
-    elseif (nowClock - LastBaseScan > 30.0) then
-        LastBaseScan = nowClock
+    local now = os.time()
+    if LastBaseScan == 0 or (now - LastBaseScan >= 30) then
+        LastBaseScan = now
         RefreshBaseCaches()
     end
 
@@ -275,7 +329,6 @@ local function DetermineRegionTrack(playerLoc, player)
     return "region_aincrad.mp3", 0.60
 end
 
-local CachedTimeManager = nil
 local function IsNightTime()
     local isNight = false
     pcall(function()
@@ -331,21 +384,21 @@ local function UpdateMusicState()
         return
     end
 
-    -- Priority 0.8: Night Time Theme (Overrides all boss, base, and regional songs)
-    if IsNightTime() then
-        BossMusic.SetTrack("night_theme.mp3", true, 0.65)
-        return
-    end
-
     -- Priority 1: 5-Minute Aura World Boss / Tower Boss / Raid Boss Combat
     if ActiveMajorBossCombat then
         BossMusic.SetTrack("boss_theme_opm.mp3", true, 0.80)
         return
     end
 
-    -- Priority 2: Field Boss Combat or Proximity (< 6000 units)
+    -- Priority 2: Field Boss Combat or World Boss Proximity (< 8000 units)
     if ActiveFieldBossCombat or ActiveNearBoss then
         BossMusic.SetTrack("boss_luminous_sword.mp3", true, 0.75)
+        return
+    end
+
+    -- Priority 2.5: Night theme. Combat must always take precedence.
+    if IsNightTime() then
+        BossMusic.SetTrack("night_theme.mp3", true, 0.65)
         return
     end
 
@@ -442,6 +495,9 @@ function BossMusic.Init()
         ActiveMajorBossCombat = false
         ActiveFieldBossCombat = false
         ActiveNearBoss = false
+        LastMajorBossCombatTime = 0
+        LastFieldBossCombatTime = 0
+        ClearWorldCaches()
         pcall(function()
             local settings = FindFirstOf("PalGameLocalSettings")
             if settings and settings:IsValid() and settings.AudioSettings then
@@ -454,12 +510,22 @@ function BossMusic.Init()
     local function OnConnectingToServer()
         IsInTitle = false
         IsConnecting = true
+        ActiveMajorBossCombat = false
+        ActiveFieldBossCombat = false
+        ActiveNearBoss = false
+        ClearWorldCaches()
         BossMusic.FadeOut(2.0)
     end
 
     local function OnJoinedWorld()
         IsInTitle = false
         IsConnecting = false
+        ActiveMajorBossCombat = false
+        ActiveFieldBossCombat = false
+        ActiveNearBoss = false
+        LastMajorBossCombatTime = 0
+        LastFieldBossCombatTime = 0
+        ClearWorldCaches()
         pcall(function()
             local settings = FindFirstOf("PalGameLocalSettings")
             if settings and settings:IsValid() and settings.AudioSettings then
@@ -510,6 +576,7 @@ function BossMusic.Init()
     -- Hook Point Damage (e.g. projectile headshots)
     pcall(RegisterHook, "/Script/Engine.Actor:ReceivePointDamage", function(Context, Damage, DamageType, HitLocation, HitNormal, HitComponent, BoneName, ShotFromDirection, InstigatedBy, DamageCauser, HitInfo)
         pcall(function()
+            if not GetLocalPlayer() then return end
             local b = BoneName and BoneName.get and BoneName:get() or BoneName
             if CheckHeadshotBone(b) then
                 BossMusic.PlayHeadshotSFX()
@@ -520,6 +587,7 @@ function BossMusic.Init()
     -- Hook PalUIDamageText:Setup (triggers when critical/weakpoint damage numbers appear)
     pcall(RegisterHook, "/Script/Pal.PalUIDamageText:Setup", function(Context, Damage, bCritical, bWeakPoint)
         pcall(function()
+            if not GetLocalPlayer() then return end
             local crit = bCritical and (bCritical.get and bCritical:get() or bCritical == true)
             local weak = bWeakPoint and (bWeakPoint.get and bWeakPoint:get() or bWeakPoint == true)
             if crit or weak then
@@ -528,47 +596,24 @@ function BossMusic.Init()
         end)
     end)
 
-    -- Hook PalCharacter:OnDamage for combat music & headshot detection
+    -- Hook PalCharacter:OnDamage for event-driven boss combat music.
     pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDamage", function(Context, DamageInfo)
         pcall(function()
             local victim = Context and Context.get and Context:get() or Context
             if not victim or not victim:IsValid() then return end
 
-            local di = DamageInfo and DamageInfo.get and DamageInfo:get() or DamageInfo
-            if di then
-                local isCrit = false
-                if di.bWeakPoint == true or di.bIsWeakPoint == true or di.bCritical == true then
-                    isCrit = true
-                end
-                if not isCrit and di.HitInfo and di.HitInfo.BoneName then
-                    if CheckHeadshotBone(di.HitInfo.BoneName) then isCrit = true end
-                end
-                if isCrit then
-                    BossMusic.PlayHeadshotSFX()
-                end
-            end
-
-            local isMajor = false
-            local isField = false
-
-            if victim.IsTowerBoss and type(victim.IsTowerBoss) == "function" and victim:IsTowerBoss() then isMajor = true end
-            if not isMajor and victim.IsBoss and type(victim.IsBoss) == "function" and victim:IsBoss() then
-                local level = 1
-                if victim.CharacterParameterComponent and victim.CharacterParameterComponent:IsValid() then
-                    level = victim.CharacterParameterComponent:GetLevel() or 1
-                end
-                if level >= 50 then isMajor = true else isField = true end
-            end
-            if not isMajor and not isField and victim.IsRarePal and type(victim.IsRarePal) == "function" and victim:IsRarePal() then
-                isField = true
-            end
+            if not IsNearLocalPlayer(victim, 15000.0) then return end
+            local isMajor, isField = ClassifyBoss(victim)
+            local now = os.time()
 
             if isMajor then
                 ActiveMajorBossCombat = true
                 ActiveFieldBossCombat = false
+                LastMajorBossCombatTime = now
                 BossMusic.SetTrack("boss_theme_opm.mp3", true, 0.80)
             elseif isField then
                 ActiveFieldBossCombat = true
+                LastFieldBossCombatTime = now
                 BossMusic.SetTrack("boss_luminous_sword.mp3", true, 0.75)
             end
         end)
@@ -577,12 +622,19 @@ function BossMusic.Init()
     -- 3. Boss HP UI Show
     pcall(RegisterHook, "/Script/Pal.PalUIBossHP:Show", function(Context)
         ActiveFieldBossCombat = true
+        LastFieldBossCombatTime = os.time()
         BossMusic.SetTrack("boss_luminous_sword.mp3", true, 0.75)
     end)
 
     -- 4. Capture Success -> Victory Fanfare
-    pcall(RegisterHook, "/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function(Context)
-        BossMusic.PlayVictoryFanfare()
+    pcall(RegisterHook, "/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function(Context, TargetPal)
+        pcall(function()
+            local captured = TargetPal and TargetPal.get and TargetPal:get() or TargetPal
+            local isMajor, isField = ClassifyBoss(captured)
+            if (isMajor or isField) and IsNearLocalPlayer(captured, 15000.0) then
+                BossMusic.PlayVictoryFanfare()
+            end
+        end)
     end)
 
     -- 5. Boss Death -> Victory Fanfare
@@ -590,11 +642,8 @@ function BossMusic.Init()
         pcall(function()
             local dead = Context and Context.get and Context:get() or Context
             if dead and dead:IsValid() then
-                local isBoss = false
-                if dead.IsBoss and type(dead.IsBoss) == "function" and dead:IsBoss() then isBoss = true end
-                if not isBoss and dead.IsRarePal and type(dead.IsRarePal) == "function" and dead:IsRarePal() then isBoss = true end
-                if not isBoss and dead.IsTowerBoss and type(dead.IsTowerBoss) == "function" and dead:IsTowerBoss() then isBoss = true end
-                if isBoss then
+                local isMajor, isField = ClassifyBoss(dead)
+                if (isMajor or isField) and IsNearLocalPlayer(dead, 15000.0) then
                     BossMusic.PlayVictoryFanfare()
                 end
             end
@@ -603,9 +652,16 @@ function BossMusic.Init()
 
     -- Initial startup: Check if player exists or at title
     local initP = GetLocalPlayer()
-    if not initP then
+    local titleState = nil
+    pcall(function() titleState = FindFirstOf("PalGameStateInTitle") end)
+    if titleState and titleState:IsValid() then
         OnTitleScreen()
+    elseif initP and initP:IsValid() then
+        IsInTitle = false
+        IsConnecting = false
     else
+        -- Do not assume "no local player" means title: dedicated servers also
+        -- have no local pawn. The title/new-world hooks will establish state.
         IsInTitle = false
     end
 
@@ -613,23 +669,22 @@ function BossMusic.Init()
     local delayFunc = ExecuteInGameThreadWithDelay or ExecuteWithDelay
     if delayFunc then
         local function MusicLoop()
-            pcall(function()
+            local ok, err = pcall(function()
                 local player = GetLocalPlayer()
                 ActiveNearBoss = false
                 if player and player:IsValid() then
                     IsInTitle = false
-                else
-                    IsInTitle = true
-
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
-                        -- Check expiry of combat music (15s after last combat hit)
                         local now = os.time()
-                        if ActiveFieldBossCombat and (now - (LastFieldBossCombatTime or 0) > 15) then
+                        if ActiveMajorBossCombat and (now - LastMajorBossCombatTime > MAJOR_BOSS_COMBAT_TIMEOUT) then
+                            ActiveMajorBossCombat = false
+                        end
+                        if ActiveFieldBossCombat and (now - LastFieldBossCombatTime > FIELD_BOSS_COMBAT_TIMEOUT) then
                             ActiveFieldBossCombat = false
                         end
 
-                        -- Aura World Boss proximity (static coordinate math, 0% CPU)
+                        -- Aura World Boss proximity uses cached spawn coordinates.
                         local wb = package.loaded["world_boss"]
                         if wb and wb.GetActiveBosses then
                             for _, data in pairs(wb.GetActiveBosses()) do
@@ -644,45 +699,21 @@ function BossMusic.Init()
                             end
                         end
                     end
+                elseif not IsConnecting then
+                    local title = nil
+                    pcall(function() title = FindFirstOf("PalGameStateInTitle") end)
+                    IsInTitle = title and title:IsValid() or false
                 end
 
                 UpdateMusicState()
             end)
+            if not ok then
+                print(string.format("[WorldBossAuraSystem] Music loop error: %s", tostring(err)))
+            end
             delayFunc(5000, MusicLoop)
         end
         delayFunc(4000, MusicLoop)
     end
-
-    -- Event-Driven Combat Music: Fires instantly when attacking or taking damage from a Boss
-    pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDamage", function(Context, DamageResult)
-        pcall(function()
-            local target = Context and Context.get and Context:get() or Context
-            if target and target:IsValid() then
-                local isBoss = false
-                if type(target.IsBoss) == "function" and target:IsBoss() then isBoss = true end
-                if not isBoss and type(target.IsRarePal) == "function" and target:IsRarePal() then isBoss = true end
-                if not isBoss and type(target.IsTowerBoss) == "function" and target:IsTowerBoss() then isBoss = true end
-                if isBoss then
-                    LastFieldBossCombatTime = os.time()
-                    if not ActiveFieldBossCombat then
-                        ActiveFieldBossCombat = true
-                        UpdateMusicState()
-                    end
-                end
-            end
-        end)
-    end)
-
-    -- Fast-Travel & Teleport Hooks: Instantly re-evaluate music upon arriving
-    pcall(RegisterHook, "/Script/Engine.PlayerController:ClientRestart", function(Context)
-        local delay = ExecuteInGameThreadWithDelay or ExecuteWithDelay
-        if delay then
-            delay(500, UpdateMusicState)
-            delay(1500, UpdateMusicState)
-        else
-            UpdateMusicState()
-        end
-    end)
 
     print("[WorldBossAuraSystem] Universal Title, Regional, Dungeon & Boss Music System initialized.")
 end
