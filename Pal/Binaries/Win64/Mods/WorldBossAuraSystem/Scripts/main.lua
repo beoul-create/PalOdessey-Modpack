@@ -32,6 +32,9 @@ local function LoadConfigFile()
         SpawnIntervalSeconds = 900,
         MaxActiveBosses = 1,
         SpawnCommandCooldownSeconds = 60,
+        RequireServerAuthority = true,
+        AllowPublicBossCommands = false,
+        AdminPlayerUIDs = {},
         LiveboardExportIntervalSeconds = 15,
         MusicLocationScanIntervalSeconds = 5,
         BaseScanIntervalSeconds = 30,
@@ -45,6 +48,12 @@ local function LoadConfigFile()
         PerformanceDiagnosticsEnabled = true,
         PerformanceAutoReportSeconds = 300,
         EnableVisualAuras = true,
+        AuraWarmupEnabled = false,
+        AuraWarmupDelaySeconds = 20,
+        SAOEffectsEnabled = true,
+        SAOMaxActiveSoulFlames = 32,
+        SAOMaxBurstEffectsPerSecond = 12,
+        SAOUseNiagaraPooling = true,
         DiscordWebhookURL = "YOUR_DISCORD_WEBHOOK_URL_HERE",
         BossPalPool = { "Kitsunebi", "ThunderDragonMan", "GrassMammoth", "WeaselDragon", "Anubis" },
         BossLevel = 100,
@@ -77,7 +86,7 @@ end
 
 local Config = LoadConfigFile()
 Performance.Configure(Config)
-SAODeath.Init()
+SAODeath.Init(Config)
 WorldBoss.LoadConfig(Config)
 WorldBoss.InitHooks()
 AutoShutdown.Init()
@@ -163,6 +172,15 @@ StartGameThreadLoop(LiveboardIntervalMs, function()
 end)
 StartGameThreadLoop(BossIntervalMs, function() WorldBoss.SpawnEvent() end)
 StartGameThreadLoop(30000, function() WorldBoss.CheckDespawns() end)
+
+if Config.AuraWarmupEnabled == true then
+    local delay = ExecuteInGameThreadWithDelay or ExecuteWithDelay
+    if delay then
+        delay(math.max(5, tonumber(Config.AuraWarmupDelaySeconds) or 20) * 1000, function()
+            pcall(WorldBoss.WarmUpAuras, delay)
+        end)
+    end
+end
 
 local PerformanceAutoReportSeconds = tonumber(Config.PerformanceAutoReportSeconds) or 0
 if PerformanceAutoReportSeconds > 0 then

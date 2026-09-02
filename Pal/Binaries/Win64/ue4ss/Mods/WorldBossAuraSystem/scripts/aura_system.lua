@@ -114,7 +114,10 @@ local function FindValidAura(auraType)
     for _, path in ipairs(list) do
         local obj = StaticFindObject(path)
         if (not obj or not obj:IsValid()) and type(LoadAsset) == "function" then
+            local loadStartedAt = Performance.Start()
             local ok, loaded = pcall(LoadAsset, path)
+            Performance.Finish("aura_asset_load", loadStartedAt, ok and loaded ~= nil)
+            Performance.Count(ok and loaded and "aura_asset_load_successes" or "aura_asset_load_failures")
             if ok then obj = loaded end
         end
         if obj and obj:IsValid() then
@@ -162,6 +165,23 @@ function AuraSystem.Attach(Character, AuraType)
     end)
     Performance.Finish("aura_attach", startedAt, ok and attached ~= nil)
     return attached
+end
+
+function AuraSystem.WarmUp(schedule)
+    if Config.AuraWarmupEnabled ~= true then return end
+    local auraTypes = AuraSystem.GetAllAuras()
+    local index = 1
+    local function LoadNext()
+        local auraType = auraTypes[index]
+        if not auraType then
+            print("[WorldBossAuraSystem] Aura asset warm-up completed.")
+            return
+        end
+        FindValidAura(auraType)
+        index = index + 1
+        if type(schedule) == "function" then schedule(1000, LoadNext) else LoadNext() end
+    end
+    LoadNext()
 end
 
 function AuraSystem.Detach(Character, Component)
