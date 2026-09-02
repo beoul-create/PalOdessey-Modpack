@@ -28,6 +28,9 @@ local function LoadGuildUpgrades()
                 end
             end
         end
+    end)
+end
+
 local function SaveGuildUpgrades()
     pcall(function()
         local encoder = nil

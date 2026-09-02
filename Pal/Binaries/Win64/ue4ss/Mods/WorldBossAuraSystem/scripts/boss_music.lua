@@ -3,10 +3,25 @@ local Performance = require("performance")
 
 local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
 local AudioDir = ScriptDir .. "../audio/"
-local StateFile = AudioDir .. "music_state.json"
-local JukeboxExe = AudioDir .. "PalBossJukebox.exe"
-local HeartbeatFile = AudioDir .. "jukebox_heartbeat.txt"
-local MetricsFile = AudioDir .. "jukebox_metrics.json"
+
+local FFI = nil
+pcall(function() FFI = require("ffi") end)
+if not FFI then pcall(function() FFI = _G.ffi end) end
+
+local WinMM = nil
+if FFI then
+    pcall(function()
+        FFI.cdef[[
+            typedef unsigned int UINT;
+            typedef unsigned long DWORD;
+            typedef void* HWND;
+            typedef const char* LPCSTR;
+            typedef char* LPSTR;
+            DWORD mciSendStringA(LPCSTR lpstrCommand, LPSTR lpstrReturnString, UINT uReturnLength, HWND hwndCallback);
+        ]]
+        WinMM = FFI.load("winmm.dll")
+    end)
+end
 local Config = {}
 
 local CurrentTrack = ""
@@ -38,55 +53,23 @@ local function Clamp(value, minimum, maximum)
     return math.max(minimum, math.min(maximum, tonumber(value) or minimum))
 end
 
-local function WriteState(content)
-    local startedAt = Performance.Start()
-    local ok, err = pcall(function()
-        local f = assert(io.open(StateFile, "w"))
-        f:write(content)
-        f:flush()
-        f:close()
-    end)
-    if not ok then
-        Performance.Count("music_state_write_errors")
-        print(string.format("[WorldBossAuraSystem] Music state write failed: %s", tostring(err)))
-    else
-        Performance.Count("music_state_writes")
+local CurrentAlias = "PalOdysseyBGM"
+local IsTrackOpen = false
+
+local function SendMciCommand(cmd)
+    if WinMM and WinMM.mciSendStringA then
+        local res = WinMM.mciSendStringA(cmd, nil, 0, nil)
+        return res == 0
     end
-    Performance.Finish("music_state_write", startedAt, ok)
-    return ok
+    return pcall(os.execute, string.format('rundll32.exe winmm.dll,mciExecute %s', cmd))
 end
 
-local function EnsureJukeboxRunning()
-    local heartbeat = io.open(HeartbeatFile, "r")
-    if heartbeat then
-        local heartbeatTime = tonumber(heartbeat:read("*all")) or 0
-        heartbeat:close()
-        local heartbeatAge = os.time() - heartbeatTime
-        if heartbeatAge >= 0 and heartbeatAge <= HeartbeatStaleSeconds then
-            JukeboxStarted = true
-            return true
-        end
+local function CloseCurrentTrack()
+    if IsTrackOpen then
+        SendMciCommand("stop " .. CurrentAlias)
+        SendMciCommand("close " .. CurrentAlias)
+        IsTrackOpen = false
     end
-    JukeboxStarted = false
-
-    local now = os.time()
-    if now - LastJukeboxStartAttempt < 5 then return false end
-    LastJukeboxStartAttempt = now
-
-    -- Verify executable exists before invoking Windows shell
-    local f = io.open(JukeboxExe, "rb")
-    if not f then
-        print("[WorldBossAuraSystem] PalBossJukebox.exe was not found; custom music is disabled.")
-        return false
-    end
-    f:close()
-
-    local ok, result, _, exitCode = pcall(os.execute, string.format('start "" /B "%s"', JukeboxExe:gsub("/", "\\")))
-    JukeboxStarted = ok and (result == true or result == 0 or exitCode == 0)
-    if not JukeboxStarted then
-        print("[WorldBossAuraSystem] PalBossJukebox.exe could not be started; retrying later.")
-    end
-    return JukeboxStarted
 end
 
 local CurrentMasterVolume = 0.15
@@ -150,7 +133,6 @@ function BossMusic.ToggleMute()
 end
 
 function BossMusic.SetTrack(trackName, loop, volume)
-    EnsureJukeboxRunning()
     local requestedBaseVolume = volume or 0.65
     local requestedLoop = loop and true or false
     if CurrentTrack == trackName and CurrentState == "play" and
@@ -166,9 +148,21 @@ function BossMusic.SetTrack(trackName, loop, volume)
 
     local master = GetMasterVolume()
     local finalVol = math.max(0.0, math.min(1.0, CurrentBaseVolume * master))
+    local mciVol = math.floor(finalVol * 1000)
 
-    WriteState(string.format('{"state":"play","track":"%s","loop":%s,"volume":%.2f}', trackName, CurrentLoop and "true" or "false", finalVol))
-    print(string.format("[WorldBossAuraSystem] 🎵 Jukebox playing: %s (Loop: %s, Vol: %.2f [Master: %.2f])", trackName, tostring(loop), finalVol, master))
+    local fullAudioPath = (AudioDir .. trackName):gsub("/", "\\")
+    
+    CloseCurrentTrack()
+    SendMciCommand(string.format('open "%s" type mpegvideo alias %s', fullAudioPath, CurrentAlias))
+    SendMciCommand(string.format('setaudio %s volume to %d', CurrentAlias, mciVol))
+    if CurrentLoop then
+        SendMciCommand("play " .. CurrentAlias .. " repeat")
+    else
+        SendMciCommand("play " .. CurrentAlias)
+    end
+    IsTrackOpen = true
+
+    print(string.format("[WorldBossAuraSystem] 🎵 In-Process Audio Playing: %s (Loop: %s, Vol: %d/1000 [Master: %.2f])", trackName, tostring(loop), mciVol, master))
 end
 
 function BossMusic.FadeOut()
@@ -176,9 +170,8 @@ function BossMusic.FadeOut()
     CurrentTrack = ""
     CurrentState = "fade_out"
     Performance.Count("music_fade_outs")
-
-    WriteState('{"state":"fade_out"}')
-    print("[WorldBossAuraSystem] 🎵 Jukebox fading out.")
+    CloseCurrentTrack()
+    print("[WorldBossAuraSystem] 🎵 In-Process Audio Stopped.")
 end
 
 function BossMusic.PlayVictoryFanfare()
