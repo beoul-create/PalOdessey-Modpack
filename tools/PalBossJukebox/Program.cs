@@ -132,6 +132,7 @@ namespace PalBossJukebox
         {
             return IsProcessRunning("Palworld-Win64-Shipping") ||
                    IsProcessRunning("Pal-Win64-Shipping") ||
+                   IsProcessRunning("Palworld") ||
                    IsProcessRunning("Pal");
         }
 
@@ -144,15 +145,20 @@ namespace PalBossJukebox
                 if (now - _lastGameProcessCheck >= TimeSpan.FromSeconds(1))
                 {
                     _lastGameProcessCheck = now;
+                    // Allow a 60-second grace period upon startup before terminating if game process hasn't been detected yet
+                    bool gracePeriod = (now - _startedAt) < TimeSpan.FromSeconds(60);
                     if (!IsGameRunning())
                     {
-                        _missingGameTicks++;
-                        if (_missingGameTicks >= 2)
+                        if (!gracePeriod)
                         {
-                            try { _activePlayer?.Close(); } catch { }
-                            try { _fadingOutPlayer?.Close(); } catch { }
-                            Environment.Exit(0);
-                            return;
+                            _missingGameTicks++;
+                            if (_missingGameTicks >= 10)
+                            {
+                                try { _activePlayer?.Close(); } catch { }
+                                try { _fadingOutPlayer?.Close(); } catch { }
+                                Environment.Exit(0);
+                                return;
+                            }
                         }
                     }
                     else
