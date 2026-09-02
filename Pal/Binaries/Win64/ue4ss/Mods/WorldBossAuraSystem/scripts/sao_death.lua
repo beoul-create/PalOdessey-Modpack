@@ -1,15 +1,6 @@
 local SAODeath = {}
-local Performance = require("performance")
-local Config = {}
 local RecentlyHandled = setmetatable({}, { __mode = "k" })
 local OriginalState = setmetatable({}, { __mode = "k" })
-local AssetCache = {}
-local BurstWindowSecond = 0
-local BurstCount = 0
-
-local function Clamp(value, minimum, maximum, fallback)
-    return math.max(minimum, math.min(maximum, tonumber(value) or fallback))
-end
 
 -- Native Palworld disintegration & crystal burst effects
 local CandidateParticles = {
@@ -27,20 +18,12 @@ local CandidateSounds = {
 
 local function FindFirstValidAsset(candidates)
     for _, path in ipairs(candidates) do
-        local obj = AssetCache[path]
-        if obj and obj:IsValid() then
-            Performance.Count("sao_asset_cache_hits")
-            return obj
-        end
-        obj = StaticFindObject(path)
+        local obj = StaticFindObject(path)
         if (not obj or not obj:IsValid()) and type(LoadAsset) == "function" then
-            local loadStartedAt = Performance.Start()
             local ok, loaded = pcall(LoadAsset, path)
-            Performance.Finish("sao_asset_load", loadStartedAt, ok and loaded ~= nil)
             if ok then obj = loaded end
         end
         if obj and obj:IsValid() then
-            AssetCache[path] = obj
             return obj
         end
     end
@@ -48,50 +31,6 @@ local function FindFirstValidAsset(candidates)
 end
 
 local ActiveSoulFlames = setmetatable({}, { __mode = "k" })
-
-local function DestroyEffect(effect)
-    pcall(function()
-        if not effect or not effect:IsValid() then return end
-        if type(effect.Deactivate) == "function" then effect:Deactivate() end
-        if type(effect.DestroyComponent) == "function" then
-            effect:DestroyComponent()
-        elseif type(effect.K2_DestroyComponent) == "function" then
-            effect:K2_DestroyComponent(effect)
-        end
-    end)
-end
-
-local function CountActiveSoulFlames()
-    local count = 0
-    for character, effect in pairs(ActiveSoulFlames) do
-        local valid = false
-        pcall(function() valid = character:IsValid() and effect and effect:IsValid() end)
-        if valid then count = count + 1 else ActiveSoulFlames[character] = nil end
-    end
-    return count
-end
-
-local function AllowBurstEffect()
-    local second = os.time()
-    if second ~= BurstWindowSecond then
-        BurstWindowSecond = second
-        BurstCount = 0
-    end
-    local maximum = Clamp(Config.SAOMaxBurstEffectsPerSecond, 1, 120, 12)
-    if BurstCount >= maximum then
-        Performance.Count("sao_burst_rate_limited")
-        return false
-    end
-    BurstCount = BurstCount + 1
-    return true
-end
-
-local function ClearSoulFlames()
-    for character, effect in pairs(ActiveSoulFlames) do
-        DestroyEffect(effect)
-        ActiveSoulFlames[character] = nil
-    end
-end
 
 local function IsBaseCampPal(Character)
     local isBase = false
@@ -119,25 +58,18 @@ local function IsBaseCampPal(Character)
 end
 
 local function HandleSAODeath(Character)
-    if Config.SAOEffectsEnabled == false then return end
     if not Character or not Character:IsValid() then return end
     local now = os.clock()
     if RecentlyHandled[Character] and now - RecentlyHandled[Character] < 1.0 then return end
     RecentlyHandled[Character] = now
 
-    local perfStartedAt = Performance.Start()
-    local handled = pcall(function()
+    pcall(function()
         local Location = Character:K2_GetActorLocation()
         local Rotation = Character:K2_GetActorRotation()
         local World = Character:GetWorld()
 
         -- BASE CAMP PAL SPECIAL HANDLING: Floating Soul Flame!
         if IsBaseCampPal(Character) then
-            local maximum = Clamp(Config.SAOMaxActiveSoulFlames, 1, 256, 32)
-            if not ActiveSoulFlames[Character] and CountActiveSoulFlames() >= maximum then
-                Performance.Count("sao_soul_flame_limit_reached")
-                return
-            end
             local Mesh = Character.Mesh or (type(Character.GetMesh) == "function" and Character:GetMesh())
             if Mesh and Mesh:IsValid() then
                 local AnimInstance = Mesh:GetAnimInstance()
@@ -183,7 +115,6 @@ local function HandleSAODeath(Character)
                         true, true, 0, true
                     )
                     ActiveSoulFlames[Character] = soulEmitter
-                    Performance.Count("sao_soul_flames_spawned")
                 end
             end
             return
@@ -246,41 +177,40 @@ local function HandleSAODeath(Character)
         end)
 
         -- 2. Spawn Crystal Polygon Burst (SAO Shatter Effect)
-        local allowBurst = AllowBurstEffect()
-        if allowBurst then
-            local NiagaraFunc = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
-            local NiagaraAsset = FindFirstValidAsset(CandidateParticles)
-            if NiagaraFunc and NiagaraFunc:IsValid() and NiagaraAsset and NiagaraAsset:IsValid() and World then
-                local poolMethod = Config.SAOUseNiagaraPooling == false and 0 or 1 -- ENCPoolMethod::AutoRelease
-                NiagaraFunc:SpawnSystemAtLocation(World, NiagaraAsset, Location, Rotation, { X=2.0, Y=2.0, Z=2.0 }, true, true, poolMethod, true)
-                Performance.Count("sao_burst_effects_spawned")
-            else
-                local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
-                if PalUtil and PalUtil:IsValid() and type(PalUtil.PlayEffectAtLocation) == "function" then
-                    PalUtil:PlayEffectAtLocation(World, Location, Rotation)
-                end
+        local NiagaraFunc = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
+        local NiagaraAsset = FindFirstValidAsset(CandidateParticles)
+
+        if NiagaraFunc and NiagaraFunc:IsValid() and NiagaraAsset and NiagaraAsset:IsValid() and World then
+            NiagaraFunc:SpawnSystemAtLocation(World, NiagaraAsset, Location, Rotation, { X=2.0, Y=2.0, Z=2.0 }, true, true, 0, true)
+        else
+            local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+            if PalUtil and PalUtil:IsValid() and type(PalUtil.PlayEffectAtLocation) == "function" then
+                PalUtil:PlayEffectAtLocation(World, Location, Rotation)
             end
         end
 
         -- 3. Play Glass / Crystal Shatter Sound
-        local SoundAsset = allowBurst and FindFirstValidAsset(CandidateSounds) or nil
+        local SoundAsset = FindFirstValidAsset(CandidateSounds)
         local GameplayStatics = StaticFindObject("/Script/Engine.Default__GameplayStatics")
         if GameplayStatics and GameplayStatics:IsValid() and SoundAsset and SoundAsset:IsValid() and World then
             GameplayStatics:PlaySoundAtLocation(World, SoundAsset, Location, 1.2, 1.0, 0.0, nil, nil, nil)
         end
     end)
-    Performance.Finish("sao_death_handler", perfStartedAt, handled)
 end
 
 local function RestoreCharacter(Character)
-    local perfStartedAt = Performance.Start()
-    local restored = pcall(function()
+    pcall(function()
         if not Character or not Character:IsValid() then return end
         RecentlyHandled[Character] = nil
 
         -- Extinguish Soul Flame if active on Base Pal
         if ActiveSoulFlames[Character] then
-            DestroyEffect(ActiveSoulFlames[Character])
+            pcall(function()
+                local emitter = ActiveSoulFlames[Character]
+                if emitter and emitter:IsValid() and type(emitter.Deactivate) == "function" then
+                    emitter:Deactivate()
+                end
+            end)
             ActiveSoulFlames[Character] = nil
         end
 
@@ -329,11 +259,9 @@ local function RestoreCharacter(Character)
         end)
         OriginalState[Character] = nil
     end)
-    Performance.Finish("sao_restore_handler", perfStartedAt, restored)
 end
 
-function SAODeath.Init(config)
-    Config = config or {}
+function SAODeath.Init()
     -- Universal death hooks covering Wild Pals, Bosses, Human NPCs, and Players
     local deathHooks = {
         "/Script/Pal.PalCharacter:OnDead",
@@ -383,11 +311,6 @@ function SAODeath.Init(config)
     end)
     pcall(RegisterHook, "/Script/Engine.PlayerController:ClientRestart", function(Context, NewPawn)
         RestoreCharacter(NewPawn and NewPawn.get and NewPawn:get() or NewPawn)
-    end)
-    pcall(RegisterHook, "/Script/Engine.PlayerController:ClientTravel", function()
-        ClearSoulFlames()
-        RecentlyHandled = setmetatable({}, { __mode = "k" })
-        OriginalState = setmetatable({}, { __mode = "k" })
     end)
 
     print("[WorldBossAuraSystem] Universal SAO Death Disintegration & Base Pal Soul Flames initialized.")

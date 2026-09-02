@@ -11,130 +11,235 @@ local Config = {}
 local SpawnInProgress = false
 local LastCommandSpawn = 0
 local PalDisplayNames = {
-    Kitsunebi = "Foxparks",
-    ThunderDragonMan = "Orserk",
-    GrassMammoth = "Mammorest",
-    WeaselDragon = "Chillet",
-    Anubis = "Anubis"
+    ["SheepBall"] = "Lamball",
+    ["Lamball_Ignis"] = "Lamball Ignis",
+    ["PinkCat"] = "Cattiva",
+    ["Cattiva_Noct"] = "Cattiva Noct",
+    ["ChickenPal"] = "Chikipi",
+    ["Chikipi_Electricity"] = "Chikipi Lux",
+    ["Carbunclo"] = "Lifmunk",
+    ["Lifmunk_Noct"] = "Lifmunk Noct",
+    ["Kitsunebi"] = "Foxparks",
+    ["Foxparks_Aqua"] = "Foxparks Aqua",
+    ["BluePlatypus"] = "Fuack",
+    ["Fuack_Ignis"] = "Fuack Ignis",
+    ["ElecCat"] = "Sparkit",
+    ["Sparkit_Aqua"] = "Sparkit Aqua",
+    ["Monkey"] = "Tanzee",
+    ["Tanzee_Aqua"] = "Tanzee Aqua",
+    ["FlameBambi"] = "Rooby",
+    ["Rooby_Cryst"] = "Rooby Cryst",
+    ["Penguin"] = "Pengullet",
+    ["Pengullet_Ignis"] = "Pengullet Ignis",
+    ["KingPenguin"] = "Penking",
+    ["Penking_Lux"] = "Penking Lux",
+    ["Hedgehog"] = "Jolthog",
+    ["Jolthog_Ignis"] = "Jolthog Ignis",
+    ["Hedgehog_Ice"] = "Jolthog Cryst",
+    ["Jolthog_Terra"] = "Jolthog Terra",
+    ["PlantSlime"] = "Gumoss",
+    ["Gumoss_Ignis"] = "Gumoss Ignis",
+    ["CuteFox"] = "Vixy",
+    ["Vixy_Noct"] = "Vixy Noct",
+    ["NightFox"] = "Hoocrates",
+    ["Hoocrates_Lux"] = "Hoocrates Lux",
+    ["WaterMammoth"] = "Teafant",
+    ["Teafant_Ignis"] = "Teafant Ignis",
+    ["NegativeKoala"] = "Depresso",
+    ["Depresso_Lux"] = "Depresso Lux",
+    ["DreamDemon"] = "Daedream",
+    ["Daedream_Lux"] = "Daedream Lux",
+    ["Boar"] = "Rushoar",
+    ["Rushoar_Aqua"] = "Rushoar Aqua",
+    ["Garm"] = "Direhowl",
+    ["Direhowl_Cryst"] = "Direhowl Cryst",
+    ["CuteMole"] = "Fuddler",
+    ["Fuddler_Aqua"] = "Fuddler Aqua",
+    ["Gryphon"] = "Killamari",
+    ["Killamari_Ignis"] = "Killamari Ignis",
+    ["Bastet"] = "Mau",
+    ["Mau_Ignis"] = "Mau Ignis",
+    ["Bastet_Ice"] = "Mau Cryst",
+    ["Mau_Lux"] = "Mau Lux",
+    ["FlowerRabbit"] = "Flopie",
+    ["Flopie_Noct"] = "Flopie Noct",
+    ["CowPal"] = "Mozzarina",
+    ["Mozzarina_Ignis"] = "Mozzarina Ignis",
+    ["GrassCactus"] = "Bristla",
+    ["Bristla_Ignis"] = "Bristla Ignis",
+    ["SharkKid"] = "Gobfin",
+    ["Gobfin_Lux"] = "Gobfin Lux",
+    ["SharkKid_Fire"] = "Gobfin Ignis",
+    ["Gobfin_Cryst"] = "Gobfin Cryst",
+    ["WindChimes"] = "Hangyu",
+    ["Hangyu_Aqua"] = "Hangyu Aqua",
+    ["WindChimes_Ice"] = "Hangyu Cryst",
+    ["Hangyu_Ignis"] = "Hangyu Ignis",
+    ["ColorfulBird"] = "Tocotoco",
+    ["Tocotoco_Noct"] = "Tocotoco Noct",
+    ["WeaselDragon"] = "Chillet",
+    ["Chillet_Terra"] = "Chillet Terra",
+    ["DrillGame"] = "Digtoise",
+    ["Digtoise_Aqua"] = "Digtoise Aqua",
+    ["BerryGoat"] = "Caprity",
+    ["Caprity_Cryst"] = "Caprity Cryst",
+    ["Alpaca"] = "Melpaca",
+    ["Melpaca_Ignis"] = "Melpaca Ignis",
+    ["Deer"] = "Eikthyrdeer",
+    ["Eikthyrdeer_Noct"] = "Eikthyrdeer Noct",
+    ["Deer_Ground"] = "Eikthyrdeer Terra",
+    ["Eikthyrdeer_Aqua"] = "Eikthyrdeer Aqua",
+    ["HawkBird"] = "Nitewing",
+    ["Nitewing_Ignis"] = "Nitewing Ignis",
+    ["RedArmorBird"] = "Ragnahawk",
+    ["Ragnahawk_Cryst"] = "Ragnahawk Cryst",
+    ["MouthFish"] = "Dumud",
+    ["Dumud_Cryst"] = "Dumud Cryst",
+    ["GhostBeast"] = "Maraith",
+    ["Maraith_Ignis"] = "Maraith Ignis",
+    ["RobinHood"] = "Robinquill",
+    ["Robinquill_Aqua"] = "Robinquill Aqua",
+    ["RobinHood_Ground"] = "Robinquill Terra",
+    ["Robinquill_Ignis"] = "Robinquill Ignis",
+    ["Gorilla"] = "Gorirat",
+    ["Gorirat_Aqua"] = "Gorirat Aqua",
+    ["Gorilla_Ground"] = "Gorirat Terra",
+    ["Gorirat_Cryst"] = "Gorirat Cryst",
+    ["BadCatgirl"] = "Ribbuny",
+    ["Ribbuny_Noct"] = "Ribbuny Noct",
+    ["QueenBee"] = "Elizabee",
+    ["Elizabee_Noct"] = "Elizabee Noct",
+    ["SoldierBee"] = "Beegarde",
+    ["Beegarde_Ignis"] = "Beegarde Ignis",
+    ["CatMage"] = "Katress",
+    ["Katress_Aqua"] = "Katress Aqua",
+    ["CatBat"] = "Grintale",
+    ["Grintale_Cryst"] = "Grintale Cryst",
+    ["WoolFox"] = "Swee",
+    ["Swee_Ignis"] = "Swee Ignis",
+    ["KingWoolFox"] = "Sweepa",
+    ["Sweepa_Ignis"] = "Sweepa Ignis",
+    ["IceFox"] = "Foxcicle",
+    ["Foxcicle_Ignis"] = "Foxcicle Ignis",
+    ["FireKirin"] = "Pyrin",
+    ["Pyrin_Aqua"] = "Pyrin Aqua",
+    ["FireKirin_Dark"] = "Pyrin Noct",
+    ["Pyrin_Cryst"] = "Pyrin Cryst",
+    ["IceDeer"] = "Reindrix",
+    ["Reindrix_Ignis"] = "Reindrix Ignis",
+    ["RaijinDaughter"] = "Dazzi",
+    ["Dazzi_Aqua"] = "Dazzi Aqua",
+    ["Eagle"] = "Galeclaw",
+    ["Galeclaw_Lux"] = "Galeclaw Lux",
+    ["FlowerDinosaur"] = "Dinossom",
+    ["Dinossom_Aqua"] = "Dinossom Aqua",
+    ["FlowerDinosaur_Electric"] = "Dinossom Lux",
+    ["Dinossom_Ignis"] = "Dinossom Ignis",
+    ["Serpent"] = "Surfent",
+    ["Surfent_Cryst"] = "Surfent Cryst",
+    ["Serpent_Ground"] = "Surfent Terra",
+    ["Surfent_Ignis"] = "Surfent Ignis",
+    ["DarkScorpion"] = "Menasting",
+    ["Menasting_Aqua"] = "Menasting Aqua",
+    ["DarkScorpion_Ground"] = "Menasting Terra",
+    ["Menasting_Ignis"] = "Menasting Ignis",
+    ["PinkLizard"] = "Lovander",
+    ["Lovander_Cryst"] = "Lovander Cryst",
+    ["GrassPanda"] = "Mossanda",
+    ["Mossanda_Cryst"] = "Mossanda Cryst",
+    ["GrassPanda_Electric"] = "Mossanda Lux",
+    ["Mossanda_Terra"] = "Mossanda Terra",
+    ["KingAlpaca"] = "Kingpaca",
+    ["Kingpaca_Ignis"] = "Kingpaca Ignis",
+    ["KingAlpaca_Ice"] = "Kingpaca Cryst",
+    ["Kingpaca_Lux"] = "Kingpaca Lux",
+    ["YukiyamaSaru"] = "Wumpo",
+    ["Wumpo_Ignis"] = "Wumpo Ignis",
+    ["YukiyamaSaru_Grass"] = "Wumpo Botan",
+    ["Wumpo_Cryst"] = "Wumpo Cryst",
+    ["Fenglope"] = "Fenglope",
+    ["Fenglope_Ignis"] = "Fenglope Ignis",
+    ["ThunderDog"] = "Grizzbolt",
+    ["Grizzbolt_Dark"] = "Grizzbolt Noct",
+    ["ThunderDog_Ice"] = "Grizzbolt Cryst",
+    ["Grizzbolt_Terra"] = "Grizzbolt Terra",
+    ["GrassMammoth"] = "Mammorest",
+    ["Mammorest_Aqua"] = "Mammorest Aqua",
+    ["GrassMammoth_Ice"] = "Mammorest Cryst",
+    ["Mammorest_Ignis"] = "Mammorest Ignis",
+    ["LilyQueen"] = "Lyleen",
+    ["Lyleen_Ignis"] = "Lyleen Ignis",
+    ["LilyQueen_Dark"] = "Lyleen Noct",
+    ["Lyleen_Aqua"] = "Lyleen Aqua",
+    ["BlackMetalDragon"] = "Astegon",
+    ["Astegon_Aqua"] = "Astegon Aqua",
+    ["Anubis"] = "Anubis",
+    ["Anubis_Cryst"] = "Anubis Cryst",
+    ["Umihebi"] = "Jormuntide",
+    ["Jormuntide_Cryst"] = "Jormuntide Cryst",
+    ["Umihebi_Fire"] = "Jormuntide Ignis",
+    ["Jormuntide_Terra"] = "Jormuntide Terra",
+    ["Suzaku"] = "Suzaku",
+    ["Suzaku_Cryst"] = "Suzaku Cryst",
+    ["Suzaku_Water"] = "Suzaku Aqua",
+    ["Suzaku_Terra"] = "Suzaku Terra",
+    ["HadesBird"] = "Helzephyr",
+    ["Helzephyr_Aqua"] = "Helzephyr Aqua",
+    ["BlackCentaur"] = "Necromus",
+    ["Necromus_Cryst"] = "Necromus Cryst",
+    ["WhiteCentaur"] = "Paladius",
+    ["Paladius_Ignis"] = "Paladius Ignis",
+    ["JetDragon"] = "Jetragon",
+    ["Jetragon_Frost"] = "Jetragon Frost",
+    ["IceHorse"] = "Frostallion",
+    ["Frostallion_Ignis"] = "Frostallion Ignis",
+    ["IceHorse_Dark"] = "Frostallion Noct",
+    ["Frostallion_Aqua"] = "Frostallion Aqua",
+    ["DarkMechaDragon"] = "Shadowbeak",
+    ["Shadowbeak_Aqua"] = "Shadowbeak Aqua",
+    ["ThunderDragonMan"] = "Orserk",
+    ["Orserk_Terra"] = "Orserk Terra",
+    ["FlameBuffalo"] = "Blazamut",
+    ["Blazamut_Aqua"] = "Blazamut Aqua",
+    ["LazyDragon"] = "Relaxaurus",
+    ["Relaxaurus_Terra"] = "Relaxaurus Terra",
+    ["LazyDragon_Electric"] = "Relaxaurus Lux",
+    ["Relaxaurus_Noct"] = "Relaxaurus Noct",
+    ["Horus"] = "Faleris",
+    ["Faleris_Aqua"] = "Faleris Aqua",
+    ["Horus_Water"] = "Faleris Aqua",
+    ["Faleris_Terra"] = "Faleris Terra",
+    ["MoonQueen"] = "Selyne",
+    ["Selyne_Ignis"] = "Selyne Ignis",
+    ["MeteorDragon"] = "Xenogard",
+    ["Xenogard_Aqua"] = "Xenogard Aqua",
+    ["Baphomet"] = "Incineram",
+    ["Incineram_Aqua"] = "Incineram Aqua",
+    ["Baphomet_Dark"] = "Incineram Noct",
+    ["Incineram_Cryst"] = "Incineram Cryst",
+    ["DarkAlien"] = "Xenovader",
+    ["Xenovader_Ignis"] = "Xenovader Ignis",
+    ["WhiteMoth"] = "Sibelyx",
+    ["Sibelyx_Ignis"] = "Sibelyx Ignis",
+    ["WhiteMoth_Neutral"] = "Sibelyx Primo",
+    ["Sibelyx_Aqua"] = "Sibelyx Aqua",
+    ["HerculesBeetle"] = "Warsect",
+    ["Warsect_Aqua"] = "Warsect Aqua",
+    ["HerculesBeetle_Ground"] = "Warsect Terra",
+    ["Warsect_Ignis"] = "Warsect Ignis",
+    ["SwordCutlassfish"] = "Skutlass",
+    ["Skutlass_Cryst"] = "Skutlass Cryst",
+    ["SwordCutlassfish_Fire"] = "Skutlass Ignis",
+    ["Skutlass_Lux"] = "Skutlass Lux",
 }
-
-local function Unwrap(value)
-    if value == nil then return nil end
-    local ok, result = pcall(function()
-        if type(value.get) == "function" then return value:get() end
-        return value
-    end)
-    return ok and result or value
-end
-
-local function IsValidObject(value)
-    if value == nil then return false end
-    local ok, result = pcall(function()
-        return type(value.IsValid) ~= "function" or value:IsValid()
-    end)
-    return ok and result ~= false
-end
-
-local function HasServerAuthority(actor)
-    local authoritative = false
-    pcall(function()
-        local gameMode = FindFirstOf("PalGameMode")
-        if IsValidObject(gameMode) then authoritative = true return end
-        actor = Unwrap(actor)
-        if IsValidObject(actor) and type(actor.HasAuthority) == "function" then
-            authoritative = actor:HasAuthority() == true
-        end
-    end)
-    return authoritative
-end
-
-local function ValueToString(value)
-    value = Unwrap(value)
-    if value == nil then return "" end
-    local result = ""
-    pcall(function()
-        if type(value) == "string" then result = value
-        elseif value.A ~= nil and value.B ~= nil and value.C ~= nil and value.D ~= nil then
-            result = string.format("%s-%s-%s-%s", tostring(value.A), tostring(value.B), tostring(value.C), tostring(value.D))
-        elseif type(value.ToString) == "function" then result = value:ToString()
-        else result = tostring(value) end
-    end)
-    return tostring(result or ""):lower():gsub("[^%w]", "")
-end
-
-local function ResolveCommandPlayerState(context)
-    local candidate = Unwrap(context)
-    if not IsValidObject(candidate) then return nil end
-    local className = ""
-    pcall(function() className = tostring(candidate:GetClass():GetName()) end)
-    if className:find("PlayerState") then return candidate end
-    local state = nil
-    pcall(function() state = candidate.PlayerState or candidate:GetPlayerState() end)
-    return IsValidObject(state) and state or nil
-end
-
-local function GetPlayerUid(state)
-    if not state then return "" end
-    local uid = ""
-    pcall(function() uid = ValueToString(state.PlayerUId or state:GetPlayerUId()) end)
-    return uid
-end
-
-local function IsAuthorizedAdministrator(context)
-    if Config.AllowPublicBossCommands == true then return true end
-    local state = ResolveCommandPlayerState(context)
-    if not state then return false end
-
-    local nativeAdmin = false
-    pcall(function()
-        for _, methodName in ipairs({ "IsAdmin", "GetIsAdmin", "IsServerAdmin" }) do
-            if type(state[methodName]) == "function" and state[methodName](state) == true then
-                nativeAdmin = true
-                return
-            end
-        end
-        if state.bIsAdmin == true then nativeAdmin = true end
-    end)
-    if nativeAdmin then return true end
-
-    local uid = GetPlayerUid(state)
-    if uid == "" then return false end
-    for _, configuredUid in ipairs(Config.AdminPlayerUIDs or {}) do
-        if uid == ValueToString(configuredUid) then return true end
-    end
-    return false
-end
-
-local function HandlePerformanceCommand(action, sourceLabel)
-    action = tostring(action or ""):lower()
-    if action == "start" then
-        Performance.Reset()
-        Performance.SetEnabled(true)
-        print(string.format("[WorldBossAuraSystem][Perf] Diagnostics started via %s.", sourceLabel))
-    elseif action == "stop" then
-        Performance.PrintReport()
-        Performance.SetEnabled(false)
-        print(string.format("[WorldBossAuraSystem][Perf] Diagnostics stopped via %s.", sourceLabel))
-    elseif action == "reset" then
-        Performance.Reset()
-        print("[WorldBossAuraSystem][Perf] Counters reset.")
-    else
-        Performance.PrintReport()
-    end
-end
 
 function WorldBoss.LoadConfig(Cfg)
     Config = Cfg or {}
-    if type(Config.AdminPlayerUIDs) ~= "table" then Config.AdminPlayerUIDs = {} end
     AuraSystem.LoadConfig(Config)
 end
 
 function WorldBoss.GetActiveBosses()
     return ActiveBosses
-end
-
-function WorldBoss.WarmUpAuras(schedule)
-    AuraSystem.WarmUp(schedule)
 end
 
 function WorldBoss.HasOnlinePlayer()
@@ -178,13 +283,11 @@ local function BroadcastInGame(Text, PalDisplayName, SelectedAura, LocationName,
                 local ps = pc.PlayerState
                 if PalUtil and PalUtil:IsValid() and world and ps and ps:IsValid() then
                     PalUtil:SendSystemToPlayerChat(world, Text, ps.PlayerUId)
+                    if type(PalUtil.SendSystemAnnounce) == "function" then
+                        PalUtil:SendSystemAnnounce(world, Text, 10.0)
+                    end
                 end
             end
-        end
-        -- SendSystemAnnounce is global; calling it inside the player loop
-        -- multiplies the same banner and network work by the player count.
-        if PalUtil and PalUtil:IsValid() and world and type(PalUtil.SendSystemAnnounce) == "function" then
-            PalUtil:SendSystemAnnounce(world, Text, 10.0)
         end
     end)
 
@@ -257,11 +360,6 @@ end
 
 function WorldBoss.SpawnEvent()
     Performance.Count("world_boss_spawn_requests")
-    if Config.RequireServerAuthority ~= false and not HasServerAuthority(nil) then
-        Performance.Count("world_boss_non_authority_rejections")
-        print("[WorldBossAuraSystem] Boss spawn rejected outside server authority.")
-        return false
-    end
     if SpawnInProgress then
         print("[WorldBossAuraSystem] Spawn already in progress; request ignored.")
         return false
@@ -505,9 +603,6 @@ function WorldBoss.CheckDespawns()
 end
 
 function WorldBoss.InitHooks()
-    if Config.AllowPublicBossCommands ~= true and #(Config.AdminPlayerUIDs or {}) == 0 then
-        print("[WorldBossAuraSystem] Chat admin commands are locked. Use the server-console commands wbspawn/wbperf or add a logged uid to AdminPlayerUIDs.")
-    end
     local function FindBossMatch(Pal)
         local perfStartedAt = Performance.Start()
         if not Pal or not Pal:IsValid() then return nil, nil end
@@ -670,26 +765,29 @@ function WorldBoss.InitHooks()
         Text = tostring(Text or ""):lower():match("^%s*(.-)%s*$")
         local perfAction = Text:match("^[!/]wbperf%s*(%a*)$")
         if perfAction ~= nil then
-            if not ResolveCommandPlayerState(Context) then return end
-            if not HasServerAuthority(Context) or not IsAuthorizedAdministrator(Context) then
-                Performance.Count("unauthorized_admin_commands")
-                print(string.format("[WorldBossAuraSystem] Unauthorized performance command rejected (uid=%s).", GetPlayerUid(ResolveCommandPlayerState(Context))))
-                return
-            end
             local clock = os.clock()
             if Text == LastBossCommandText and clock - LastBossCommandTime < 1.0 then return end
             LastBossCommandText, LastBossCommandTime = Text, clock
-            HandlePerformanceCommand(perfAction, "authorized chat")
+            if perfAction == "start" then
+                Performance.Reset()
+                Performance.SetEnabled(true)
+                print("[WorldBossAuraSystem][Perf] Server diagnostics started.")
+            elseif perfAction == "stop" then
+                Performance.PrintReport()
+                Performance.SetEnabled(false)
+                print("[WorldBossAuraSystem][Perf] Server diagnostics stopped.")
+            elseif perfAction == "reset" then
+                Performance.Reset()
+                print("[WorldBossAuraSystem][Perf] Counters reset.")
+            else
+                Performance.PrintReport()
+            end
             return
         end
 
         if Text == "!spawnboss" or Text == "/spawnboss" then
-            if not ResolveCommandPlayerState(Context) then return end
-            if not HasServerAuthority(Context) or not IsAuthorizedAdministrator(Context) then
-                Performance.Count("unauthorized_admin_commands")
-                print(string.format("[WorldBossAuraSystem] Unauthorized boss spawn command rejected (uid=%s).", GetPlayerUid(ResolveCommandPlayerState(Context))))
-                return
-            end
+            local gameMode = FindFirstOf("PalGameMode")
+            if not gameMode or not gameMode:IsValid() then return end
             local clock = os.clock()
             if Text == LastBossCommandText and clock - LastBossCommandTime < 1.0 then return end
             LastBossCommandText, LastBossCommandTime = Text, clock
@@ -703,22 +801,6 @@ function WorldBoss.InitHooks()
             print("[WorldBossAuraSystem] Manual boss spawn triggered via chat command!")
             WorldBoss.SpawnEvent()
         end
-    end
-
-    -- Trusted local server-console alternatives. They still require server
-    -- authority, but do not depend on a player's chat/admin identity.
-    if type(RegisterConsoleCommandGlobalHandler) == "function" then
-        pcall(RegisterConsoleCommandGlobalHandler, "wbspawn", function()
-            if not HasServerAuthority(nil) then return false end
-            WorldBoss.SpawnEvent()
-            return true
-        end)
-        pcall(RegisterConsoleCommandGlobalHandler, "wbperf", function(_, parameters)
-            if not HasServerAuthority(nil) then return false end
-            local action = type(parameters) == "table" and parameters[1] or "status"
-            HandlePerformanceCommand(action, "server console")
-            return true
-        end)
     end
 
     local registered = 0
