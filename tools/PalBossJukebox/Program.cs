@@ -16,6 +16,7 @@ namespace PalBossJukebox
         private static string _audioDir = "";
         private static string _stateFile = "";
         private static string _heartbeatFile = "";
+        private static string _metricsFile = "";
         private static string _currentTrack = "";
         private static bool _currentLoop = true;
         private static double _targetVolume = 0.65;
@@ -23,6 +24,18 @@ namespace PalBossJukebox
         private static DateTime _lastStateReadTime = DateTime.MinValue;
         private static DateTime _lastGameProcessCheck = DateTime.MinValue;
         private static DateTime _lastHeartbeatWrite = DateTime.MinValue;
+        private static DateTime _lastMetricsWrite = DateTime.MinValue;
+        private static readonly DateTime _startedAt = DateTime.UtcNow;
+        private static TimeSpan _lastCpuTime = TimeSpan.Zero;
+        private static DateTime _lastCpuSampleAt = DateTime.UtcNow;
+        private static double _cpuPercent;
+        private static int _statePollMilliseconds = 250;
+        private static int _crossfadeDurationMilliseconds = 1200;
+        private static int _heartbeatIntervalSeconds = 5;
+        private static long _stateReads;
+        private static long _stateErrors;
+        private static long _trackTransitions;
+        private static long _playbackErrors;
 
         private class StateDto
         {
@@ -49,7 +62,9 @@ namespace PalBossJukebox
             _audioDir = baseDir;
             _stateFile = Path.Combine(_audioDir, "music_state.json");
             _heartbeatFile = Path.Combine(_audioDir, "jukebox_heartbeat.txt");
+            _metricsFile = Path.Combine(_audioDir, "jukebox_metrics.json");
             _headshotPath = Path.Combine(_audioDir, "rust_headshot.wav");
+            LoadConfiguration();
             AppDomain.CurrentDomain.ProcessExit += (s, e) => DeleteHeartbeat();
 
             // Instant low-latency headshot SFX listener
@@ -78,7 +93,7 @@ namespace PalBossJukebox
             app.Startup += (s, e) =>
             {
                 // Periodic check for state changes and game process
-                var checkTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
+                var checkTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(_statePollMilliseconds) };
                 checkTimer.Tick += (ts, te) => CheckState();
                 checkTimer.Start();
 
@@ -144,6 +159,7 @@ namespace PalBossJukebox
                     {
                         _missingGameTicks = 0;
                         WriteHeartbeat(now);
+                        WriteMetrics(now);
                     }
                 }
 
@@ -155,6 +171,7 @@ namespace PalBossJukebox
                 string json = File.ReadAllText(_stateFile);
                 var dto = JsonSerializer.Deserialize<StateDto>(json);
                 if (dto == null) return;
+                _stateReads++;
                 // Only acknowledge the timestamp after a complete, valid read.
                 _lastStateReadTime = writeTime;
 
@@ -172,7 +189,31 @@ namespace PalBossJukebox
                     FadeOutAll();
                 }
             }
-            catch { }
+            catch
+            {
+                _stateErrors++;
+            }
+        }
+
+        private static void LoadConfiguration()
+        {
+            try
+            {
+                string configPath = Path.GetFullPath(Path.Combine(_audioDir, "..", "config.json"));
+                if (!File.Exists(configPath)) return;
+                using JsonDocument document = JsonDocument.Parse(File.ReadAllText(configPath));
+                JsonElement root = document.RootElement;
+                if (root.TryGetProperty("JukeboxStatePollMilliseconds", out JsonElement poll) && poll.TryGetInt32(out int pollValue))
+                    _statePollMilliseconds = Math.Clamp(pollValue, 100, 2000);
+                if (root.TryGetProperty("JukeboxCrossfadeDurationMilliseconds", out JsonElement fade) && fade.TryGetInt32(out int fadeValue))
+                    _crossfadeDurationMilliseconds = Math.Clamp(fadeValue, 200, 10000);
+                if (root.TryGetProperty("JukeboxHeartbeatIntervalSeconds", out JsonElement heartbeat) && heartbeat.TryGetInt32(out int heartbeatValue))
+                    _heartbeatIntervalSeconds = Math.Clamp(heartbeatValue, 2, 30);
+            }
+            catch
+            {
+                // Invalid optional tuning values fall back to safe defaults.
+            }
         }
 
         private static void DeleteHeartbeat()
@@ -186,7 +227,7 @@ namespace PalBossJukebox
 
         private static void WriteHeartbeat(DateTime now)
         {
-            if (now - _lastHeartbeatWrite < TimeSpan.FromSeconds(5)) return;
+            if (now - _lastHeartbeatWrite < TimeSpan.FromSeconds(_heartbeatIntervalSeconds)) return;
             try
             {
                 File.WriteAllText(
@@ -197,6 +238,42 @@ namespace PalBossJukebox
             catch
             {
                 // Heartbeat failure must never block state-file processing.
+            }
+        }
+
+        private static void WriteMetrics(DateTime now)
+        {
+            if (now - _lastMetricsWrite < TimeSpan.FromMinutes(1)) return;
+            try
+            {
+                using Process process = Process.GetCurrentProcess();
+                TimeSpan cpuTime = process.TotalProcessorTime;
+                double elapsedSeconds = Math.Max(0.001, (now - _lastCpuSampleAt).TotalSeconds);
+                _cpuPercent = Math.Max(0.0, (cpuTime - _lastCpuTime).TotalSeconds / elapsedSeconds / Environment.ProcessorCount * 100.0);
+                _lastCpuTime = cpuTime;
+                _lastCpuSampleAt = now;
+
+                string json = JsonSerializer.Serialize(new
+                {
+                    timestampUtc = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                    processId = Environment.ProcessId,
+                    uptimeSeconds = Math.Round((now - _startedAt).TotalSeconds, 1),
+                    cpuPercent = Math.Round(_cpuPercent, 3),
+                    workingSetBytes = process.WorkingSet64,
+                    privateMemoryBytes = process.PrivateMemorySize64,
+                    handleCount = process.HandleCount,
+                    stateReads = _stateReads,
+                    stateErrors = _stateErrors,
+                    trackTransitions = _trackTransitions,
+                    playbackErrors = _playbackErrors,
+                    currentTrack = _currentTrack
+                });
+                File.WriteAllText(_metricsFile, json);
+                _lastMetricsWrite = now;
+            }
+            catch
+            {
+                // Metrics are diagnostic-only and must never affect playback.
             }
         }
 
@@ -228,6 +305,7 @@ namespace PalBossJukebox
             _fadingOutPlayer = _activePlayer;
 
             var newPlayer = new MediaPlayer();
+            newPlayer.MediaFailed += (ms, me) => _playbackErrors++;
             newPlayer.MediaEnded += (ms, me) =>
             {
                 if (_currentLoop && ReferenceEquals(newPlayer, _activePlayer))
@@ -237,6 +315,8 @@ namespace PalBossJukebox
                 }
             };
             _activePlayer = newPlayer;
+
+            _trackTransitions++;
 
             _activePlayer.Open(new Uri(fullPath));
             _activePlayer.Volume = 0.0;
@@ -266,6 +346,7 @@ namespace PalBossJukebox
 
         private static void HandleCrossFade()
         {
+            double fadeStep = Math.Clamp(40.0 / _crossfadeDurationMilliseconds, 0.004, 0.2);
             // Move active volume toward the target in either direction. This is
             // required for volume-down and mute while the same track is playing.
             if (_activePlayer != null)
@@ -278,7 +359,7 @@ namespace PalBossJukebox
                 else
                 {
                     _activePlayer.Volume = Math.Clamp(
-                        _activePlayer.Volume + Math.Clamp(difference, -0.03, 0.03),
+                        _activePlayer.Volume + Math.Clamp(difference, -fadeStep, fadeStep),
                         0.0,
                         1.0);
                 }
@@ -287,7 +368,7 @@ namespace PalBossJukebox
             // Fade down fading-out player
             if (_fadingOutPlayer != null)
             {
-                _fadingOutPlayer.Volume = Math.Max(0.0, _fadingOutPlayer.Volume - 0.035);
+                _fadingOutPlayer.Volume = Math.Max(0.0, _fadingOutPlayer.Volume - fadeStep);
                 if (_fadingOutPlayer.Volume <= 0.005)
                 {
                     _fadingOutPlayer.Stop();

@@ -4,6 +4,7 @@ package.path = ScriptDir .. "?.lua;" .. ScriptDir .. "../?.lua;" .. package.path
 local WorldBoss = {}
 local AuraSystem = require("aura_system")
 local LiveboardExport = require("liveboard_export")
+local Performance = require("performance")
 
 local ActiveBosses = {}
 local Config = {}
@@ -19,6 +20,7 @@ local PalDisplayNames = {
 
 function WorldBoss.LoadConfig(Cfg)
     Config = Cfg or {}
+    AuraSystem.LoadConfig(Config)
 end
 
 function WorldBoss.GetActiveBosses()
@@ -142,6 +144,7 @@ function WorldBoss.BroadcastDiscord(PalName, AuraType, LocationName, Pos)
 end
 
 function WorldBoss.SpawnEvent()
+    Performance.Count("world_boss_spawn_requests")
     if SpawnInProgress then
         print("[WorldBossAuraSystem] Spawn already in progress; request ignored.")
         return false
@@ -302,8 +305,9 @@ function WorldBoss.SpawnEvent()
             end
         end)
 
-        -- 3. Attach Visual Aura
-        pcall(AuraSystem.Attach, BossActor, SelectedAura)
+        -- 3. Attach and retain the visual aura so its lifecycle follows the boss.
+        local AuraComponent = nil
+        pcall(function() AuraComponent = AuraSystem.Attach(BossActor, SelectedAura) end)
 
         -- 4. Record Active Boss
         local uid = "Boss_" .. tostring(os.time())
@@ -319,6 +323,7 @@ function WorldBoss.SpawnEvent()
             Coords = { X = Point.X, Y = Point.Y },
             SpawnTime = os.time(),
             BossActor = BossActor,
+            AuraComponent = AuraComponent,
             Address = tostring(BossActor:get_address())
         }
 
@@ -329,16 +334,19 @@ function WorldBoss.SpawnEvent()
         WorldBoss.BroadcastDiscord(PalDisplayName, SelectedAura, Point.Name, SpawnLoc)
         LiveboardExport.DumpState(ActiveBosses, Config)
         print(string.format("[WorldBossAuraSystem] Successfully spawned World Boss %s (%s) at %s.", PalDisplayName, PalId, Point.Name))
+        Performance.Count("world_boss_spawn_successes")
         SpawnInProgress = false
         return true
     else
         print(string.format("[WorldBossAuraSystem] All spawn methods failed for %s at %s.", PalId, Point.Name))
+        Performance.Count("world_boss_spawn_failures")
         SpawnInProgress = false
         return false
     end
 end
 
 function WorldBoss.CheckDespawns()
+    local perfStartedAt = Performance.Start()
     local now = os.time()
     local maxLifespan = tonumber(Config.BossLifespanSeconds) or 1800 -- 30 minutes default
     for uid, data in pairs(ActiveBosses) do
@@ -357,6 +365,7 @@ function WorldBoss.CheckDespawns()
             local aura = data.Aura or "Elemental"
             local msg = string.format("💨 [%s (%s Aura)] has vanished back into the wild.", bossName, aura)
 
+            AuraSystem.Detach(data.BossActor, data.AuraComponent)
             pcall(function()
                 if data.BossActor and data.BossActor:IsValid() then
                     data.BossActor:K2_DestroyActor()
@@ -375,10 +384,12 @@ function WorldBoss.CheckDespawns()
             )
         end
     end
+    Performance.Finish("world_boss_despawn_scan", perfStartedAt, true)
 end
 
 function WorldBoss.InitHooks()
     local function FindBossMatch(Pal)
+        local perfStartedAt = Performance.Start()
         if not Pal or not Pal:IsValid() then return nil, nil end
         local palUid = nil
         pcall(function() palUid = Pal:GetUniqueID() end)
@@ -387,9 +398,11 @@ function WorldBoss.InitHooks()
 
         for uid, data in pairs(ActiveBosses) do
             if (palUid and uid == palUid) or (data.BossActor and data.BossActor:IsValid() and data.BossActor == Pal) or (data.Address and data.Address == palAddr) then
+                Performance.Finish("world_boss_match", perfStartedAt, true)
                 return uid, data
             end
         end
+        Performance.Finish("world_boss_match", perfStartedAt, true)
         return nil, nil
     end
 
@@ -471,7 +484,9 @@ function WorldBoss.InitHooks()
             local aura = bossData.Aura or "Elemental"
             local msg = string.format("🎉 %s has captured [%s (%s Aura)]!", playerName, bossName, aura)
 
+            AuraSystem.Detach(Pal, bossData.AuraComponent)
             ActiveBosses[uid] = nil
+            Performance.Count("world_boss_captures")
             LiveboardExport.DumpState(ActiveBosses, Config)
 
             BroadcastInGame(msg, string.format("🎉 %s CAPTURED!", bossName), aura, string.format("Captured by %s", playerName), { X = 0, Y = 0 })
@@ -495,7 +510,9 @@ function WorldBoss.InitHooks()
             local aura = bossData.Aura or "Elemental"
             local msg = string.format("⚔️ [%s (%s Aura)] has been defeated in battle!", bossName, aura)
 
+            AuraSystem.Detach(Pal, bossData.AuraComponent)
             ActiveBosses[uid] = nil
+            Performance.Count("world_boss_deaths")
             LiveboardExport.DumpState(ActiveBosses, Config)
 
             BroadcastInGame(msg, string.format("⚔️ %s DEFEATED!", bossName), aura, "Fallen in combat", { X = 0, Y = 0 })
@@ -531,6 +548,28 @@ function WorldBoss.InitHooks()
         if Text == "" and Context and Context.Message then Text = TryGetStr(Context.Message) end
 
         Text = tostring(Text or ""):lower():match("^%s*(.-)%s*$")
+        local perfAction = Text:match("^[!/]wbperf%s*(%a*)$")
+        if perfAction ~= nil then
+            local clock = os.clock()
+            if Text == LastBossCommandText and clock - LastBossCommandTime < 1.0 then return end
+            LastBossCommandText, LastBossCommandTime = Text, clock
+            if perfAction == "start" then
+                Performance.Reset()
+                Performance.SetEnabled(true)
+                print("[WorldBossAuraSystem][Perf] Server diagnostics started.")
+            elseif perfAction == "stop" then
+                Performance.PrintReport()
+                Performance.SetEnabled(false)
+                print("[WorldBossAuraSystem][Perf] Server diagnostics stopped.")
+            elseif perfAction == "reset" then
+                Performance.Reset()
+                print("[WorldBossAuraSystem][Perf] Counters reset.")
+            else
+                Performance.PrintReport()
+            end
+            return
+        end
+
         if Text == "!spawnboss" or Text == "/spawnboss" then
             local gameMode = FindFirstOf("PalGameMode")
             if not gameMode or not gameMode:IsValid() then return end

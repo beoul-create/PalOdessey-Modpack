@@ -8,6 +8,7 @@ local WorldBoss = require("world_boss")
 local LiveboardExport = require("liveboard_export")
 local AutoShutdown = require("auto_shutdown")
 local BossMusic = require("boss_music")
+local Performance = require("performance")
 
 local function DecodeJson(Content)
     local decoders = {}
@@ -32,6 +33,18 @@ local function LoadConfigFile()
         MaxActiveBosses = 1,
         SpawnCommandCooldownSeconds = 60,
         LiveboardExportIntervalSeconds = 15,
+        MusicLocationScanIntervalSeconds = 5,
+        BaseScanIntervalSeconds = 30,
+        MajorBossCombatTimeoutSeconds = 20,
+        FieldBossCombatTimeoutSeconds = 15,
+        BossCombatProximityRadius = 15000,
+        WorldBossMusicRadius = 8000,
+        JukeboxStatePollMilliseconds = 250,
+        JukeboxCrossfadeDurationMilliseconds = 1200,
+        JukeboxHeartbeatIntervalSeconds = 5,
+        PerformanceDiagnosticsEnabled = true,
+        PerformanceAutoReportSeconds = 300,
+        EnableVisualAuras = true,
         DiscordWebhookURL = "YOUR_DISCORD_WEBHOOK_URL_HERE",
         BossPalPool = { "Kitsunebi", "ThunderDragonMan", "GrassMammoth", "WeaselDragon", "Anubis" },
         BossLevel = 100,
@@ -63,11 +76,12 @@ local function LoadConfigFile()
 end
 
 local Config = LoadConfigFile()
+Performance.Configure(Config)
 SAODeath.Init()
 WorldBoss.LoadConfig(Config)
 WorldBoss.InitHooks()
 AutoShutdown.Init()
-BossMusic.Init()
+BossMusic.Init(Config)
 
 -- Initial liveboard export
 LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)
@@ -149,3 +163,10 @@ StartGameThreadLoop(LiveboardIntervalMs, function()
 end)
 StartGameThreadLoop(BossIntervalMs, function() WorldBoss.SpawnEvent() end)
 StartGameThreadLoop(30000, function() WorldBoss.CheckDespawns() end)
+
+local PerformanceAutoReportSeconds = tonumber(Config.PerformanceAutoReportSeconds) or 0
+if PerformanceAutoReportSeconds > 0 then
+    StartGameThreadLoop(math.max(60, PerformanceAutoReportSeconds) * 1000, function()
+        if Performance.IsEnabled() then Performance.PrintReport() end
+    end)
+end

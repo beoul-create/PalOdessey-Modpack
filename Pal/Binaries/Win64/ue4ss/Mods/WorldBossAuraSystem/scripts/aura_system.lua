@@ -1,4 +1,9 @@
 local AuraSystem = {}
+local Performance = require("performance")
+
+local Config = {}
+local ResolvedAssets = {}
+local AttachedAuras = {}
 
 local AuraMap = {
     ["Fiery"] = {
@@ -81,7 +86,30 @@ function AuraSystem.GetAllAuras()
     return { "Fiery", "Glacial", "Celestial", "Corrupted", "Verdant", "Tidal", "Draconic", "Radiant", "Transmigrator", "Regressor" }
 end
 
+function AuraSystem.LoadConfig(config)
+    Config = config or {}
+end
+
+local function GetCharacterKey(character)
+    if not character then return nil end
+    local key = nil
+    pcall(function()
+        if type(character.get_address) == "function" then
+            key = tostring(character:get_address())
+        elseif type(character.GetAddress) == "function" then
+            key = tostring(character:GetAddress())
+        end
+    end)
+    return key
+end
+
 local function FindValidAura(auraType)
+    local cached = ResolvedAssets[auraType]
+    if cached and cached:IsValid() then
+        Performance.Count("aura_asset_cache_hits")
+        return cached
+    end
+
     local list = AuraMap[auraType] or AuraMap["Fiery"]
     for _, path in ipairs(list) do
         local obj = StaticFindObject(path)
@@ -90,6 +118,7 @@ local function FindValidAura(auraType)
             if ok then obj = loaded end
         end
         if obj and obj:IsValid() then
+            ResolvedAssets[auraType] = obj
             return obj
         end
     end
@@ -97,16 +126,27 @@ local function FindValidAura(auraType)
 end
 
 function AuraSystem.Attach(Character, AuraType)
-    pcall(function()
+    if Config.EnableVisualAuras == false then return nil end
+    local startedAt = Performance.Start()
+    local attached = nil
+    local ok = pcall(function()
         if not Character or not Character:IsValid() then return nil end
         local Mesh = Character.Mesh
         if not Mesh or not Mesh:IsValid() then return nil end
+
+        local key = GetCharacterKey(Character)
+        local existing = key and AttachedAuras[key] or nil
+        if existing and existing:IsValid() then
+            Performance.Count("aura_duplicate_attach_prevented")
+            attached = existing
+            return
+        end
 
         local NiagaraAsset = FindValidAura(AuraType)
         local NiagaraFunc = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
 
         if NiagaraFunc and NiagaraFunc:IsValid() and NiagaraAsset and NiagaraAsset:IsValid() then
-            return NiagaraFunc:SpawnSystemAttached(
+            attached = NiagaraFunc:SpawnSystemAttached(
                 NiagaraAsset,
                 Mesh,
                 FName("pelvis"),
@@ -115,9 +155,36 @@ function AuraSystem.Attach(Character, AuraType)
                 1, -- EAttachLocation::KeepRelativeOffset
                 true, true, 0, true
             )
+            if key and attached and attached:IsValid() then
+                AttachedAuras[key] = attached
+            end
         end
     end)
-    return nil
+    Performance.Finish("aura_attach", startedAt, ok and attached ~= nil)
+    return attached
+end
+
+function AuraSystem.Detach(Character, Component)
+    local startedAt = Performance.Start()
+    local key = GetCharacterKey(Character)
+    local aura = Component or (key and AttachedAuras[key]) or nil
+    local ok = pcall(function()
+        if aura and aura:IsValid() then
+            if type(aura.Deactivate) == "function" then aura:Deactivate() end
+            if type(aura.DestroyComponent) == "function" then
+                aura:DestroyComponent()
+            elseif type(aura.K2_DestroyComponent) == "function" then
+                aura:K2_DestroyComponent(aura)
+            end
+        end
+    end)
+    if key then AttachedAuras[key] = nil end
+    Performance.Finish("aura_detach", startedAt, ok)
+end
+
+function AuraSystem.ClearCaches()
+    ResolvedAssets = {}
+    AttachedAuras = {}
 end
 
 return AuraSystem

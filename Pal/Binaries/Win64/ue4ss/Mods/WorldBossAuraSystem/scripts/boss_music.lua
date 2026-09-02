@@ -1,10 +1,13 @@
 local BossMusic = {}
+local Performance = require("performance")
 
 local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
 local AudioDir = ScriptDir .. "../audio/"
 local StateFile = AudioDir .. "music_state.json"
 local JukeboxExe = AudioDir .. "PalBossJukebox.exe"
 local HeartbeatFile = AudioDir .. "jukebox_heartbeat.txt"
+local MetricsFile = AudioDir .. "jukebox_metrics.json"
+local Config = {}
 
 local CurrentTrack = ""
 local CurrentState = "idle"
@@ -22,10 +25,21 @@ local LastMajorBossCombatTime = 0
 local LastFieldBossCombatTime = 0
 local LastHeadshotSfxTime = 0
 
-local MAJOR_BOSS_COMBAT_TIMEOUT = 20
-local FIELD_BOSS_COMBAT_TIMEOUT = 15
+local MajorBossCombatTimeout = 20
+local FieldBossCombatTimeout = 15
+local MusicScanIntervalMs = 5000
+local BaseScanIntervalSeconds = 30
+local BossCombatProximityRadius = 15000.0
+local WorldBossMusicRadius = 8000.0
+local HeartbeatStaleSeconds = 12
+local BossClassificationCache = {}
+
+local function Clamp(value, minimum, maximum)
+    return math.max(minimum, math.min(maximum, tonumber(value) or minimum))
+end
 
 local function WriteState(content)
+    local startedAt = Performance.Start()
     local ok, err = pcall(function()
         local f = assert(io.open(StateFile, "w"))
         f:write(content)
@@ -33,8 +47,12 @@ local function WriteState(content)
         f:close()
     end)
     if not ok then
+        Performance.Count("music_state_write_errors")
         print(string.format("[WorldBossAuraSystem] Music state write failed: %s", tostring(err)))
+    else
+        Performance.Count("music_state_writes")
     end
+    Performance.Finish("music_state_write", startedAt, ok)
     return ok
 end
 
@@ -44,7 +62,7 @@ local function EnsureJukeboxRunning()
         local heartbeatTime = tonumber(heartbeat:read("*all")) or 0
         heartbeat:close()
         local heartbeatAge = os.time() - heartbeatTime
-        if heartbeatAge >= 0 and heartbeatAge <= 12 then
+        if heartbeatAge >= 0 and heartbeatAge <= HeartbeatStaleSeconds then
             JukeboxStarted = true
             return true
         end
@@ -144,6 +162,7 @@ function BossMusic.SetTrack(trackName, loop, volume)
     CurrentState = "play"
     CurrentBaseVolume = requestedBaseVolume
     CurrentLoop = requestedLoop
+    Performance.Count("music_track_transitions")
 
     local master = GetMasterVolume()
     local finalVol = math.max(0.0, math.min(1.0, CurrentBaseVolume * master))
@@ -156,6 +175,7 @@ function BossMusic.FadeOut()
     if CurrentState == "fade_out" then return end
     CurrentTrack = ""
     CurrentState = "fade_out"
+    Performance.Count("music_fade_outs")
 
     WriteState('{"state":"fade_out"}')
     print("[WorldBossAuraSystem] 🎵 Jukebox fading out.")
@@ -175,6 +195,7 @@ function BossMusic.PlayHeadshotSFX()
     local now = os.clock()
     if now - LastHeadshotSfxTime < 0.15 then return end
     LastHeadshotSfxTime = now
+    Performance.Count("headshot_sfx_requests")
     pcall(function()
         EnsureJukeboxRunning()
         local pipe = io.open([[\.\pipe\PalHeadshotPipe]], "w")
@@ -203,8 +224,21 @@ local function GetLocalPlayer()
 end
 
 local function ClassifyBoss(actor)
+    local startedAt = Performance.Start()
     local isMajor = false
     local isField = false
+    local cacheKey = nil
+    pcall(function()
+        if actor and type(actor.get_address) == "function" then cacheKey = tostring(actor:get_address())
+        elseif actor and type(actor.GetAddress) == "function" then cacheKey = tostring(actor:GetAddress()) end
+    end)
+    local cached = cacheKey and BossClassificationCache[cacheKey] or nil
+    if cached then
+        Performance.Count("boss_classification_cache_hits")
+        Performance.Finish("boss_classification", startedAt, true)
+        return cached.Major, cached.Field
+    end
+
     pcall(function()
         if not actor or not actor:IsValid() then return end
         if type(actor.IsTowerBoss) == "function" and actor:IsTowerBoss() then
@@ -223,7 +257,18 @@ local function ClassifyBoss(actor)
             isField = true
         end
     end)
+    if cacheKey then BossClassificationCache[cacheKey] = { Major = isMajor, Field = isField } end
+    Performance.Count("boss_classification_cache_misses")
+    Performance.Finish("boss_classification", startedAt, true)
     return isMajor, isField
+end
+
+local function ForgetBossClassification(actor)
+    pcall(function()
+        local key = type(actor.get_address) == "function" and tostring(actor:get_address())
+            or (type(actor.GetAddress) == "function" and tostring(actor:GetAddress()) or nil)
+        if key then BossClassificationCache[key] = nil end
+    end)
 end
 
 local function IsNearLocalPlayer(actor, radius)
@@ -250,10 +295,12 @@ local function ClearWorldCaches()
     CachedBases = {}
     LastBaseScan = 0
     CachedTimeManager = nil
+    BossClassificationCache = {}
 end
 
 local function RefreshBaseCaches()
-    pcall(function()
+    local startedAt = Performance.Start()
+    local ok = pcall(function()
         local list = {}
         local boxClasses = { "BP_PalBox_C", "PalMapObjectBaseCampPoint", "BP_BaseCampPoint_C" }
         for _, cls in ipairs(boxClasses) do
@@ -278,6 +325,7 @@ local function RefreshBaseCaches()
         end
         CachedBases = list
     end)
+    Performance.Finish("base_cache_refresh", startedAt, ok)
 end
 
 local function DetermineRegionTrack(playerLoc, player)
@@ -289,7 +337,7 @@ local function DetermineRegionTrack(playerLoc, player)
     -- 2. Base Camp Detection (Checks cached coordinates without hitching)
     local inBase = false
     local now = os.time()
-    if LastBaseScan == 0 or (now - LastBaseScan >= 30) then
+    if LastBaseScan == 0 or (now - LastBaseScan >= BaseScanIntervalSeconds) then
         LastBaseScan = now
         RefreshBaseCaches()
     end
@@ -414,7 +462,17 @@ local function UpdateMusicState()
     end
 end
 
-function BossMusic.Init()
+function BossMusic.Init(config)
+    Config = config or {}
+    MajorBossCombatTimeout = Clamp(Config.MajorBossCombatTimeoutSeconds or 20, 5, 300)
+    FieldBossCombatTimeout = Clamp(Config.FieldBossCombatTimeoutSeconds or 15, 5, 300)
+    MusicScanIntervalMs = math.floor(Clamp(Config.MusicLocationScanIntervalSeconds or 5, 1, 60) * 1000)
+    BaseScanIntervalSeconds = Clamp(Config.BaseScanIntervalSeconds or 30, 5, 600)
+    BossCombatProximityRadius = Clamp(Config.BossCombatProximityRadius or 15000, 1000, 100000)
+    WorldBossMusicRadius = Clamp(Config.WorldBossMusicRadius or 8000, 1000, 100000)
+    local heartbeatInterval = Clamp(Config.JukeboxHeartbeatIntervalSeconds or 5, 2, 30)
+    HeartbeatStaleSeconds = math.max(12, heartbeatInterval * 2 + 2)
+
     -- Dedicated servers do not have audio devices or local players!
     local src = (debug.getinfo(1, "S").source or ""):lower()
     if src:find("palserver") then
@@ -436,6 +494,8 @@ function BossMusic.Init()
     end
 
     -- 1. In-Game Volume Chat Commands: /vol <0-100>, /mute, /unmute
+    local LastPerfCommandText = ""
+    local LastPerfCommandTime = 0
     local function ProcessVolumeChat(Context, Param1, Param2)
         local function TryGetStr(val)
             if not val then return "" end
@@ -451,6 +511,35 @@ function BossMusic.Init()
         if text == "" then text = TryGetStr(Param2) end
         if text == "" and Context and Context.Message then text = TryGetStr(Context.Message) end
         text = text:lower():match("^%s*(.-)%s*$") or ""
+
+        local perfAction = text:match("^[!/]bgmperf%s*(%a*)$")
+        if perfAction ~= nil then
+            local now = os.clock()
+            if text == LastPerfCommandText and now - LastPerfCommandTime < 1.0 then return end
+            LastPerfCommandText, LastPerfCommandTime = text, now
+            if perfAction == "start" then
+                Performance.Reset()
+                Performance.SetEnabled(true)
+                print("[WorldBossAuraSystem][Perf] Music diagnostics started.")
+            elseif perfAction == "stop" then
+                Performance.PrintReport()
+                Performance.SetEnabled(false)
+                print("[WorldBossAuraSystem][Perf] Music diagnostics stopped.")
+            elseif perfAction == "reset" then
+                Performance.Reset()
+                print("[WorldBossAuraSystem][Perf] Counters reset.")
+            else
+                Performance.PrintReport()
+                local metrics = io.open(MetricsFile, "r")
+                if metrics then
+                    print("[WorldBossAuraSystem][Perf] Jukebox " .. metrics:read("*all"))
+                    metrics:close()
+                else
+                    print("[WorldBossAuraSystem][Perf] No jukebox metrics are available yet.")
+                end
+            end
+            return
+        end
 
         local volNum = text:match("^/[vV][oO][lL]%s+(%d+)") or text:match("^/[vV][oO][lL][uU][mM][eE]%s+(%d+)") or text:match("^/[mM][uU][sS][iI][cC]%s+(%d+)")
         if volNum then
@@ -598,11 +687,12 @@ function BossMusic.Init()
 
     -- Hook PalCharacter:OnDamage for event-driven boss combat music.
     pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDamage", function(Context, DamageInfo)
+        local perfStartedAt = Performance.Start()
         pcall(function()
             local victim = Context and Context.get and Context:get() or Context
             if not victim or not victim:IsValid() then return end
 
-            if not IsNearLocalPlayer(victim, 15000.0) then return end
+            if not IsNearLocalPlayer(victim, BossCombatProximityRadius) then return end
             local isMajor, isField = ClassifyBoss(victim)
             local now = os.time()
 
@@ -617,6 +707,7 @@ function BossMusic.Init()
                 BossMusic.SetTrack("boss_luminous_sword.mp3", true, 0.75)
             end
         end)
+        Performance.Finish("music_damage_hook", perfStartedAt, true)
     end)
 
     -- 3. Boss HP UI Show
@@ -631,9 +722,10 @@ function BossMusic.Init()
         pcall(function()
             local captured = TargetPal and TargetPal.get and TargetPal:get() or TargetPal
             local isMajor, isField = ClassifyBoss(captured)
-            if (isMajor or isField) and IsNearLocalPlayer(captured, 15000.0) then
+            if (isMajor or isField) and IsNearLocalPlayer(captured, BossCombatProximityRadius) then
                 BossMusic.PlayVictoryFanfare()
             end
+            ForgetBossClassification(captured)
         end)
     end)
 
@@ -643,9 +735,10 @@ function BossMusic.Init()
             local dead = Context and Context.get and Context:get() or Context
             if dead and dead:IsValid() then
                 local isMajor, isField = ClassifyBoss(dead)
-                if (isMajor or isField) and IsNearLocalPlayer(dead, 15000.0) then
+                if (isMajor or isField) and IsNearLocalPlayer(dead, BossCombatProximityRadius) then
                     BossMusic.PlayVictoryFanfare()
                 end
+                ForgetBossClassification(dead)
             end
         end)
     end)
@@ -669,6 +762,7 @@ function BossMusic.Init()
     local delayFunc = ExecuteInGameThreadWithDelay or ExecuteWithDelay
     if delayFunc then
         local function MusicLoop()
+            local perfStartedAt = Performance.Start()
             local ok, err = pcall(function()
                 local player = GetLocalPlayer()
                 ActiveNearBoss = false
@@ -677,10 +771,10 @@ function BossMusic.Init()
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
                         local now = os.time()
-                        if ActiveMajorBossCombat and (now - LastMajorBossCombatTime > MAJOR_BOSS_COMBAT_TIMEOUT) then
+                        if ActiveMajorBossCombat and (now - LastMajorBossCombatTime > MajorBossCombatTimeout) then
                             ActiveMajorBossCombat = false
                         end
-                        if ActiveFieldBossCombat and (now - LastFieldBossCombatTime > FIELD_BOSS_COMBAT_TIMEOUT) then
+                        if ActiveFieldBossCombat and (now - LastFieldBossCombatTime > FieldBossCombatTimeout) then
                             ActiveFieldBossCombat = false
                         end
 
@@ -691,7 +785,8 @@ function BossMusic.Init()
                                 if data.Coords then
                                     local dx = pLoc.X - data.Coords.X
                                     local dy = pLoc.Y - data.Coords.Y
-                                    if (dx*dx + dy*dy) < (8000.0 * 8000.0) then
+                                    Performance.Count("world_boss_proximity_checks")
+                                    if (dx*dx + dy*dy) < (WorldBossMusicRadius * WorldBossMusicRadius) then
                                         ActiveNearBoss = true
                                         break
                                     end
@@ -707,10 +802,11 @@ function BossMusic.Init()
 
                 UpdateMusicState()
             end)
+            Performance.Finish("music_update_loop", perfStartedAt, ok)
             if not ok then
                 print(string.format("[WorldBossAuraSystem] Music loop error: %s", tostring(err)))
             end
-            delayFunc(5000, MusicLoop)
+            delayFunc(MusicScanIntervalMs, MusicLoop)
         end
         delayFunc(4000, MusicLoop)
     end

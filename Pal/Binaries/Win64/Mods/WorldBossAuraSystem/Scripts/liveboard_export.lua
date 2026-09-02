@@ -1,4 +1,5 @@
 local LiveboardExport = {}
+local Performance = require("performance")
 local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
 local StatePath = ScriptDir .. "../../../../../../Saved/liveboard_state.json"
 
@@ -56,6 +57,7 @@ local function EncodeJsonValue(val)
 end
 
 function LiveboardExport.DumpState(ActiveBosses, Config)
+    local perfStartedAt = Performance.Start()
     local PlayersList = {}
     local SeenNames = {}
 
@@ -174,7 +176,13 @@ function LiveboardExport.DumpState(ActiveBosses, Config)
         os.remove(backupPath)
         written = true
     end)
-    if not written then print("[WorldBossAuraSystem] Failed to publish liveboard state.") end
+    if not written then
+        Performance.Count("liveboard_write_errors")
+        print("[WorldBossAuraSystem] Failed to publish liveboard state.")
+    else
+        Performance.Count("liveboard_writes")
+    end
+    Performance.Finish("liveboard_export", perfStartedAt, written)
 end
 
 return LiveboardExport
