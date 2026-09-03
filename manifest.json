@@ -1,11 +1,11 @@
 {
-  "Version": "20260903203732",
-  "GeneratedAt": "2026-09-03T20:37:32.354Z",
+  "Version": "20260903210314",
+  "GeneratedAt": "2026-09-03T21:03:14.252Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 730,
+  "TotalFiles": 722,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -2075,30 +2075,6 @@
       "Hash": "cca42fad930f909150c8c373d665d0cabd136f4d569bdb840ed831b3af13482d",
       "Size": 1335404,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/night_theme.mp3"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.deps.json",
-      "Hash": "260751e2f7b4ddab633c673d29c5d83b67cc75a30fbce4e8d925073986fe1bbf",
-      "Size": 35000,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.deps.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.dll",
-      "Hash": "c2c21c9c4234e99d8205de2d453f25a3a26da9880a0c1d83d0e76d8bb548b9f5",
-      "Size": 17920,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.dll"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe",
-      "Hash": "05d81af9872dc5788d0f96f882b08d75b0c1a4a169a81c6c48367debd6b0d8f3",
-      "Size": 71602739,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.runtimeconfig.json",
-      "Hash": "076fe6a2bccd2cb8cf62a06f2bf9dd765cb78addbfa14d43cf02a0d564464c5f",
-      "Size": 450,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.runtimeconfig.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_aincrad.mp3",
@@ -4253,30 +4229,6 @@
       "Hash": "cca42fad930f909150c8c373d665d0cabd136f4d569bdb840ed831b3af13482d",
       "Size": 1335404,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/night_theme.mp3"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.deps.json",
-      "Hash": "260751e2f7b4ddab633c673d29c5d83b67cc75a30fbce4e8d925073986fe1bbf",
-      "Size": 35000,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.deps.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.dll",
-      "Hash": "c2c21c9c4234e99d8205de2d453f25a3a26da9880a0c1d83d0e76d8bb548b9f5",
-      "Size": 17920,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.dll"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe",
-      "Hash": "05d81af9872dc5788d0f96f882b08d75b0c1a4a169a81c6c48367debd6b0d8f3",
-      "Size": 71602739,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.runtimeconfig.json",
-      "Hash": "076fe6a2bccd2cb8cf62a06f2bf9dd765cb78addbfa14d43cf02a0d564464c5f",
-      "Size": 450,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.runtimeconfig.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_aincrad.mp3",
