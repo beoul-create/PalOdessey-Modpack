@@ -818,6 +818,7 @@ local function refresh_control_lock_cinematic()
 end
 
 local function suppression_active()
+    if _G.PalOdysseyBossAudio_Active then return true end
     return battle_bgm_active or raid_active or tower_boss_active
         -- IsInStage covers both ordinary dungeons and towers. Only a positive
         -- dungeon identification may release stage suppression.
