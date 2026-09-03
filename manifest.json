@@ -1,6 +1,6 @@
 {
-  "Version": "20260903210314",
-  "GeneratedAt": "2026-09-03T21:03:14.252Z",
+  "Version": "20260903214116",
+  "GeneratedAt": "2026-09-03T21:41:16.572Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -1849,12 +1849,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/RamTrimMod/dlls/main.dll"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/RamTrimMod/enabled.txt",
-      "Hash": "e16f1596201850fd4a63680b27f603cb64e67176159be3d8ed78a4403fdb1700",
-      "Size": 2,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/RamTrimMod/enabled.txt"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/shared/jsbProfiler/jsbProfi.lua",
       "Hash": "7390d12e3c3cd0256cf70ea277c3a0789d2a50bc713389da6d3f1c1dca3c7f78",
       "Size": 14113,
@@ -2183,6 +2177,18 @@
       "Hash": "e187c8e93299e45f3034240435c6c66045748d9059cc44df4fb0518959500eb0",
       "Size": 4800,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Palworld_Borealis_Preset.ini"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/steam_api64.dll",
+      "Hash": "4df999c0c8cb12589f0864d52be5d4c775577aeb27fee28b49b188f9ba083eea",
+      "Size": 295336,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/steam_api64.dll"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/steam_appid.txt",
+      "Hash": "abf8fc38f41db5d629130e35852912c058b8de54770f4e41927e2272ff237436",
+      "Size": 7,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/steam_appid.txt"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/LICENSE",
@@ -4001,12 +4007,6 @@
       "Hash": "82a74c2dd58b957cc9f12b62304d1bbb3770f099c97b098e85762c3a7f44fdc4",
       "Size": 309248,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/RamTrimMod/dlls/main.dll"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/RamTrimMod/enabled.txt",
-      "Hash": "e16f1596201850fd4a63680b27f603cb64e67176159be3d8ed78a4403fdb1700",
-      "Size": 2,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/RamTrimMod/enabled.txt"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/jsbProfiler/jsbProfi.lua",
