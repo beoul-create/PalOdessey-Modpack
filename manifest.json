@@ -1,11 +1,11 @@
 {
-  "Version": "20260903214116",
-  "GeneratedAt": "2026-09-03T21:41:16.572Z",
+  "Version": "20260903215342",
+  "GeneratedAt": "2026-09-03T21:53:42.710Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 722,
+  "TotalFiles": 748,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -41,6 +41,102 @@
       "Hash": "dcd0e6915cb1a7f514b08b12c49b9e3aaad4ee9dd2b5823e8285ffca6e463f5c",
       "Size": 36851,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/MemberVariableLayout.ini"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/dlls/main.dll",
+      "Hash": "b613c7a693f74e7d8c57a713a518b02ca636cd7a7f82f926ea415e259a00016e",
+      "Size": 1078272,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/dlls/main.dll"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/enabled.txt",
+      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Size": 0,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/enabled.txt"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/base_the_first_town.mp3",
+      "Hash": "f71f5c796cadc3c2004812ba7fd6025099a52eab9c72d9c48089c38923774ebf",
+      "Size": 1854908,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/base_the_first_town.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/boss_luminous_sword.mp3",
+      "Hash": "b47caafd677d2563a240580876d535c79aaac693cd5b2055d368c00b5e20da5f",
+      "Size": 2375756,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/boss_luminous_sword.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/boss_theme_opm.mp3",
+      "Hash": "b65b38a03a2d3bde9057c504b2b92c7ca82b5567eb0a3ae796f5d44aac9f3726",
+      "Size": 5136860,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/boss_theme_opm.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/dungeon_weird_place.mp3",
+      "Hash": "d707092c71e653e2f5f4535ecd029ec9b65bbd828d04a125a1442c29463c085b",
+      "Size": 1817804,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/dungeon_weird_place.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/night_theme.mp3",
+      "Hash": "cca42fad930f909150c8c373d665d0cabd136f4d569bdb840ed831b3af13482d",
+      "Size": 1335404,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/night_theme.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/region_aincrad.mp3",
+      "Hash": "b5ec54809ec7d73feb887a16475aa48ecfc72d1c726ef8cd5086004eea1e8c2e",
+      "Size": 1513316,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/region_aincrad.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/region_desert.mp3",
+      "Hash": "ff927142dba9fc31828b7020f8a43e497679d6860728b1cf3dfed18b01fc1196",
+      "Size": 1759604,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/region_desert.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/region_snow.mp3",
+      "Hash": "3109df124a9de576fbe5675e218b448035ec9663179c5affe3caf276ecade335",
+      "Size": 2313020,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/region_snow.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/region_volcano.mp3",
+      "Hash": "062a778f903c63ceabce29e522a4fdfc15d1b97ecea536271211796abddf2b53",
+      "Size": 2017940,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/region_volcano.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/rust_headshot.wav",
+      "Hash": "37807e33051906e3241fcdeb85d794a39e5584374148f258b9d53b5cdf2cbe19",
+      "Size": 176206,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/rust_headshot.wav"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/title_perfect_time.mp3",
+      "Hash": "20b72b7d9bac4c11002e8cb58cfe05ab1768e43fb64374dd192b4249df1eecc2",
+      "Size": 4784444,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/title_perfect_time.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/victory_fanfare.mp3",
+      "Hash": "eec187bdcaf2b8db9b5133e4569b3d7fe99918eea8e78f098f9c4e0563d69551",
+      "Size": 1426532,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/victory_fanfare.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/runtime_state.json",
+      "Hash": "805c41b600383b661300f7edda7318eb57c4b61bfe26574bf5af0a00572d2de0",
+      "Size": 282,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/runtime_state.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/Scripts/main.lua",
+      "Hash": "ef27b5e350d28202edeadc04a2a5a755b2fbf2f7662ec0ec68acb1c4863ee6b0",
+      "Size": 58991,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/BPML_GenericFunctions/Scripts/main.lua",
@@ -181,6 +277,18 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnToasts/Scripts/ToastLib_config_example.lua"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/Mods/DekModConfigMenu/enabled.txt",
+      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Size": 0,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DekModConfigMenu/enabled.txt"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/DekModConfigMenu/Scripts/main.lua",
+      "Hash": "7b6d25a91e0317993b90ff1a2d2ac7ae73bd010dfe64dfb1be71f9b95fe0e335",
+      "Size": 13638,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DekModConfigMenu/Scripts/main.lua"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/Mods/ExpeditionXP/config.lua",
       "Hash": "8a686302d84fe43b26374b4a2cdabf23d857481d9cf537e332af7a3bf9bb00f8",
       "Size": 819,
@@ -302,8 +410,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/mods.txt",
-      "Hash": "108fe45a786b12d8e71dd741095ae43c88120e93781ccb7e9e5392d6877d5368",
-      "Size": 375,
+      "Hash": "224d6e02cd4b8e948b925ebdb3168ea1ecba9753ae647b6e4453944364db3dd8",
+      "Size": 412,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/mods.txt"
     },
     {
@@ -2041,6 +2149,78 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/WEAPONS.md"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/base_the_first_town.mp3",
+      "Hash": "f71f5c796cadc3c2004812ba7fd6025099a52eab9c72d9c48089c38923774ebf",
+      "Size": 1854908,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/base_the_first_town.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/boss_luminous_sword.mp3",
+      "Hash": "b47caafd677d2563a240580876d535c79aaac693cd5b2055d368c00b5e20da5f",
+      "Size": 2375756,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/boss_luminous_sword.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/boss_theme_opm.mp3",
+      "Hash": "b65b38a03a2d3bde9057c504b2b92c7ca82b5567eb0a3ae796f5d44aac9f3726",
+      "Size": 5136860,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/boss_theme_opm.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/dungeon_weird_place.mp3",
+      "Hash": "d707092c71e653e2f5f4535ecd029ec9b65bbd828d04a125a1442c29463c085b",
+      "Size": 1817804,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/dungeon_weird_place.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/night_theme.mp3",
+      "Hash": "cca42fad930f909150c8c373d665d0cabd136f4d569bdb840ed831b3af13482d",
+      "Size": 1335404,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/night_theme.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_aincrad.mp3",
+      "Hash": "b5ec54809ec7d73feb887a16475aa48ecfc72d1c726ef8cd5086004eea1e8c2e",
+      "Size": 1513316,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_aincrad.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_desert.mp3",
+      "Hash": "ff927142dba9fc31828b7020f8a43e497679d6860728b1cf3dfed18b01fc1196",
+      "Size": 1759604,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_desert.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_snow.mp3",
+      "Hash": "3109df124a9de576fbe5675e218b448035ec9663179c5affe3caf276ecade335",
+      "Size": 2313020,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_snow.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_volcano.mp3",
+      "Hash": "062a778f903c63ceabce29e522a4fdfc15d1b97ecea536271211796abddf2b53",
+      "Size": 2017940,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_volcano.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/rust_headshot.wav",
+      "Hash": "37807e33051906e3241fcdeb85d794a39e5584374148f258b9d53b5cdf2cbe19",
+      "Size": 176206,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/rust_headshot.wav"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/title_perfect_time.mp3",
+      "Hash": "20b72b7d9bac4c11002e8cb58cfe05ab1768e43fb64374dd192b4249df1eecc2",
+      "Size": 4784444,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/title_perfect_time.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/victory_fanfare.mp3",
+      "Hash": "eec187bdcaf2b8db9b5133e4569b3d7fe99918eea8e78f098f9c4e0563d69551",
+      "Size": 1426532,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/victory_fanfare.mp3"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/config.json",
       "Hash": "9d5a500b5f58eaeb7b885afa461462580401c44b335201df34b25131b0ef4f6d",
       "Size": 5420,
@@ -2063,6 +2243,12 @@
       "Hash": "fd54b06f1ede24f53a98a6ed7bbe593d523a38920803240185a4bb816dfecf9f",
       "Size": 4085,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/auto_shutdown.lua"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua",
+      "Hash": "efbf5105d5f748463617ff0c6ee58cd235b14a50821b46b2420e095648995050",
+      "Size": 29938,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/liveboard_export.lua",
@@ -2123,6 +2309,102 @@
       "Hash": "dcd0e6915cb1a7f514b08b12c49b9e3aaad4ee9dd2b5823e8285ffca6e463f5c",
       "Size": 36851,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/MemberVariableLayout.ini"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/dlls/main.dll",
+      "Hash": "b613c7a693f74e7d8c57a713a518b02ca636cd7a7f82f926ea415e259a00016e",
+      "Size": 1078272,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/dlls/main.dll"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/enabled.txt",
+      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Size": 0,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/enabled.txt"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/base_the_first_town.mp3",
+      "Hash": "f71f5c796cadc3c2004812ba7fd6025099a52eab9c72d9c48089c38923774ebf",
+      "Size": 1854908,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/base_the_first_town.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/boss_luminous_sword.mp3",
+      "Hash": "b47caafd677d2563a240580876d535c79aaac693cd5b2055d368c00b5e20da5f",
+      "Size": 2375756,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/boss_luminous_sword.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/boss_theme_opm.mp3",
+      "Hash": "b65b38a03a2d3bde9057c504b2b92c7ca82b5567eb0a3ae796f5d44aac9f3726",
+      "Size": 5136860,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/boss_theme_opm.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/dungeon_weird_place.mp3",
+      "Hash": "d707092c71e653e2f5f4535ecd029ec9b65bbd828d04a125a1442c29463c085b",
+      "Size": 1817804,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/dungeon_weird_place.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/night_theme.mp3",
+      "Hash": "cca42fad930f909150c8c373d665d0cabd136f4d569bdb840ed831b3af13482d",
+      "Size": 1335404,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/night_theme.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/region_aincrad.mp3",
+      "Hash": "b5ec54809ec7d73feb887a16475aa48ecfc72d1c726ef8cd5086004eea1e8c2e",
+      "Size": 1513316,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/region_aincrad.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/region_desert.mp3",
+      "Hash": "ff927142dba9fc31828b7020f8a43e497679d6860728b1cf3dfed18b01fc1196",
+      "Size": 1759604,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/region_desert.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/region_snow.mp3",
+      "Hash": "3109df124a9de576fbe5675e218b448035ec9663179c5affe3caf276ecade335",
+      "Size": 2313020,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/region_snow.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/region_volcano.mp3",
+      "Hash": "062a778f903c63ceabce29e522a4fdfc15d1b97ecea536271211796abddf2b53",
+      "Size": 2017940,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/region_volcano.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/rust_headshot.wav",
+      "Hash": "37807e33051906e3241fcdeb85d794a39e5584374148f258b9d53b5cdf2cbe19",
+      "Size": 176206,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/rust_headshot.wav"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/title_perfect_time.mp3",
+      "Hash": "20b72b7d9bac4c11002e8cb58cfe05ab1768e43fb64374dd192b4249df1eecc2",
+      "Size": 4784444,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/title_perfect_time.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/victory_fanfare.mp3",
+      "Hash": "eec187bdcaf2b8db9b5133e4569b3d7fe99918eea8e78f098f9c4e0563d69551",
+      "Size": 1426532,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/victory_fanfare.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/runtime_state.json",
+      "Hash": "805c41b600383b661300f7edda7318eb57c4b61bfe26574bf5af0a00572d2de0",
+      "Size": 282,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/runtime_state.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/Scripts/main.lua",
+      "Hash": "ef27b5e350d28202edeadc04a2a5a755b2fbf2f7662ec0ec68acb1c4863ee6b0",
+      "Size": 58991,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/BPML_GenericFunctions/Scripts/main.lua",
@@ -2263,6 +2545,18 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib_config_example.lua"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DekModConfigMenu/enabled.txt",
+      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Size": 0,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DekModConfigMenu/enabled.txt"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DekModConfigMenu/Scripts/main.lua",
+      "Hash": "7b6d25a91e0317993b90ff1a2d2ac7ae73bd010dfe64dfb1be71f9b95fe0e335",
+      "Size": 13638,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DekModConfigMenu/Scripts/main.lua"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/ExpeditionXP/config.lua",
       "Hash": "8a686302d84fe43b26374b4a2cdabf23d857481d9cf537e332af7a3bf9bb00f8",
       "Size": 819,
@@ -2384,8 +2678,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/mods.txt",
-      "Hash": "b7d772b1166e4c338aec8c71895d8a94e43a35867b74ac66e52beaf702fbdc93",
-      "Size": 375,
+      "Hash": "ccf9af23fcbd686f32f63a085cd231acadfbe63c2e3a7d462edcde95af9d6581",
+      "Size": 412,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/mods.txt"
     },
     {
@@ -4147,6 +4441,12 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/auto_shutdown.lua"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/boss_music.lua",
+      "Hash": "a15e7f81b519875a5f5ea61505a7c02cc826a5463c71514794d6e8c9888da3d6",
+      "Size": 357,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/boss_music.lua"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/liveboard_export.lua",
       "Hash": "577284f739f14d0c2382ed32bd9db909f490a3079710d71b52817743f66e81fa",
       "Size": 6551,
@@ -4199,6 +4499,18 @@
       "Hash": "d0107f63e567313cb6a15c505b5db2bdba38130964a04e019bda7611c6178022",
       "Size": 16519168,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/UE4SS.dll"
+    },
+    {
+      "RelativePath": "Pal/Content/Paks/LogicMods/AdaptiveBGM.modconfig.json",
+      "Hash": "7f8c45482b1399355fa2e8165aae247b4d2eba0b975263990340d51c73187d02",
+      "Size": 10845,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Content/Paks/LogicMods/AdaptiveBGM.modconfig.json"
+    },
+    {
+      "RelativePath": "Pal/Content/Paks/LogicMods/DekModConfigMenu_P.pak",
+      "Hash": "8ba71cb40e98c9a55d0c883d4d0b12b1a47765979fbaa77eeefc933015468b51",
+      "Size": 12092638,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Content/Paks/LogicMods/DekModConfigMenu_P.pak"
     },
     {
       "RelativePath": "Pal/Content/Paks/~mods/Catch All PREDATOR Bosses_P.pak",

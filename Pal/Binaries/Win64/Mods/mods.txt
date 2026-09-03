@@ -17,4 +17,6 @@ TechPointShopBridge : 1
 GuildBuildingLimits : 1
 
 ; Built-in keybinds, do not move up!
+AdaptiveBGM : 1
+DekModConfigMenu : 1
 Keybinds : 1
