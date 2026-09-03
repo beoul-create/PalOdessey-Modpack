@@ -7,7 +7,6 @@ local SAODeath = require("sao_death")
 local WorldBoss = require("world_boss")
 local LiveboardExport = require("liveboard_export")
 local AutoShutdown = require("auto_shutdown")
-local BossMusic = require("boss_music")
 local Performance = require("performance")
 
 local function DecodeJson(Content)
@@ -81,7 +80,6 @@ SAODeath.Init()
 WorldBoss.LoadConfig(Config)
 WorldBoss.InitHooks()
 AutoShutdown.Init()
-BossMusic.Init(Config)
 
 -- Initial liveboard export
 LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)

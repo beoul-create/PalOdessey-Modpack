@@ -711,7 +711,6 @@ function WorldBoss.InitHooks()
                 string.format("🏆 **%s** has successfully captured **%s (%s Aura)**!", playerName, bossName, aura),
                 65280 -- Emerald Green
             )
-            pcall(function() local bm = require("boss_music") if bm and bm.FadeOut then bm.FadeOut() end end)
         end
     end)
 
@@ -737,7 +736,6 @@ function WorldBoss.InitHooks()
                 string.format("💀 **%s (%s Aura)** has fallen in battle!", bossName, aura),
                 15158332 -- Amber/Red
             )
-            pcall(function() local bm = require("boss_music") if bm and bm.FadeOut then bm.FadeOut() end end)
         end
     end)
 

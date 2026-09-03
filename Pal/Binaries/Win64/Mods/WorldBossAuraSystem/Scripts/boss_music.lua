@@ -61,7 +61,7 @@ local function SendMciCommand(cmd)
         local res = WinMM.mciSendStringA(cmd, nil, 0, nil)
         return res == 0
     end
-    return pcall(os.execute, string.format('rundll32.exe winmm.dll,mciExecute %s', cmd))
+    return false
 end
 
 local function CloseCurrentTrack()
