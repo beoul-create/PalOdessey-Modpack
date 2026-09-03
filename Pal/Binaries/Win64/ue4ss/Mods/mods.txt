@@ -1,7 +1,7 @@
 BPML_GenericFunctions : 1
 BPModLoaderMod : 1
 PalSchema : 1
-RamTrimMod : 1
+RamTrimMod : 0
 PalworldTuner : 1
 ExpeditionXP : 1
 DarnToasts : 1
@@ -14,7 +14,7 @@ PalClearVision : 1
 FastConnect : 1
 WorldBossAuraSystem : 1
 TechPointShopBridge : 1
-GuildBuildingLimits : 1
+GuildBuildingLimits : 0
 
 ; Built-in keybinds, do not move up!
 Keybinds : 1

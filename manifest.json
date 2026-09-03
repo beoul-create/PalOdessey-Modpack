@@ -1,6 +1,6 @@
 {
-  "Version": "20260903201408",
-  "GeneratedAt": "2026-09-03T20:14:08.145Z",
+  "Version": "20260903203732",
+  "GeneratedAt": "2026-09-03T20:37:32.354Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -248,7 +248,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/GuildBuildingLimits/enabled.txt",
-      "Hash": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "Hash": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
       "Size": 2,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/GuildBuildingLimits/enabled.txt"
     },
@@ -2426,7 +2426,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/enabled.txt",
-      "Hash": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "Hash": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
       "Size": 2,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/enabled.txt"
     },
@@ -2480,7 +2480,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/mods.txt",
-      "Hash": "108fe45a786b12d8e71dd741095ae43c88120e93781ccb7e9e5392d6877d5368",
+      "Hash": "b7d772b1166e4c338aec8c71895d8a94e43a35867b74ac66e52beaf702fbdc93",
       "Size": 375,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/mods.txt"
     },
