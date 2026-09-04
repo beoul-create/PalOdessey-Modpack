@@ -1,6 +1,6 @@
 {
-  "Version": "20260903220011",
-  "GeneratedAt": "2026-09-03T22:00:11.921Z",
+  "Version": "20260904002454",
+  "GeneratedAt": "2026-09-04T00:24:54.142Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -470,8 +470,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/Scripts/main.lua",
-      "Hash": "b9c36215bbe4529d3c1a6f7e9072a46c4e7c2b7cf8b9adc4793323f1c491f101",
-      "Size": 11356,
+      "Hash": "2f755a87db323f91cd22a0dccc7a13f4a6cb945dda6eef5a9e2d7577d1407331",
+      "Size": 14627,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/Scripts/main.lua"
     },
     {
@@ -2702,8 +2702,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/Scripts/main.lua",
-      "Hash": "b9c36215bbe4529d3c1a6f7e9072a46c4e7c2b7cf8b9adc4793323f1c491f101",
-      "Size": 11356,
+      "Hash": "2f755a87db323f91cd22a0dccc7a13f4a6cb945dda6eef5a9e2d7577d1407331",
+      "Size": 14627,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/Scripts/main.lua"
     },
     {
@@ -4502,8 +4502,8 @@
     },
     {
       "RelativePath": "Pal/Content/Paks/LogicMods/AdaptiveBGM.modconfig.json",
-      "Hash": "7f8c45482b1399355fa2e8165aae247b4d2eba0b975263990340d51c73187d02",
-      "Size": 10845,
+      "Hash": "997c122197a61ea4d3a809825a705748b527481a512d8c451093ee7f44df7da1",
+      "Size": 15932,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Content/Paks/LogicMods/AdaptiveBGM.modconfig.json"
     },
     {

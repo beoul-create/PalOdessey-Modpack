@@ -48,7 +48,7 @@ end
 
 local CurrentTrackAlias = nil
 local CurrentTrackFile = nil
-local CurrentVolume = 0.70
+local CurrentVolume = 0.25 -- Gentle, comfortable default (25%)
 local IsMuted = false
 
 local function LoadConfig()
@@ -90,6 +90,39 @@ local function StopCurrentBGM()
     end
 end
 
+local function SetMasterVolume(newVol)
+    CurrentVolume = math.max(0.0, math.min(1.0, newVol))
+    SaveConfig()
+    if CurrentTrackAlias then
+        local vol = math.floor(CurrentVolume * 1000 + 0.5)
+        MciExec(string.format("setaudio %s volume to %d", CurrentTrackAlias, math.max(0, math.min(1000, vol))))
+    end
+    Log(string.format("Master Volume set to: %.0f%%", CurrentVolume * 100))
+    pcall(function()
+        local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+        if PalUtil and PalUtil:IsValid() and type(PalUtil.SendSystemToChat) == "function" then
+            PalUtil:SendSystemToChat(string.format("Custom Music Volume: %.0f%% (Use [ and ] to adjust)", CurrentVolume * 100))
+        end
+    end)
+end
+
+local function ToggleMute()
+    IsMuted = not IsMuted
+    SaveConfig()
+    if IsMuted then
+        StopCurrentBGM()
+        Log("Custom Music MUTED")
+    else
+        Log("Custom Music UNMUTED")
+    end
+    pcall(function()
+        local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+        if PalUtil and PalUtil:IsValid() and type(PalUtil.SendSystemToChat) == "function" then
+            PalUtil:SendSystemToChat(IsMuted and "Custom Music: MUTED (Press \\ or type /mute to toggle)" or "Custom Music: UNMUTED")
+        end
+    end)
+end
+
 local function PlayBossBGM(fileName, loop, volumeFraction)
     if IsMuted then return end
     if CurrentTrackFile == fileName then return end
@@ -110,7 +143,7 @@ local function PlayBossBGM(fileName, loop, volumeFraction)
 
         local playCmd = loop and string.format("play %s repeat", alias) or string.format("play %s", alias)
         MciExec(playCmd)
-        Log(string.format("🎵 Playing Boss BGM: %s", fileName))
+        Log(string.format("🎵 Playing Boss BGM: %s (Volume: %d/1000)", fileName, vol))
     else
         Log(string.format("Warning: Failed to play %s (ret: %d)", fileName, ret))
     end
@@ -144,7 +177,58 @@ local function PlayOneShotSFX(fileName, volumeFraction)
     end
 end
 
--- 3. Game State & Combat Detection
+-- 3. In-Game Chat Commands and Hotkeys for Volume Adjustment
+local function ProcessVolumeChat(Context, Param1)
+    local function TryGetStr(val)
+        if not val then return "" end
+        local s = ""
+        pcall(function()
+            local obj = val
+            if type(val.get) == "function" then obj = val:get() end
+            if type(obj) == "string" then s = obj
+            elseif type(obj.ToString) == "function" then s = obj:ToString()
+            elseif obj.Message and type(obj.Message.ToString) == "function" then s = obj.Message:ToString() end
+        end)
+        return s
+    end
+
+    local text = TryGetStr(Param1):lower():gsub("^%s+", ""):gsub("%s+$", "")
+    local volArg = text:match("^/vol%s+(%d+)") or text:match("^!vol%s+(%d+)") or text:match("^/volume%s+(%d+)")
+    if volArg then
+        local pct = tonumber(volArg)
+        if pct then
+            SetMasterVolume(pct / 100.0)
+        end
+    elseif text == "/mute" or text == "!mute" or text == "/unmute" then
+        ToggleMute()
+    end
+end
+
+pcall(RegisterHook, "/Script/Pal.PalPlayerState:EnterChat", ProcessVolumeChat)
+pcall(RegisterHook, "/Script/Pal.PalGameStateInGame:BroadcastChatMessage", ProcessVolumeChat)
+
+-- Keyboard shortcuts: [ (Volume Down 5%), ] (Volume Up 5%),  (Mute/Unmute)
+if type(RegisterKeyBindAsync) == "function" and Key then
+    pcall(function()
+        if Key.OPEN_BRACKET then
+            RegisterKeyBindAsync(Key.OPEN_BRACKET, {}, function()
+                SetMasterVolume(CurrentVolume - 0.05)
+            end)
+        end
+        if Key.CLOSE_BRACKET then
+            RegisterKeyBindAsync(Key.CLOSE_BRACKET, {}, function()
+                SetMasterVolume(CurrentVolume + 0.05)
+            end)
+        end
+        if Key.BACKSLASH then
+            RegisterKeyBindAsync(Key.BACKSLASH, {}, function()
+                ToggleMute()
+            end)
+        end
+    end)
+end
+
+-- 4. Game State & Combat Detection
 local ActiveMajorBossCombat = false
 local ActiveFieldBossCombat = false
 local LastCombatHitTime = 0
@@ -318,4 +402,4 @@ else
     IsInTitle = false
 end
 
-Log("PalOdysseyBossAudio successfully initialized alongside AdaptiveBGM.")
+Log("PalOdysseyBossAudio successfully initialized alongside AdaptiveBGM with live volume controls.")
