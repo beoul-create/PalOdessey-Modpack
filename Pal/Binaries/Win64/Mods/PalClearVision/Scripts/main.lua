@@ -58,7 +58,7 @@ local function ApplyVisualTweaks()
         if Config.removeFogHaze then
             ExecuteConsole("r.VolumetricFog 0")
             ExecuteConsole("r.VolumetricCloud 0")
-            ExecuteConsole("r.ContactShadows 0")
+            ExecuteConsole("r.ContactShadows 1")
         end
         if Config.disableChromaticAberration then
             ExecuteConsole("r.SceneColorFringeQuality 0")
