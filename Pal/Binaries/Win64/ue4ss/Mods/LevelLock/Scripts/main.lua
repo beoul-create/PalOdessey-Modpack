@@ -2268,6 +2268,22 @@ end
 
 RegisterHook("/Script/Engine.PlayerController:ServerAcknowledgePossession",
     function(self, Pawn)
+        -- Once progress is loaded for the local session, bypass repossession to eliminate mount/dismount stalls
+        if progressLoaded and not isDedicatedServer() then
+            return
+        end
+
+        local controller = self
+        pcall(function() controller = self:get() end)
+        if not (controller and controller:IsValid()) then return end
+
+        -- If player's progress is already loaded in memory, do not re-run file reads on dismount!
+        local rawUid = realUid(fmtGuid(controller:GetPlayerUId()))
+        local uid = canonUid(rawUid)
+        if (uid and playerDefeated[uid]) or (rawUid and playerDefeated[rawUid]) then
+            return
+        end
+
         local pawnObj = Pawn and (Pawn.get and Pawn:get() or Pawn)
         if pawnObj and pawnObj.IsA then
             local isPlayerPawn = false
@@ -2281,16 +2297,6 @@ RegisterHook("/Script/Engine.PlayerController:ServerAcknowledgePossession",
                 -- Mounting a Pal: controller repossesses the mount, ignore completely!
                 return
             end
-        end
-
-        local controller = self
-        pcall(function() controller = self:get() end)
-        if not (controller and controller:IsValid()) then return end
-
-        -- If player's progress is already loaded in memory, do not re-run file reads on dismount!
-        local uid = realUid(fmtGuid(controller:GetPlayerUId()))
-        if uid and playerDefeated[uid] then
-            return
         end
 
         ExecuteWithDelay(3000, function()

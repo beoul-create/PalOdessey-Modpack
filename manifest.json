@@ -1,11 +1,11 @@
 {
-  "Version": "20260904005640",
-  "GeneratedAt": "2026-09-04T00:56:40.826Z",
+  "Version": "20260904223724",
+  "GeneratedAt": "2026-09-04T22:37:24.072Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 748,
+  "TotalFiles": 752,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -134,8 +134,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/Scripts/main.lua",
-      "Hash": "ef27b5e350d28202edeadc04a2a5a755b2fbf2f7662ec0ec68acb1c4863ee6b0",
-      "Size": 58991,
+      "Hash": "55bd4aea6eb413ab2d10e2d4c1e30789398fd8573275249180ebfd746e5d58b8",
+      "Size": 57627,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/Scripts/main.lua"
     },
     {
@@ -398,8 +398,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "bab666f584604ce42aa61e207f90217dcb8703bc68b36cac06f3451825fc30cf",
-      "Size": 98035,
+      "Hash": "c97c562569dc4a17bcf6d63e7b9ddc3902d459897e9acc358d7c5cc5a758e69f",
+      "Size": 98320,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -463,6 +463,18 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio/victory_fanfare.mp3"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio_state.json",
+      "Hash": "f116b00d49dfef943f72154146253708e2885ca8dc9c80deb209fa2d0a3577e2",
+      "Size": 191,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio_state.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/dlls/main.dll",
+      "Hash": "04893e38844835592f7946e0d4b9b25371c093fc149941e6c8600d42a0e5ffc8",
+      "Size": 270336,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/dlls/main.dll"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/enabled.txt",
       "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "Size": 0,
@@ -470,8 +482,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/Scripts/main.lua",
-      "Hash": "cdf64dfcd6ef4c7736ebb0b5eeb9821d3a4a47e56acd4f1e284452acfc9fbc38",
-      "Size": 15512,
+      "Hash": "948ed0505383cc297a7c620c198a3fa680400b0811cbf8053aa58f4f3f18b0b6",
+      "Size": 13940,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/Scripts/main.lua"
     },
     {
@@ -2366,8 +2378,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/Scripts/main.lua",
-      "Hash": "191db80cf6031e6eb3a9727d81a5702ab6295c062d56fa53452384c61f85ced4",
-      "Size": 59049,
+      "Hash": "55bd4aea6eb413ab2d10e2d4c1e30789398fd8573275249180ebfd746e5d58b8",
+      "Size": 57627,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/Scripts/main.lua"
     },
     {
@@ -2630,8 +2642,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "bab666f584604ce42aa61e207f90217dcb8703bc68b36cac06f3451825fc30cf",
-      "Size": 98035,
+      "Hash": "c97c562569dc4a17bcf6d63e7b9ddc3902d459897e9acc358d7c5cc5a758e69f",
+      "Size": 98320,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -2695,6 +2707,18 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio/victory_fanfare.mp3"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio_state.json",
+      "Hash": "f116b00d49dfef943f72154146253708e2885ca8dc9c80deb209fa2d0a3577e2",
+      "Size": 191,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio_state.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/dlls/main.dll",
+      "Hash": "04893e38844835592f7946e0d4b9b25371c093fc149941e6c8600d42a0e5ffc8",
+      "Size": 270336,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/dlls/main.dll"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/enabled.txt",
       "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "Size": 0,
@@ -2702,8 +2726,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/Scripts/main.lua",
-      "Hash": "cdf64dfcd6ef4c7736ebb0b5eeb9821d3a4a47e56acd4f1e284452acfc9fbc38",
-      "Size": 15512,
+      "Hash": "948ed0505383cc297a7c620c198a3fa680400b0811cbf8053aa58f4f3f18b0b6",
+      "Size": 13940,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/Scripts/main.lua"
     },
     {

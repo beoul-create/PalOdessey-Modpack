@@ -1,21 +1,19 @@
-
-local ok_ffi, ffi = pcall(require, "ffi")
-print(string.format("[PROBE-TEST] ok_ffi=%s, type=%s", tostring(ok_ffi), type(ffi)))
-
--- PalOdysseyBossAudio - Complementary Boss & Combat Audio Mod for PalOdyssey
+-- PalOdysseyBossAudio - Complementary Boss, Combat & Title Audio Mod for PalOdyssey
 -- Works alongside AdaptiveBGM: seamlessly signals suppression during bosses & title screen
--- Uses Native Windows MCI API in-process via UE4SS FFI (Zero external process / Zero AV triggers)
+-- Uses Native in-process C++ DLL (dlls/main.dll) with MCI & atomic state synchronization (Zero external processes / Zero AV triggers)
 
 local ModName = "PalOdysseyBossAudio"
 local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
-local AudioDir = (ScriptDir:gsub("[Ss][Cc][Rr][Ii][Pp][Tt][Ss][\\/]+$", "")) .. "audio/"
-local ConfigFile = ScriptDir .. "../config.json"
+local ModDir = (ScriptDir:gsub("[Ss][Cc][Rr][Ii][Pp][Tt][Ss][\\/]+$", ""))
+local AudioDir = ModDir .. "audio/"
+local StateFile = ModDir .. "audio_state.json"
+local ConfigFile = ModDir .. "config.json"
 
 local function Log(msg)
     print(string.format("[%s] %s", ModName, tostring(msg)))
 end
 
--- 1. Dedicated Server Gate (Servers do not render audio)
+-- 1. Dedicated Server Gate (Dedicated servers do not render audio)
 local isDedicated = false
 pcall(function()
     local kismet = StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
@@ -29,50 +27,15 @@ if isDedicated then
     return
 end
 
--- 2. Windows Native In-Process MCI via FFI
-local ok_ffi, ffi = pcall(require, "ffi")
-local NativeAudioLib = nil
-
-if ok_ffi and ffi then
-    pcall(function()
-        ffi.cdef[[
-            int mciSendStringA(const char* lpstrCommand, char* lpstrReturnString, unsigned int uReturnLength, size_t hwndCallback);
-            int mciGetErrorStringA(int fdwError, char* lpszErrorText, unsigned int cchErrorText);
-        ]]
-        local ok_load, lib = pcall(function() return ffi.load("winmm.dll") end)
-        if ok_load and lib then
-            NativeAudioLib = lib
-        else
-            NativeAudioLib = ffi.C
-        end
-    end)
-end
-
-local function MciExec(cmd)
-    if not NativeAudioLib then
-        Log("[MCI-ERROR] NativeAudioLib is nil!")
-        return -1
-    end
-    local ok, res = pcall(function()
-        return NativeAudioLib.mciSendStringA(cmd, nil, 0, 0)
-    end)
-    if not ok then
-        Log("[MCI-ERROR] pcall failed: " .. tostring(res))
-        return -1
-    end
-    if res ~= 0 then
-        pcall(function()
-            local errBuf = ffi.new("char[256]")
-            NativeAudioLib.mciGetErrorStringA(res, errBuf, 256)
-            Log(string.format("[MCI-ERROR] cmd: '%s' -> Code: %d (%s)", cmd, res, ffi.string(errBuf)))
-        end)
-    end
-    return res
-end
-
-local CurrentTrackAlias = nil
-local CurrentTrackFile = nil
+-- 2. State & Volume Management
+local CurrentBgmState = "stop"
+local CurrentBgmTrack = ""
+local CurrentBgmLoop = true
 local CurrentVolume = 0.25 -- Gentle, comfortable default (25%)
+local CurrentFadeSec = 1.0
+local SfxSequence = 0
+local CurrentSfxTrack = ""
+local CurrentSfxVolume = 0.75
 local IsMuted = false
 
 local function LoadConfig()
@@ -101,31 +64,84 @@ end
 
 LoadConfig()
 
+local function WriteAudioState()
+    pcall(function()
+        local effectiveVol = IsMuted and 0.0 or CurrentVolume
+        local json = string.format(
+            '{\n  "bgm_state": "%s",\n  "bgm_track": "%s",\n  "bgm_loop": %s,\n  "bgm_volume": %.2f,\n  "fade_seconds": %.1f,\n  "sfx_track": "%s",\n  "sfx_volume": %.2f,\n  "sfx_sequence": %d\n}\n',
+            CurrentBgmState,
+            CurrentBgmTrack,
+            CurrentBgmLoop and "true" or "false",
+            effectiveVol,
+            CurrentFadeSec,
+            CurrentSfxTrack,
+            effectiveVol,
+            SfxSequence
+        )
+        local tmpFile = StateFile .. ".tmp"
+        local f = io.open(tmpFile, "w")
+        if f then
+            f:write(json)
+            f:close()
+            os.remove(StateFile)
+            os.rename(tmpFile, StateFile)
+        end
+    end)
+end
+
 local function SetAdaptiveBGMSuppression(active)
     _G.PalOdysseyBossAudio_Active = active
 end
 
-local function StopCurrentBGM()
-    if CurrentTrackAlias then
-        MciExec(string.format("stop %s", CurrentTrackAlias))
-        MciExec(string.format("close %s", CurrentTrackAlias))
-        CurrentTrackAlias = nil
-        CurrentTrackFile = nil
-    end
+local function PlayBossBGM(fileName, loop, volumeFraction, fadeSeconds)
+    if IsMuted then return end
+    if CurrentBgmTrack == fileName and CurrentBgmState == "play" then return end
+
+    SetAdaptiveBGMSuppression(true)
+
+    CurrentBgmState = "play"
+    CurrentBgmTrack = fileName
+    CurrentBgmLoop = (loop ~= false)
+    CurrentFadeSec = fadeSeconds or 0.8
+    WriteAudioState()
+
+    Log(string.format("Playing Audio: %s (Volume: %.0f%%)", fileName, CurrentVolume * 100))
+end
+
+local function StopBossBGM(fadeSeconds)
+    CurrentBgmState = "stop"
+    CurrentFadeSec = fadeSeconds or 1.2
+    WriteAudioState()
+    SetAdaptiveBGMSuppression(false)
+end
+
+local function PlayOneShotSFX(fileName, volumeFraction)
+    if IsMuted then return end
+    SfxSequence = SfxSequence + 1
+    CurrentSfxTrack = fileName
+    CurrentSfxVolume = (volumeFraction or 1.0) * CurrentVolume
+    WriteAudioState()
 end
 
 local function SetMasterVolume(newVol)
     CurrentVolume = math.max(0.0, math.min(1.0, newVol))
     SaveConfig()
-    if CurrentTrackAlias then
-        local vol = math.floor(CurrentVolume * 1000 + 0.5)
-        MciExec(string.format("setaudio %s volume to %d", CurrentTrackAlias, math.max(0, math.min(1000, vol))))
-    end
+    WriteAudioState()
+
     Log(string.format("Master Volume set to: %.0f%%", CurrentVolume * 100))
     pcall(function()
+        local chatSub = FindFirstOf("PalChatSubsystem")
+        local msg = string.format("Custom Music Volume: %.0f%% (Use [ and ] to adjust)", CurrentVolume * 100)
+        if chatSub and chatSub:IsValid() and type(chatSub.SendSystemChatMessage) == "function" then
+            local pc = UEHelpers and UEHelpers.GetPlayerController and UEHelpers.GetPlayerController()
+            if pc and pc:IsValid() then
+                chatSub:SendSystemChatMessage(pc, FText(msg))
+                return
+            end
+        end
         local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
         if PalUtil and PalUtil:IsValid() and type(PalUtil.SendSystemToChat) == "function" then
-            PalUtil:SendSystemToChat(string.format("Custom Music Volume: %.0f%% (Use [ and ] to adjust)", CurrentVolume * 100))
+            PalUtil:SendSystemToChat(msg)
         end
     end)
 end
@@ -133,8 +149,8 @@ end
 local function ToggleMute()
     IsMuted = not IsMuted
     SaveConfig()
+    WriteAudioState()
     if IsMuted then
-        StopCurrentBGM()
         Log("Custom Music MUTED")
     else
         Log("Custom Music UNMUTED")
@@ -142,66 +158,12 @@ local function ToggleMute()
     pcall(function()
         local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
         if PalUtil and PalUtil:IsValid() and type(PalUtil.SendSystemToChat) == "function" then
-            PalUtil:SendSystemToChat(IsMuted and "Custom Music: MUTED (Press \\ or type /mute to toggle)" or "Custom Music: UNMUTED")
+            PalUtil:SendSystemToChat(IsMuted and "Custom Music: MUTED" or string.format("Custom Music: UNMUTED (%.0f%%)", CurrentVolume * 100))
         end
     end)
 end
 
-local function PlayBossBGM(fileName, loop, volumeFraction)
-    if IsMuted then return end
-    if CurrentTrackFile == fileName then return end
-
-    StopCurrentBGM()
-    SetAdaptiveBGMSuppression(true)
-
-    local fullPath = (AudioDir .. fileName):gsub("/", "\\")
-    local alias = "PalBoss_" .. tostring(os.time())
-    local openCmd = string.format('open "%s" type mpegvideo alias %s', fullPath, alias)
-    local ret = MciExec(openCmd)
-    if ret == 0 then
-        CurrentTrackAlias = alias
-        CurrentTrackFile = fileName
-
-        local vol = math.floor(((volumeFraction or 1.0) * CurrentVolume * 1000) + 0.5)
-        MciExec(string.format("setaudio %s volume to %d", alias, math.max(0, math.min(1000, vol))))
-
-        local playCmd = loop and string.format("play %s repeat", alias) or string.format("play %s", alias)
-        MciExec(playCmd)
-        Log(string.format("🎵 Playing Boss BGM: %s (Volume: %d/1000)", fileName, vol))
-    else
-        Log(string.format("Warning: Failed to play %s (ret: %d)", fileName, ret))
-    end
-end
-
-local function StopBossBGM()
-    StopCurrentBGM()
-    SetAdaptiveBGMSuppression(false)
-end
-
-local function PlayOneShotSFX(fileName, volumeFraction)
-    if IsMuted then return end
-    local fullPath = (AudioDir .. fileName):gsub("/", "\\")
-    local alias = "PalSFX_" .. tostring(os.clock()):gsub("%.", "")
-    local openCmd = fileName:find("%.wav$") and string.format('open "%s" type waveaudio alias %s', fullPath, alias)
-        or string.format('open "%s" type mpegvideo alias %s', fullPath, alias)
-    
-    if MciExec(openCmd) == 0 then
-        local vol = math.floor(((volumeFraction or 1.0) * CurrentVolume * 1000) + 0.5)
-        MciExec(string.format("setaudio %s volume to %d", alias, math.max(0, math.min(1000, vol))))
-        MciExec(string.format("play %s", alias))
-
-        -- Auto-close SFX after 8 seconds
-        local delay = ExecuteInGameThreadWithDelay or ExecuteWithDelay
-        if delay then
-            delay(8000, function()
-                MciExec(string.format("stop %s", alias))
-                MciExec(string.format("close %s", alias))
-            end)
-        end
-    end
-end
-
--- 3. In-Game Chat Commands and Hotkeys for Volume Adjustment
+-- 3. In-Game Chat Commands & Hotkeys for Volume Adjustment
 local function ProcessVolumeChat(Context, Param1)
     local function TryGetStr(val)
         if not val then return "" end
@@ -231,21 +193,26 @@ end
 pcall(RegisterHook, "/Script/Pal.PalPlayerState:EnterChat", ProcessVolumeChat)
 pcall(RegisterHook, "/Script/Pal.PalGameStateInGame:BroadcastChatMessage", ProcessVolumeChat)
 
--- Keyboard shortcuts: [ (Volume Down 5%), ] (Volume Up 5%),  (Mute/Unmute)
+-- Keyboard shortcuts: [ (Volume Down 5%), ] (Volume Up 5%), \ (Mute/Unmute)
+-- Uses UE4SS Key enums: OEM_FOUR = [, OEM_SIX = ], OEM_FIVE = \
 if type(RegisterKeyBindAsync) == "function" and Key then
     pcall(function()
-        if Key.OPEN_BRACKET then
-            RegisterKeyBindAsync(Key.OPEN_BRACKET, {}, function()
+        local keyVolDown = Key.OEM_FOUR or Key.OPEN_BRACKET
+        local keyVolUp = Key.OEM_SIX or Key.CLOSE_BRACKET
+        local keyMute = Key.OEM_FIVE or Key.BACKSLASH
+
+        if keyVolDown then
+            RegisterKeyBindAsync(keyVolDown, {}, function()
                 SetMasterVolume(CurrentVolume - 0.05)
             end)
         end
-        if Key.CLOSE_BRACKET then
-            RegisterKeyBindAsync(Key.CLOSE_BRACKET, {}, function()
+        if keyVolUp then
+            RegisterKeyBindAsync(keyVolUp, {}, function()
                 SetMasterVolume(CurrentVolume + 0.05)
             end)
         end
-        if Key.BACKSLASH then
-            RegisterKeyBindAsync(Key.BACKSLASH, {}, function()
+        if keyMute then
+            RegisterKeyBindAsync(keyMute, {}, function()
                 ToggleMute()
             end)
         end
@@ -314,10 +281,10 @@ local function OnDamageProcessed(Context, DamageInfo)
             if isMajor then
                 ActiveMajorBossCombat = true
                 ActiveFieldBossCombat = false
-                PlayBossBGM("boss_theme_opm.mp3", true, 0.80)
+                PlayBossBGM("boss_theme_opm.mp3", true, 0.80, 0.8)
             elseif isField and not ActiveMajorBossCombat then
                 ActiveFieldBossCombat = true
-                PlayBossBGM("boss_luminous_sword.mp3", true, 0.75)
+                PlayBossBGM("boss_luminous_sword.mp3", true, 0.75, 0.8)
             end
         end
     end)
@@ -330,7 +297,7 @@ pcall(RegisterHook, "/Script/Pal.PalUIBossHP:Show", function()
     LastCombatHitTime = os.time()
     if not ActiveMajorBossCombat then
         ActiveFieldBossCombat = true
-        PlayBossBGM("boss_luminous_sword.mp3", true, 0.75)
+        PlayBossBGM("boss_luminous_sword.mp3", true, 0.75, 0.8)
     end
 end)
 
@@ -339,13 +306,8 @@ pcall(RegisterHook, "/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function
     if ActiveMajorBossCombat or ActiveFieldBossCombat then
         ActiveMajorBossCombat = false
         ActiveFieldBossCombat = false
-        PlayBossBGM("victory_fanfare.mp3", false, 0.80)
-        local delay = ExecuteInGameThreadWithDelay or ExecuteWithDelay
-        if delay then
-            delay(7000, function()
-                StopBossBGM()
-            end)
-        end
+        PlayOneShotSFX("victory_fanfare.mp3", 0.85)
+        StopBossBGM(1.0)
     end
 end)
 
@@ -362,13 +324,8 @@ pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDead", function(Context)
         if isBoss and (ActiveMajorBossCombat or ActiveFieldBossCombat) then
             ActiveMajorBossCombat = false
             ActiveFieldBossCombat = false
-            PlayBossBGM("victory_fanfare.mp3", false, 0.80)
-            local delay = ExecuteInGameThreadWithDelay or ExecuteWithDelay
-            if delay then
-                delay(7000, function()
-                    StopBossBGM()
-                end)
-            end
+            PlayOneShotSFX("victory_fanfare.mp3", 0.85)
+            StopBossBGM(1.0)
         end
     end)
 end)
@@ -378,13 +335,14 @@ local function OnTitleScreen()
     IsInTitle = true
     ActiveMajorBossCombat = false
     ActiveFieldBossCombat = false
-    PlayBossBGM("title_perfect_time.mp3", true, 0.65)
+    PlayBossBGM("title_perfect_time.mp3", true, 0.65, 1.0)
 end
 
 local function OnJoinedWorld()
     if IsInTitle then
         IsInTitle = false
-        StopBossBGM()
+        StopBossBGM(1.5)
+        Log("Player joined world -> Stopped title music, AdaptiveBGM active.")
     end
 end
 
@@ -407,7 +365,7 @@ if delayFunc then
             if (ActiveMajorBossCombat or ActiveFieldBossCombat) and (now - LastCombatHitTime > 18) then
                 ActiveMajorBossCombat = false
                 ActiveFieldBossCombat = false
-                StopBossBGM()
+                StopBossBGM(1.5)
                 Log("Boss combat timeout -> Resumed AdaptiveBGM exploration audio.")
             end
         end)
@@ -416,7 +374,7 @@ if delayFunc then
     delayFunc(5000, MonitorLoop)
 end
 
--- Initial Check
+-- Initial Check on Mod Load
 local okInit, pc = pcall(function()
     return UEHelpers and UEHelpers.GetPlayerController and UEHelpers.GetPlayerController()
 end)

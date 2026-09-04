@@ -1103,14 +1103,6 @@ local function refresh_stage_state(force_resolution)
 end
 
 local function controlled_mount_pal()
-    if not valid(cached_controller) then return nil end
-    for _, getter in ipairs({
-        function() return cached_controller:GetControlPalCharacter() end,
-        function() return cached_controller:GetLowBodyPalCharacter() end,
-    }) do
-        local ok, pal = pcall(getter)
-        if ok and valid(pal) then return pal end
-    end
     return nil
 end
 
@@ -1124,35 +1116,6 @@ local function read_flying_mount_capability(riding)
     if ok_direct and type(direct) == "boolean" then
         return true, direct
     end
-
-    local mount = controlled_mount_pal()
-    if not valid(mount) then return true, false end
-    local ok_static, static = pcall(function()
-        return mount.StaticCharacterParameterComponent
-    end)
-    if not ok_static or not valid(static) then return true, false end
-
-    local ok_fly, is_fly = pcall(function() return static:IsFlyPal() end)
-    if ok_fly and type(is_fly) == "boolean" then
-        return true, is_fly
-    end
-
-    local ok_type, movement_type = pcall(function()
-        return static.MovementType
-    end)
-    if ok_type then
-        if type(movement_type) == "number" then
-            return true, movement_type == 1 or movement_type == 2
-        end
-        local text = lower(movement_type)
-        if string.find(text, "fly", 1, true) then return true, true end
-        if string.find(text, "ground", 1, true)
-            or string.find(text, "swim", 1, true) then
-            return true, false
-        end
-    end
-    -- Prefer ground-mount classification over "unknown" so Riding tracks remain
-    -- eligible when fly-pal reflection is unavailable.
     return true, false
 end
 
