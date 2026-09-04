@@ -832,8 +832,8 @@ end
 
 local function register_combat_hooks()
     hook_combat_event(
-        "client_restart",
-        "/Script/Engine.PlayerController:ClientRestart",
+        "client_travel",
+        "/Script/Engine.PlayerController:ClientTravel",
         function() request_player_refresh() end
     )
     hook_combat_event(

@@ -15,6 +15,7 @@ function NetworkModule.apply(cfg)
     -- Tune NetDriver properties when a valid world + NetDriver is available
     local tuned = false
     local function tuneNetwork()
+        if tuned then return end
         pcall(function()
             local world = GetWorldSafe()
             if not world or not world:IsValid() then return end

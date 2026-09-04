@@ -276,6 +276,12 @@ local function RestoreCharacter(Character)
     local perfStartedAt = Performance.Start()
     local restored = pcall(function()
         if not Character or not Character:IsValid() then return end
+        -- Critical Guard: Only restore characters that actually went through SAO death disintegration!
+        -- Mounting/dismounting causes ClientRestart with healthy live characters.
+        -- Forcibly resetting collision or components here causes physics deadlocks while mounted!
+        if not OriginalState[Character] and not RecentlyHandled[Character] then
+            return
+        end
         RecentlyHandled[Character] = nil
 
         -- Extinguish Soul Flame if active on Base Pal
@@ -382,7 +388,10 @@ function SAODeath.Init(config)
         end)
     end)
     pcall(RegisterHook, "/Script/Engine.PlayerController:ClientRestart", function(Context, NewPawn)
-        RestoreCharacter(NewPawn and NewPawn.get and NewPawn:get() or NewPawn)
+        local p = NewPawn and (NewPawn.get and NewPawn:get() or NewPawn)
+        if p and (OriginalState[p] or RecentlyHandled[p]) then
+            RestoreCharacter(p)
+        end
     end)
     pcall(RegisterHook, "/Script/Engine.PlayerController:ClientTravel", function()
         ClearSoulFlames()

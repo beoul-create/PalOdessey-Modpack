@@ -1,6 +1,6 @@
 {
-  "Version": "20260904224242",
-  "GeneratedAt": "2026-09-04T22:42:42.882Z",
+  "Version": "20260904230545",
+  "GeneratedAt": "2026-09-04T23:05:45.277Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -134,8 +134,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/Scripts/main.lua",
-      "Hash": "55bd4aea6eb413ab2d10e2d4c1e30789398fd8573275249180ebfd746e5d58b8",
-      "Size": 57627,
+      "Hash": "98805f253810a31be5743dc3ccbf4070ebedf233b8c2b893d9969361b098052f",
+      "Size": 57625,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/Scripts/main.lua"
     },
     {
@@ -530,8 +530,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/input.lua",
-      "Hash": "1ce0c0dfcb543b945399e82a861816f28c4ae34ffaea579fbb98db84dcb00df5",
-      "Size": 4947,
+      "Hash": "f77e26aee1b1b8e12fe93596310e682a10e98bf3dbab3dd3067a8328d3a46e5f",
+      "Size": 5059,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/input.lua"
     },
     {
@@ -542,14 +542,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/memory.lua",
-      "Hash": "b5b11bd88eff93423744c39cc949bf7a90ee85d0b85329e08b0a22a0febada9a",
-      "Size": 1730,
+      "Hash": "38a771200a649ca336deddc266625885b06cac103a691fc238d9636d0e13ae9e",
+      "Size": 1729,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/memory.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/network.lua",
-      "Hash": "52af86c722d0bd020affec6795c76c318b74f034c04d6cb2e368de879a89090c",
-      "Size": 3088,
+      "Hash": "5889195bd00ff22cb0de02bfca60e3fb8597af4896dbefa41dd3ddfdd4e01961",
+      "Size": 3121,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/network.lua"
     },
     {
@@ -2246,8 +2246,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/sao_death.lua",
-      "Hash": "750d18771436b0555a2cbb6f30ef15797263299664c2552ee106defdfa1dfc61",
-      "Size": 18066,
+      "Hash": "e08f915c4784ce89808afc2308b24cf9fb1fbaebb2becf7b1e93f83c29a683e4",
+      "Size": 18564,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/sao_death.lua"
     },
     {
@@ -2378,8 +2378,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/Scripts/main.lua",
-      "Hash": "55bd4aea6eb413ab2d10e2d4c1e30789398fd8573275249180ebfd746e5d58b8",
-      "Size": 57627,
+      "Hash": "98805f253810a31be5743dc3ccbf4070ebedf233b8c2b893d9969361b098052f",
+      "Size": 57625,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/Scripts/main.lua"
     },
     {
@@ -2774,8 +2774,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/input.lua",
-      "Hash": "1ce0c0dfcb543b945399e82a861816f28c4ae34ffaea579fbb98db84dcb00df5",
-      "Size": 4947,
+      "Hash": "f77e26aee1b1b8e12fe93596310e682a10e98bf3dbab3dd3067a8328d3a46e5f",
+      "Size": 5059,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/input.lua"
     },
     {
@@ -2786,14 +2786,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/memory.lua",
-      "Hash": "b5b11bd88eff93423744c39cc949bf7a90ee85d0b85329e08b0a22a0febada9a",
-      "Size": 1730,
+      "Hash": "38a771200a649ca336deddc266625885b06cac103a691fc238d9636d0e13ae9e",
+      "Size": 1729,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/memory.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/network.lua",
-      "Hash": "52af86c722d0bd020affec6795c76c318b74f034c04d6cb2e368de879a89090c",
-      "Size": 3088,
+      "Hash": "5889195bd00ff22cb0de02bfca60e3fb8597af4896dbefa41dd3ddfdd4e01961",
+      "Size": 3121,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/network.lua"
     },
     {
@@ -4490,8 +4490,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/sao_death.lua",
-      "Hash": "750d18771436b0555a2cbb6f30ef15797263299664c2552ee106defdfa1dfc61",
-      "Size": 18066,
+      "Hash": "e08f915c4784ce89808afc2308b24cf9fb1fbaebb2becf7b1e93f83c29a683e4",
+      "Size": 18564,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/sao_death.lua"
     },
     {

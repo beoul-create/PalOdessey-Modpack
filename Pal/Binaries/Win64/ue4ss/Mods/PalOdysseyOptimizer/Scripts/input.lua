@@ -87,10 +87,13 @@ function InputModule.apply(cfg)
     end
 
     -- Hook PlayerController initialization
+    local inputConfigured = false
     RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context)
+        if inputConfigured then return end
         local pc = Context:get()
         if pc and pc:IsValid() then
             setupPlayerInput(pc)
+            inputConfigured = true
         end
     end)
 
