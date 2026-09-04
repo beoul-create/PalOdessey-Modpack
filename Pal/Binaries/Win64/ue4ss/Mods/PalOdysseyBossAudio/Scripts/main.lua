@@ -1,6 +1,7 @@
--- PalOdysseyBossAudio - Complementary Boss, Combat & Title Audio Mod for PalOdyssey
--- Works alongside AdaptiveBGM: seamlessly signals suppression during bosses & title screen
--- Uses Native in-process C++ DLL (dlls/main.dll) with MCI & atomic state synchronization (Zero external processes / Zero AV triggers)
+-- PalOdysseyBossAudio - Complete Adaptive Music & Audio System for PalOdyssey
+-- Plays Title, Exploration, Night, Dungeon, Weather, Boss, Victory & SFX audio
+-- Native in-process C++ DLL (dlls/main.dll) with MCI & atomic state synchronization
+-- Live volume adjustment via Keyboard shortcuts ([, ], \), Chat commands (/vol, /mute), and Toast visual display
 
 local ModName = "PalOdysseyBossAudio"
 local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
@@ -8,6 +9,7 @@ local ModDir = (ScriptDir:gsub("[Ss][Cc][Rr][Ii][Pp][Tt][Ss][\\/]+$", ""))
 local AudioDir = ModDir .. "audio/"
 local StateFile = ModDir .. "audio_state.json"
 local ConfigFile = ModDir .. "config.json"
+local AdaptiveStateFile = ModDir .. "../AdaptiveBGM/runtime_state.json"
 
 local function Log(msg)
     print(string.format("[%s] %s", ModName, tostring(msg)))
@@ -27,11 +29,14 @@ if isDedicated then
     return
 end
 
+-- Suppress legacy AdaptiveBGM native playback so it does not conflict or play double audio
+_G.PalOdysseyBossAudio_Active = true
+
 -- 2. State & Volume Management
-local CurrentBgmState = "stop"
+local CurrentBgmState = "play"
 local CurrentBgmTrack = ""
 local CurrentBgmLoop = true
-local CurrentVolume = 0.25 -- Gentle, comfortable default (25%)
+local CurrentVolume = 0.20 -- Comfortable, gentle default (20%)
 local CurrentFadeSec = 1.0
 local SfxSequence = 0
 local CurrentSfxTrack = ""
@@ -68,7 +73,7 @@ local function WriteAudioState()
     pcall(function()
         local effectiveVol = IsMuted and 0.0 or CurrentVolume
         local json = string.format(
-            '{\n  "bgm_state": "%s",\n  "bgm_track": "%s",\n  "bgm_loop": %s,\n  "bgm_volume": %.2f,\n  "fade_seconds": %.1f,\n  "sfx_track": "%s",\n  "sfx_volume": %.2f,\n  "sfx_sequence": %d\n}\n',
+            '{\n  "bgm_state": "%s",\n  "bgm_track": "%s",\n  "bgm_loop": %s,\n  "bgm_volume": %.2f,\n  "fade_seconds": %.2f,\n  "sfx_track": "%s",\n  "sfx_volume": %.2f,\n  "sfx_sequence": %d\n}\n',
             CurrentBgmState,
             CurrentBgmTrack,
             CurrentBgmLoop and "true" or "false",
@@ -89,30 +94,25 @@ local function WriteAudioState()
     end)
 end
 
-local function SetAdaptiveBGMSuppression(active)
-    _G.PalOdysseyBossAudio_Active = active
-end
-
-local function PlayBossBGM(fileName, loop, volumeFraction, fadeSeconds)
-    if IsMuted then return end
-    if CurrentBgmTrack == fileName and CurrentBgmState == "play" then return end
-
-    SetAdaptiveBGMSuppression(true)
+local function PlayTrack(fileName, loop, fadeSeconds)
+    if not fileName or fileName == "" then return end
+    if CurrentBgmTrack == fileName and CurrentBgmState == "play" then
+        return
+    end
 
     CurrentBgmState = "play"
     CurrentBgmTrack = fileName
     CurrentBgmLoop = (loop ~= false)
-    CurrentFadeSec = fadeSeconds or 0.8
+    CurrentFadeSec = fadeSeconds or 1.0
     WriteAudioState()
 
     Log(string.format("Playing Audio: %s (Volume: %.0f%%)", fileName, CurrentVolume * 100))
 end
 
-local function StopBossBGM(fadeSeconds)
+local function StopBGM(fadeSeconds)
     CurrentBgmState = "stop"
     CurrentFadeSec = fadeSeconds or 1.2
     WriteAudioState()
-    SetAdaptiveBGMSuppression(false)
 end
 
 local function PlayOneShotSFX(fileName, volumeFraction)
@@ -123,15 +123,28 @@ local function PlayOneShotSFX(fileName, volumeFraction)
     WriteAudioState()
 end
 
-local function SetMasterVolume(newVol)
-    CurrentVolume = math.max(0.0, math.min(1.0, newVol))
-    SaveConfig()
-    WriteAudioState()
+-- Show visual notification on screen
+local function NotifyVolumeChange()
+    local pct = math.floor(CurrentVolume * 100 + 0.5)
+    local msg = IsMuted and "Custom Music: MUTED" or string.format("Music Volume: %d%% ([ / ] to adjust)", pct)
 
-    Log(string.format("Master Volume set to: %.0f%%", CurrentVolume * 100))
+    -- 1. Try ToastLib (DarnToasts UI toast)
+    pcall(function()
+        local okT, ToastLib = pcall(require, "ToastLib")
+        if okT and ToastLib and type(ToastLib.new) == "function" then
+            if not _G.PalOdysseyVolumeToast then
+                _G.PalOdysseyVolumeToast = ToastLib.new("PalOdysseyBossAudio")
+            end
+            if _G.PalOdysseyVolumeToast and type(_G.PalOdysseyVolumeToast.show) == "function" then
+                _G.PalOdysseyVolumeToast:show(msg)
+                return
+            end
+        end
+    end)
+
+    -- 2. System chat notification
     pcall(function()
         local chatSub = FindFirstOf("PalChatSubsystem")
-        local msg = string.format("Custom Music Volume: %.0f%% (Use [ and ] to adjust)", CurrentVolume * 100)
         if chatSub and chatSub:IsValid() and type(chatSub.SendSystemChatMessage) == "function" then
             local pc = UEHelpers and UEHelpers.GetPlayerController and UEHelpers.GetPlayerController()
             if pc and pc:IsValid() then
@@ -146,21 +159,27 @@ local function SetMasterVolume(newVol)
     end)
 end
 
+local function SetMasterVolume(newVol)
+    CurrentVolume = math.max(0.0, math.min(1.0, newVol))
+    SaveConfig()
+    CurrentFadeSec = 0.10 -- Snappy volume adjustment (100ms)
+    WriteAudioState()
+
+    Log(string.format("Master Volume set to: %.0f%%", CurrentVolume * 100))
+    NotifyVolumeChange()
+end
+
 local function ToggleMute()
     IsMuted = not IsMuted
     SaveConfig()
+    CurrentFadeSec = 0.10
     WriteAudioState()
     if IsMuted then
         Log("Custom Music MUTED")
     else
         Log("Custom Music UNMUTED")
     end
-    pcall(function()
-        local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
-        if PalUtil and PalUtil:IsValid() and type(PalUtil.SendSystemToChat) == "function" then
-            PalUtil:SendSystemToChat(IsMuted and "Custom Music: MUTED" or string.format("Custom Music: UNMUTED (%.0f%%)", CurrentVolume * 100))
-        end
-    end)
+    NotifyVolumeChange()
 end
 
 -- 3. In-Game Chat Commands & Hotkeys for Volume Adjustment
@@ -193,37 +212,100 @@ end
 pcall(RegisterHook, "/Script/Pal.PalPlayerState:EnterChat", ProcessVolumeChat)
 pcall(RegisterHook, "/Script/Pal.PalGameStateInGame:BroadcastChatMessage", ProcessVolumeChat)
 
--- Keyboard shortcuts: [ (Volume Down 5%), ] (Volume Up 5%), \ (Mute/Unmute)
--- Uses UE4SS Key enums: OEM_FOUR = [, OEM_SIX = ], OEM_FIVE = \
-if type(RegisterKeyBindAsync) == "function" and Key then
-    pcall(function()
-        local keyVolDown = Key.OEM_FOUR or Key.OPEN_BRACKET
-        local keyVolUp = Key.OEM_SIX or Key.CLOSE_BRACKET
-        local keyMute = Key.OEM_FIVE or Key.BACKSLASH
+-- Keyboard shortcuts:
+-- [ / - / Numpad- : Volume Down 5%
+-- ] / = / Numpad+ : Volume Up 5%
+-- \ / VolumeMute   : Toggle Mute
+local function BindKey(k, cb)
+    if not k then return end
+    if type(RegisterKeyBind) == "function" then
+        pcall(RegisterKeyBind, k, cb)
+    end
+    if type(RegisterKeyBindAsync) == "function" then
+        pcall(RegisterKeyBindAsync, k, {}, cb)
+    end
+end
 
-        if keyVolDown then
-            RegisterKeyBindAsync(keyVolDown, {}, function()
-                SetMasterVolume(CurrentVolume - 0.05)
-            end)
-        end
-        if keyVolUp then
-            RegisterKeyBindAsync(keyVolUp, {}, function()
-                SetMasterVolume(CurrentVolume + 0.05)
-            end)
-        end
-        if keyMute then
-            RegisterKeyBindAsync(keyMute, {}, function()
-                ToggleMute()
-            end)
-        end
+if Key then
+    pcall(function()
+        -- Volume Down
+        BindKey(Key.OEM_FOUR, function() SetMasterVolume(CurrentVolume - 0.05) end)
+        BindKey(Key.OEM_MINUS, function() SetMasterVolume(CurrentVolume - 0.05) end)
+        BindKey(Key.SUBTRACT, function() SetMasterVolume(CurrentVolume - 0.05) end)
+
+        -- Volume Up
+        BindKey(Key.OEM_SIX, function() SetMasterVolume(CurrentVolume + 0.05) end)
+        BindKey(Key.OEM_PLUS, function() SetMasterVolume(CurrentVolume + 0.05) end)
+        BindKey(Key.ADD, function() SetMasterVolume(CurrentVolume + 0.05) end)
+
+        -- Mute
+        BindKey(Key.OEM_FIVE, function() ToggleMute() end)
+        BindKey(Key.VOLUME_MUTE, function() ToggleMute() end)
     end)
 end
 
--- 4. Game State & Combat Detection
+-- 4. Environment & Combat Music Resolver
+local function ResolveAmbientTrack()
+    local dungeon = false
+    local time = "Day"
+    local temp = "Normal"
+
+    pcall(function()
+        local f = io.open(AdaptiveStateFile, "r")
+        if f then
+            local content = f:read("*all")
+            f:close()
+            if content:find('"dungeon_active":%s*true') then dungeon = true end
+            local t = content:match('"time":%s*"([^"]+)"')
+            if t then time = t end
+            local tp = content:match('"temperature":%s*"([^"]+)"')
+            if tp then temp = tp end
+        end
+    end)
+
+    if dungeon then
+        return "dungeon_weird_place.mp3"
+    end
+    if temp == "Hot" then
+        return "region_desert.mp3"
+    end
+    if temp == "Cold" then
+        return "region_snow.mp3"
+    end
+    if time == "Night" then
+        return "night_theme.mp3"
+    end
+    return "region_aincrad.mp3"
+end
+
+-- 5. Game State & Combat Detection
 local ActiveMajorBossCombat = false
 local ActiveFieldBossCombat = false
 local LastCombatHitTime = 0
 local IsInTitle = true
+
+local function UpdateMusicState()
+    _G.PalOdysseyBossAudio_Active = true
+
+    if IsInTitle then
+        PlayTrack("title_perfect_time.mp3", true, 1.0)
+        return
+    end
+
+    if ActiveMajorBossCombat then
+        PlayTrack("boss_theme_opm.mp3", true, 0.8)
+        return
+    end
+
+    if ActiveFieldBossCombat then
+        PlayTrack("boss_luminous_sword.mp3", true, 0.8)
+        return
+    end
+
+    -- Normal exploration
+    local ambient = ResolveAmbientTrack()
+    PlayTrack(ambient, true, 1.5)
+end
 
 local function CheckHeadshotBone(bone)
     if not bone then return false end
@@ -281,11 +363,10 @@ local function OnDamageProcessed(Context, DamageInfo)
             if isMajor then
                 ActiveMajorBossCombat = true
                 ActiveFieldBossCombat = false
-                PlayBossBGM("boss_theme_opm.mp3", true, 0.80, 0.8)
             elseif isField and not ActiveMajorBossCombat then
                 ActiveFieldBossCombat = true
-                PlayBossBGM("boss_luminous_sword.mp3", true, 0.75, 0.8)
             end
+            UpdateMusicState()
         end
     end)
 end
@@ -297,7 +378,7 @@ pcall(RegisterHook, "/Script/Pal.PalUIBossHP:Show", function()
     LastCombatHitTime = os.time()
     if not ActiveMajorBossCombat then
         ActiveFieldBossCombat = true
-        PlayBossBGM("boss_luminous_sword.mp3", true, 0.75, 0.8)
+        UpdateMusicState()
     end
 end)
 
@@ -307,7 +388,7 @@ pcall(RegisterHook, "/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function
         ActiveMajorBossCombat = false
         ActiveFieldBossCombat = false
         PlayOneShotSFX("victory_fanfare.mp3", 0.85)
-        StopBossBGM(1.0)
+        UpdateMusicState()
     end
 end)
 
@@ -325,7 +406,7 @@ pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDead", function(Context)
             ActiveMajorBossCombat = false
             ActiveFieldBossCombat = false
             PlayOneShotSFX("victory_fanfare.mp3", 0.85)
-            StopBossBGM(1.0)
+            UpdateMusicState()
         end
     end)
 end)
@@ -335,14 +416,14 @@ local function OnTitleScreen()
     IsInTitle = true
     ActiveMajorBossCombat = false
     ActiveFieldBossCombat = false
-    PlayBossBGM("title_perfect_time.mp3", true, 0.65, 1.0)
+    UpdateMusicState()
 end
 
 local function OnJoinedWorld()
     if IsInTitle then
         IsInTitle = false
-        StopBossBGM(1.5)
-        Log("Player joined world -> Stopped title music, AdaptiveBGM active.")
+        Log("Player joined world -> Starting exploration music with full volume controls.")
+        UpdateMusicState()
     end
 end
 
@@ -356,6 +437,10 @@ pcall(RegisterHook, "/Script/Engine.PlayerController:ClientRestart", function()
     OnJoinedWorld()
 end)
 
+pcall(RegisterHook, "/Script/Pal.PalPlayerController:ClientTravel", function()
+    OnJoinedWorld()
+end)
+
 -- Background Proximity & Combat Expiry Loop
 local delayFunc = ExecuteInGameThreadWithDelay or ExecuteWithDelay
 if delayFunc then
@@ -365,13 +450,13 @@ if delayFunc then
             if (ActiveMajorBossCombat or ActiveFieldBossCombat) and (now - LastCombatHitTime > 18) then
                 ActiveMajorBossCombat = false
                 ActiveFieldBossCombat = false
-                StopBossBGM(1.5)
-                Log("Boss combat timeout -> Resumed AdaptiveBGM exploration audio.")
+                Log("Boss combat timeout -> Resumed exploration audio.")
             end
+            UpdateMusicState()
         end)
-        delayFunc(2000, MonitorLoop)
+        delayFunc(1500, MonitorLoop)
     end
-    delayFunc(5000, MonitorLoop)
+    delayFunc(2000, MonitorLoop)
 end
 
 -- Initial Check on Mod Load
@@ -382,6 +467,7 @@ if not okInit or not pc or not pc:IsValid() then
     OnTitleScreen()
 else
     IsInTitle = false
+    UpdateMusicState()
 end
 
-Log("PalOdysseyBossAudio successfully initialized alongside AdaptiveBGM with live volume controls.")
+Log("PalOdysseyBossAudio initialized with unified ambient/boss music engine and live volume controls.")
