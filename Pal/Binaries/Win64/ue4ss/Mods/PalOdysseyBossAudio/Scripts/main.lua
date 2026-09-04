@@ -1,10 +1,14 @@
+
+local ok_ffi, ffi = pcall(require, "ffi")
+print(string.format("[PROBE-TEST] ok_ffi=%s, type=%s", tostring(ok_ffi), type(ffi)))
+
 -- PalOdysseyBossAudio - Complementary Boss & Combat Audio Mod for PalOdyssey
 -- Works alongside AdaptiveBGM: seamlessly signals suppression during bosses & title screen
 -- Uses Native Windows MCI API in-process via UE4SS FFI (Zero external process / Zero AV triggers)
 
 local ModName = "PalOdysseyBossAudio"
 local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
-local AudioDir = ScriptDir .. "../audio/"
+local AudioDir = (ScriptDir:gsub("[Ss][Cc][Rr][Ii][Pp][Tt][Ss][\\/]+$", "")) .. "audio/"
 local ConfigFile = ScriptDir .. "../config.json"
 
 local function Log(msg)
@@ -27,23 +31,43 @@ end
 
 -- 2. Windows Native In-Process MCI via FFI
 local ok_ffi, ffi = pcall(require, "ffi")
-local NativeAudioReady = false
+local NativeAudioLib = nil
 
 if ok_ffi and ffi then
     pcall(function()
         ffi.cdef[[
             int mciSendStringA(const char* lpstrCommand, char* lpstrReturnString, unsigned int uReturnLength, size_t hwndCallback);
+            int mciGetErrorStringA(int fdwError, char* lpszErrorText, unsigned int cchErrorText);
         ]]
-        NativeAudioReady = true
+        local ok_load, lib = pcall(function() return ffi.load("winmm.dll") end)
+        if ok_load and lib then
+            NativeAudioLib = lib
+        else
+            NativeAudioLib = ffi.C
+        end
     end)
 end
 
 local function MciExec(cmd)
-    if not NativeAudioReady then return -1 end
+    if not NativeAudioLib then
+        Log("[MCI-ERROR] NativeAudioLib is nil!")
+        return -1
+    end
     local ok, res = pcall(function()
-        return ffi.C.mciSendStringA(cmd, nil, 0, 0)
+        return NativeAudioLib.mciSendStringA(cmd, nil, 0, 0)
     end)
-    return ok and res or -1
+    if not ok then
+        Log("[MCI-ERROR] pcall failed: " .. tostring(res))
+        return -1
+    end
+    if res ~= 0 then
+        pcall(function()
+            local errBuf = ffi.new("char[256]")
+            NativeAudioLib.mciGetErrorStringA(res, errBuf, 256)
+            Log(string.format("[MCI-ERROR] cmd: '%s' -> Code: %d (%s)", cmd, res, ffi.string(errBuf)))
+        end)
+    end
+    return res
 end
 
 local CurrentTrackAlias = nil
