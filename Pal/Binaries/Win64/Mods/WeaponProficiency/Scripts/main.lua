@@ -616,7 +616,7 @@ return {
                durabilityMaxMult = 3.0, magMaxMultiplier = 1, curvePower = 0.5,
                targetXp = true, progressScope = "instance", persistBoost = true,
                restoreToStock = false, bootReport = true,
-               panelAutoHide = true, panelIdleSec = 2, nameplateInfo = true, barColor = "gold",
+               panelAutoHide = true, panelIdleSec = 2, nameplateInfo = false, barColor = "gold",
                panelOnAim = true,
                panelOpacity = 100, gradeEdge = 0, tierEdge = 0.05, skipUntestedWeapons = false,
                applyUnsupported = false,
@@ -1416,7 +1416,7 @@ local function tick()
       elseif not lootPaused then cfg._lootPauseSaid = nil end
     end
     if cfg.nameplateInfo ~= false and not lootPaused
-       and (id ~= lastShownId or (os.clock() - npCensusAt) >= 1) then
+       and (id ~= lastShownId or (os.clock() - npCensusAt) >= 10) then
       npCensusAt = os.clock()
       local function textOf(rw)
         local ct = alive(rw) and safe(function() return rw.Text_WeaponName end)
