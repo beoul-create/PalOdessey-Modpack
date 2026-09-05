@@ -1,11 +1,11 @@
 {
-  "Version": "20260905214502",
-  "GeneratedAt": "2026-09-05T21:45:02.989Z",
+  "Version": "20260905215824",
+  "GeneratedAt": "2026-09-05T21:58:24.867Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 760,
+  "TotalFiles": 761,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -116,8 +116,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/AdaptiveBGM/music/title_perfect_time.mp3",
-      "Hash": "20b72b7d9bac4c11002e8cb58cfe05ab1768e43fb64374dd192b4249df1eecc2",
-      "Size": 4784444,
+      "Hash": "209301884d6d50d836bb609ab819fdcda611e50b483ded2926cc860fccac7072",
+      "Size": 5115044,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/AdaptiveBGM/music/title_perfect_time.mp3"
     },
     {
@@ -458,8 +458,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio/title_perfect_time.mp3",
-      "Hash": "20b72b7d9bac4c11002e8cb58cfe05ab1768e43fb64374dd192b4249df1eecc2",
-      "Size": 4784444,
+      "Hash": "209301884d6d50d836bb609ab819fdcda611e50b483ded2926cc860fccac7072",
+      "Size": 5115044,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio/title_perfect_time.mp3"
     },
     {
@@ -467,6 +467,12 @@
       "Hash": "eec187bdcaf2b8db9b5133e4569b3d7fe99918eea8e78f098f9c4e0563d69551",
       "Size": 1426532,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio/victory_fanfare.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/config.json",
+      "Hash": "4289583e731ad25de8b53d31784584c429c177e70b58e1c8a02034ca5232411d",
+      "Size": 39,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/config.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/dlls/main.dll",
@@ -2372,8 +2378,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/title_perfect_time.mp3",
-      "Hash": "20b72b7d9bac4c11002e8cb58cfe05ab1768e43fb64374dd192b4249df1eecc2",
-      "Size": 4784444,
+      "Hash": "209301884d6d50d836bb609ab819fdcda611e50b483ded2926cc860fccac7072",
+      "Size": 5115044,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/AdaptiveBGM/music/title_perfect_time.mp3"
     },
     {
@@ -2756,8 +2762,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio/title_perfect_time.mp3",
-      "Hash": "20b72b7d9bac4c11002e8cb58cfe05ab1768e43fb64374dd192b4249df1eecc2",
-      "Size": 4784444,
+      "Hash": "209301884d6d50d836bb609ab819fdcda611e50b483ded2926cc860fccac7072",
+      "Size": 5115044,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio/title_perfect_time.mp3"
     },
     {
