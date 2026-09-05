@@ -103,6 +103,8 @@ local function ApplyVisualTweaks()
             ExecuteConsole("r.Streaming.AmortizeCPUToGPUCopy 1")
             ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
             ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 40")
+            ExecuteConsole("r.Streaming.HLODStrategy 1")
+            ExecuteConsole("r.Streaming.DefragDynamicBounds 1")
             ExecuteConsole("r.Streaming.LimitPoolSizeToVRAM 1")
         end
 

@@ -8,8 +8,45 @@ local function GetWorldSafe()
     return ok and world or nil
 end
 
+local function is_dedicated_server_process()
+    local command = string.lower(tostring(os.getenv("CMDCMDLINE") or ""))
+    if string.find(command, "dedicated", 1, true)
+        or string.find(command, "palserver", 1, true) then
+        return true
+    end
+    local source = debug.getinfo(1, "S").source:lower():gsub("\\", "/")
+    if string.find(source, "/palserver/") ~= nil then
+        return true
+    end
+    local ok, engine = pcall(function()
+        return FindFirstOf("GameEngine")
+    end)
+    if ok and engine ~= nil then
+        local ok_net, net_mode = pcall(function()
+            return engine.NetMode
+        end)
+        if ok_net and type(net_mode) == "number" and net_mode == 3 then
+            return true
+        end
+    end
+    local ok_geo, is_ded = pcall(function()
+        local GameplayStatics = StaticFindObject("/Script/Engine.Default__GameplayStatics")
+        local world = (UEHelpers and UEHelpers.GetWorldContextObject and UEHelpers.GetWorldContextObject()) or (GetWorldContext and GetWorldContext())
+        if GameplayStatics and GameplayStatics:IsValid() and world and world:IsValid() and type(GameplayStatics.IsDedicatedServer) == "function" then
+            return GameplayStatics:IsDedicatedServer(world)
+        end
+        return false
+    end)
+    if ok_geo and is_ded then return true end
+    return false
+end
+
 function ServerModule.apply(cfg)
     if not cfg or not cfg.enabled then return end
+    if not is_dedicated_server_process() then
+        print("[PalOdysseyOptimizer] Client environment detected; Dedicated Server Performance Suite idle.")
+        return
+    end
 
     print("[PalOdysseyOptimizer] Initializing Modrinth-Inspired Dedicated Server Optimization Suite...")
 
@@ -63,6 +100,8 @@ function ServerModule.apply(cfg)
         ExecuteConsole("gc.CreateGCClusters 1")
         ExecuteConsole("gc.MergeGCClusters 1")
         ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 300")
+    end
+
     -- One backup pass covers builds where the world hook is unavailable.
     ExecuteWithDelay(6000, function() setupServerEngineOptimization(GetWorldSafe()) end)
 
