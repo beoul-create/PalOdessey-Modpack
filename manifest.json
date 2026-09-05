@@ -1,6 +1,6 @@
 {
-  "Version": "20260905223957",
-  "GeneratedAt": "2026-09-05T22:39:57.945Z",
+  "Version": "20260905224618",
+  "GeneratedAt": "2026-09-05T22:46:18.163Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -110,8 +110,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/DarnMenu/Scripts/main.lua",
-      "Hash": "26932344452e2dc2b4a1f64f3d632221c8aeed132e5a6ea80d454e9e5aab98aa",
-      "Size": 176697,
+      "Hash": "6fd04f8f6dc40bdac8cef5b39e02670e906ee73f67eb368e08c6adacbb47a4bc",
+      "Size": 176485,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnMenu/Scripts/main.lua"
     },
     {
@@ -2282,8 +2282,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua",
-      "Hash": "26932344452e2dc2b4a1f64f3d632221c8aeed132e5a6ea80d454e9e5aab98aa",
-      "Size": 176697,
+      "Hash": "6fd04f8f6dc40bdac8cef5b39e02670e906ee73f67eb368e08c6adacbb47a4bc",
+      "Size": 176485,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua"
     },
     {
