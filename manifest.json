@@ -1,6 +1,6 @@
 {
-  "Version": "20260905222605",
-  "GeneratedAt": "2026-09-05T22:26:05.230Z",
+  "Version": "20260905223957",
+  "GeneratedAt": "2026-09-05T22:39:57.945Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -110,8 +110,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/DarnMenu/Scripts/main.lua",
-      "Hash": "812bc4821df6a59dc1df71b848773c3b28e74abece059e90e9ac5820e3547f68",
-      "Size": 176569,
+      "Hash": "26932344452e2dc2b4a1f64f3d632221c8aeed132e5a6ea80d454e9e5aab98aa",
+      "Size": 176697,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnMenu/Scripts/main.lua"
     },
     {
@@ -254,8 +254,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/FastConnect/Scripts/main.lua",
-      "Hash": "1f9aa2a0089bfbda296479d6b33060f57db0985526e6f9a469d6a0ead64f237e",
-      "Size": 7625,
+      "Hash": "9a13a2f001d7493362b50115daf76272531f996cf5ec37b6535ad1e5a2fc4f2c",
+      "Size": 7829,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/FastConnect/Scripts/main.lua"
     },
     {
@@ -308,8 +308,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "61d1a0ebaa638cef3d7b3a8e94c938f0b27127ccb0b12c622306bd2c85590245",
-      "Size": 98479,
+      "Hash": "e5b6bd0468c150225621050203764a45b6fbb79d350d3ca1d9854efaf3b8c085",
+      "Size": 98608,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -338,7 +338,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalClearVision/Scripts/main.lua",
-      "Hash": "5ced85371b3bfc77bc6c0cceef111b83e79d07bc04c92c9eee25963b1177f4cf",
+      "Hash": "129ff43e899573d775c0e97af60dc7dba5ca7e5b83f349c69641dd0bb9937f6f",
       "Size": 5749,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalClearVision/Scripts/main.lua"
     },
@@ -434,14 +434,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/delivery.lua",
-      "Hash": "95b1de47e55bfd96e9d16917a9d2a57b8b020b196a376332fd77e648d89ead58",
-      "Size": 27722,
+      "Hash": "badceb9ee17214e6a52ea2de625973305cd038f2b768a8dc87039315c1b94772",
+      "Size": 28702,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/delivery.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "28c885735eb98f89d2a9d087fc0bb3901269fd14398daccaaefaeafa81d46e01",
-      "Size": 9528,
+      "Hash": "b0777308e1aab02c7ade6dc9c62b4f53197ed2543bc979bbaae3dd682cc298c6",
+      "Size": 9600,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -2282,8 +2282,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua",
-      "Hash": "812bc4821df6a59dc1df71b848773c3b28e74abece059e90e9ac5820e3547f68",
-      "Size": 176569,
+      "Hash": "26932344452e2dc2b4a1f64f3d632221c8aeed132e5a6ea80d454e9e5aab98aa",
+      "Size": 176697,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua"
     },
     {
@@ -2426,8 +2426,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua",
-      "Hash": "1f9aa2a0089bfbda296479d6b33060f57db0985526e6f9a469d6a0ead64f237e",
-      "Size": 7625,
+      "Hash": "9a13a2f001d7493362b50115daf76272531f996cf5ec37b6535ad1e5a2fc4f2c",
+      "Size": 7829,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua"
     },
     {
@@ -2480,8 +2480,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "61d1a0ebaa638cef3d7b3a8e94c938f0b27127ccb0b12c622306bd2c85590245",
-      "Size": 98479,
+      "Hash": "e5b6bd0468c150225621050203764a45b6fbb79d350d3ca1d9854efaf3b8c085",
+      "Size": 98608,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -2510,7 +2510,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalClearVision/Scripts/main.lua",
-      "Hash": "5ced85371b3bfc77bc6c0cceef111b83e79d07bc04c92c9eee25963b1177f4cf",
+      "Hash": "129ff43e899573d775c0e97af60dc7dba5ca7e5b83f349c69641dd0bb9937f6f",
       "Size": 5749,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalClearVision/Scripts/main.lua"
     },
@@ -2648,14 +2648,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/delivery.lua",
-      "Hash": "95b1de47e55bfd96e9d16917a9d2a57b8b020b196a376332fd77e648d89ead58",
-      "Size": 27722,
+      "Hash": "badceb9ee17214e6a52ea2de625973305cd038f2b768a8dc87039315c1b94772",
+      "Size": 28702,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/delivery.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "28c885735eb98f89d2a9d087fc0bb3901269fd14398daccaaefaeafa81d46e01",
-      "Size": 9528,
+      "Hash": "b0777308e1aab02c7ade6dc9c62b4f53197ed2543bc979bbaae3dd682cc298c6",
+      "Size": 9600,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
