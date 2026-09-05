@@ -245,11 +245,73 @@ if Key then
 end
 
 -- 4. Environment & Combat Music Resolver
-local function ResolveAmbientTrack()
-    local dungeon = false
+local function GetDirectDayNight()
     local time = "Day"
-    local temp = "Normal"
+    pcall(function()
+        local timeMgr = FindFirstOf("PalTimeManager")
+        if timeMgr and timeMgr:IsValid() then
+            if type(timeMgr.IsNight) == "function" and timeMgr:IsNight() then
+                time = "Night"
+            elseif type(timeMgr.IsDay) == "function" and timeMgr:IsDay() then
+                time = "Day"
+            else
+                local t = timeMgr.CurrentDayTimeType or timeMgr.NowDayTimeType or timeMgr.DayTimeType
+                if t == 2 or (t and tostring(t):lower():find("night")) then
+                    time = "Night"
+                end
+            end
+        end
+    end)
+    return time
+end
 
+local function GetDirectIsDungeon()
+    local inDungeon = false
+    pcall(function()
+        local char = FindFirstOf("PalPlayerCharacter")
+        if char and char:IsValid() and type(char.IsInStage) == "function" then
+            inDungeon = char:IsInStage()
+            return
+        end
+        local ps = FindFirstOf("PalPlayerState")
+        if ps and ps:IsValid() and type(ps.IsInStage) == "function" then
+            inDungeon = ps:IsInStage()
+            return
+        end
+        local sm = FindFirstOf("PalStageManager")
+        if sm and sm:IsValid() and type(sm.IsInStage) == "function" then
+            local pc = UEHelpers and UEHelpers.GetPlayerController and UEHelpers.GetPlayerController()
+            if pc and pc:IsValid() then
+                inDungeon = sm:IsInStage(pc)
+            end
+        end
+    end)
+    return inDungeon
+end
+
+local function GetDirectTemperature()
+    local temp = "Normal"
+    pcall(function()
+        local char = FindFirstOf("PalPlayerCharacter")
+        if char and char:IsValid() then
+            local param = char.CharacterParameterComponent
+            if param and param:IsValid() and type(param.GetBodyTemperature) == "function" then
+                local t = param:GetBodyTemperature() or 0
+                if t >= 1.25 then temp = "Hot"
+                elseif t <= -1.25 then temp = "Cold"
+                end
+            end
+        end
+    end)
+    return temp
+end
+
+local function ResolveAmbientTrack()
+    local dungeon = GetDirectIsDungeon()
+    local time = GetDirectDayNight()
+    local temp = GetDirectTemperature()
+
+    -- Fallback to state file if present
     pcall(function()
         local f = io.open(AdaptiveStateFile, "r")
         if f then

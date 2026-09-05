@@ -17,7 +17,7 @@ TechPointShopBridge : 1
 GuildBuildingLimits : 1
 
 ; Built-in keybinds, do not move up!
-AdaptiveBGM : 1
+AdaptiveBGM : 0
 DekModConfigMenu : 1
 PalOdysseyBossAudio : 1
 Keybinds : 1

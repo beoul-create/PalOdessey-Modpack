@@ -1,8 +1,8 @@
 {
   "Enabled": {
     "desc": "Enable or disable AdaptiveBGM playback.",
-    "init": true,
-    "live": true,
+    "init": false,
+    "live": false,
     "type": "boolean"
   },
   "Global Volume": {
