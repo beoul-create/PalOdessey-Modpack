@@ -113,6 +113,7 @@ local function ApplyVisualTweaks()
             ExecuteConsole("r.GTSyncType 0")
             ExecuteConsole("r.OneFrameThreadLag 1")
             ExecuteConsole("r.FinishCurrentFrame 0")
+            ExecuteConsole("t.UnfocusedMaxFPS 30")
         end
 
         -- 7. Enhanced Upscaling Reconstruction & Anti-Aliasing (Option B: 85% TSR)
@@ -126,10 +127,12 @@ local function ApplyVisualTweaks()
     end)
 end
 
--- Apply on game start and world entry
+-- Apply once on world entry to eliminate hitching during mounting/dismounting
+local appliedOnce = false
 local function SafeDelayedApply()
+    if appliedOnce then return end
+    appliedOnce = true
     ExecuteWithDelay(3000, ApplyVisualTweaks)
-    ExecuteWithDelay(8000, ApplyVisualTweaks)
 end
 
 pcall(function()
@@ -139,7 +142,7 @@ pcall(function()
 end)
 
 pcall(function()
-    RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context)
+    RegisterHook("/Script/Engine.PlayerController:ClientTravel", function(Context)
         SafeDelayedApply()
     end)
 end)

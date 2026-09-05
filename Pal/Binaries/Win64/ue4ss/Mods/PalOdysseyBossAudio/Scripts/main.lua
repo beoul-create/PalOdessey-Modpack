@@ -36,7 +36,7 @@ _G.PalOdysseyBossAudio_Active = true
 local CurrentBgmState = "play"
 local CurrentBgmTrack = ""
 local CurrentBgmLoop = true
-local CurrentVolume = 0.20 -- Comfortable, gentle default (20%)
+local CurrentVolume = 0.08 -- Balanced default (8%), comfortably sits behind native game audio
 local CurrentFadeSec = 1.0
 local SfxSequence = 0
 local CurrentSfxTrack = ""
@@ -160,9 +160,9 @@ local function NotifyVolumeChange()
 end
 
 local function SetMasterVolume(newVol)
-    CurrentVolume = math.max(0.0, math.min(1.0, newVol))
+    CurrentVolume = math.max(0.0, math.min(1.0, math.floor((newVol * 100) + 0.5) / 100.0))
     SaveConfig()
-    CurrentFadeSec = 0.10 -- Snappy volume adjustment (100ms)
+    CurrentFadeSec = 0.05 -- Snappy volume adjustment (50ms)
     WriteAudioState()
 
     Log(string.format("Master Volume set to: %.0f%%", CurrentVolume * 100))
@@ -172,7 +172,7 @@ end
 local function ToggleMute()
     IsMuted = not IsMuted
     SaveConfig()
-    CurrentFadeSec = 0.10
+    CurrentFadeSec = 0.05
     WriteAudioState()
     if IsMuted then
         Log("Custom Music MUTED")
@@ -213,8 +213,8 @@ pcall(RegisterHook, "/Script/Pal.PalPlayerState:EnterChat", ProcessVolumeChat)
 pcall(RegisterHook, "/Script/Pal.PalGameStateInGame:BroadcastChatMessage", ProcessVolumeChat)
 
 -- Keyboard shortcuts:
--- [ / - / Numpad- : Volume Down 5%
--- ] / = / Numpad+ : Volume Up 5%
+-- [ / - / Numpad- : Volume Down 1%
+-- ] / = / Numpad+ : Volume Up 1%
 -- \ / VolumeMute   : Toggle Mute
 local function BindKey(k, cb)
     if not k then return end
@@ -228,15 +228,15 @@ end
 
 if Key then
     pcall(function()
-        -- Volume Down
-        BindKey(Key.OEM_FOUR, function() SetMasterVolume(CurrentVolume - 0.05) end)
-        BindKey(Key.OEM_MINUS, function() SetMasterVolume(CurrentVolume - 0.05) end)
-        BindKey(Key.SUBTRACT, function() SetMasterVolume(CurrentVolume - 0.05) end)
+        -- Volume Down (1%)
+        BindKey(Key.OEM_FOUR, function() SetMasterVolume(CurrentVolume - 0.01) end)
+        BindKey(Key.OEM_MINUS, function() SetMasterVolume(CurrentVolume - 0.01) end)
+        BindKey(Key.SUBTRACT, function() SetMasterVolume(CurrentVolume - 0.01) end)
 
-        -- Volume Up
-        BindKey(Key.OEM_SIX, function() SetMasterVolume(CurrentVolume + 0.05) end)
-        BindKey(Key.OEM_PLUS, function() SetMasterVolume(CurrentVolume + 0.05) end)
-        BindKey(Key.ADD, function() SetMasterVolume(CurrentVolume + 0.05) end)
+        -- Volume Up (1%)
+        BindKey(Key.OEM_SIX, function() SetMasterVolume(CurrentVolume + 0.01) end)
+        BindKey(Key.OEM_PLUS, function() SetMasterVolume(CurrentVolume + 0.01) end)
+        BindKey(Key.ADD, function() SetMasterVolume(CurrentVolume + 0.01) end)
 
         -- Mute
         BindKey(Key.OEM_FIVE, function() ToggleMute() end)
@@ -412,6 +412,43 @@ pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDead", function(Context)
 end)
 
 -- Title Screen & Transitions
+local function CheckIsInWorld()
+    local inWorld = false
+    pcall(function()
+        local gs = FindFirstOf("PalGameStateInGame")
+        if gs and gs:IsValid() then
+            inWorld = true
+            return
+        end
+        local pc = UEHelpers and UEHelpers.GetPlayerController and UEHelpers.GetPlayerController()
+        if pc and pc:IsValid() then
+            local pawn = pc.Pawn or pc.AcknowledgedPawn or pc.Character
+            if pawn and pawn:IsValid() then
+                inWorld = true
+                return
+            end
+        end
+        local playerChar = FindFirstOf("PalPlayerCharacter")
+        if playerChar and playerChar:IsValid() then
+            inWorld = true
+            return
+        end
+    end)
+    if inWorld then return true end
+
+    pcall(function()
+        local f = io.open(AdaptiveStateFile, "r")
+        if f then
+            local str = f:read("*all")
+            f:close()
+            if str:find('"world_active":%s*true') then
+                inWorld = true
+            end
+        end
+    end)
+    return inWorld
+end
+
 local function OnTitleScreen()
     IsInTitle = true
     ActiveMajorBossCombat = false
@@ -420,16 +457,20 @@ local function OnTitleScreen()
 end
 
 local function OnJoinedWorld()
-    if IsInTitle then
-        IsInTitle = false
-        Log("Player joined world -> Starting exploration music with full volume controls.")
-        UpdateMusicState()
-    end
+    IsInTitle = false
+    Log("Player joined world -> Starting exploration music with full volume controls.")
+    UpdateMusicState()
 end
 
 pcall(function()
     NotifyOnNewObject("/Script/Pal.PalGameStateInTitle", function()
         OnTitleScreen()
+    end)
+end)
+
+pcall(function()
+    NotifyOnNewObject("/Script/Pal.PalGameStateInGame", function()
+        OnJoinedWorld()
     end)
 end)
 
@@ -452,6 +493,16 @@ if delayFunc then
                 ActiveFieldBossCombat = false
                 Log("Boss combat timeout -> Resumed exploration audio.")
             end
+
+            local inWorld = CheckIsInWorld()
+            if inWorld and IsInTitle then
+                IsInTitle = false
+                Log("Player detected in world -> Transitioning from title music to exploration BGM.")
+            elseif not inWorld and not IsInTitle then
+                IsInTitle = true
+                Log("Player left world -> Transitioning to title music.")
+            end
+
             UpdateMusicState()
         end)
         delayFunc(1500, MonitorLoop)
@@ -460,10 +511,8 @@ if delayFunc then
 end
 
 -- Initial Check on Mod Load
-local okInit, pc = pcall(function()
-    return UEHelpers and UEHelpers.GetPlayerController and UEHelpers.GetPlayerController()
-end)
-if not okInit or not pc or not pc:IsValid() then
+local okInit, inWorld = pcall(CheckIsInWorld)
+if not okInit or not inWorld then
     OnTitleScreen()
 else
     IsInTitle = false

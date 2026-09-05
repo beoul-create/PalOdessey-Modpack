@@ -75,14 +75,14 @@ local function ApplyLoadingOptimizations()
     pcall(function()
         if not Config.accelerateLoadingScreens then return end
 
-        ExecuteConsole("s.AsyncLoadingTimeLimit 15.0")
-        ExecuteConsole("s.PriorityAsyncLoadingExtraTime 20.0")
-        ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 10.0")
-        ExecuteConsole("s.UnregisterComponentsTimeLimit 5.0")
+        ExecuteConsole("s.AsyncLoadingTimeLimit 10.0")
+        ExecuteConsole("s.PriorityAsyncLoadingExtraTime 10.0")
+        ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 5.0")
+        ExecuteConsole("s.UnregisterComponentsTimeLimit 2.0")
         ExecuteConsole("s.AsyncLoadingUseFullTimeLimit 0")
         ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 30")
         ExecuteConsole("r.Streaming.HLODStrategy 1")
-        ExecuteConsole("r.Streaming.DefragDynamicBounds 1")
+        ExecuteConsole("r.Streaming.DefragDynamicBounds 0")
         ExecuteConsole("r.Streaming.AmortizeCPUWork 1")
         ExecuteConsole("r.Streaming.Boost 2")
         ExecuteConsole("r.Streaming.PoolSize 2048")
@@ -113,12 +113,13 @@ end
 local function ApplySteadyStateStreaming()
     ConnectionPhase = false
     ExecuteConsole("s.AsyncLoadingUseFullTimeLimit 0")
-    ExecuteConsole("s.AsyncLoadingTimeLimit 5.0")
-    ExecuteConsole("s.PriorityAsyncLoadingExtraTime 10.0")
-    ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 5.0")
-    ExecuteConsole("s.UnregisterComponentsTimeLimit 2.0")
+    ExecuteConsole("s.AsyncLoadingTimeLimit 2.0")
+    ExecuteConsole("s.PriorityAsyncLoadingExtraTime 2.0")
+    ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 3.0")
+    ExecuteConsole("s.UnregisterComponentsTimeLimit 1.0")
     ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 20")
     ExecuteConsole("r.Streaming.HLODStrategy 1")
+    ExecuteConsole("r.Streaming.DefragDynamicBounds 0")
     ExecuteConsole("r.Streaming.Boost 1.5")
     ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
     ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 120")
@@ -129,7 +130,7 @@ end
 local function OnPlayerTransition()
     pcall(function()
         if not Config.bypassFastTravelWait then return end
-        ExecuteConsole("r.Streaming.PurgeUnused")
+        -- ExecuteConsole("r.Streaming.PurgeUnused") -- Disabled: PurgeUnused forces synchronous hitch
         ApplyFastNetworkRates()
         ApplySteadyStateStreaming()
     end)
@@ -189,14 +190,12 @@ pcall(function()
 end)
 
 pcall(function()
-    RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context)
-        OnPlayerTransition()
-        ApplySteadyStateStreaming()
-    end)
-end)
-
-pcall(function()
     RegisterHook("/Script/Engine.PlayerController:ClientTravel", function(Context)
+        -- ClientRestart also fires for ordinary pawn possession changes such as
+        -- mounting and dismounting.  Cleanup belongs on actual travel only;
+        -- purging the streaming cache during a mount transition stalls the game
+        -- thread while the server continues the possession change.
+        OnPlayerTransition()
         SafeDelayedEnforce()
     end)
 end)

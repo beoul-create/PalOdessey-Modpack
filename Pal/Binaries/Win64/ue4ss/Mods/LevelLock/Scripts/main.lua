@@ -2266,21 +2266,30 @@ end
 
 ------- init -------
 
+local initializedControllers = setmetatable({}, { __mode = "k" })
+
+local function hasServerAuthority()
+    local auth = false
+    pcall(function()
+        local gm = FindFirstOf("PalGameMode")
+        if gm and gm:IsValid() then auth = true end
+    end)
+    return auth
+end
+
 RegisterHook("/Script/Engine.PlayerController:ServerAcknowledgePossession",
     function(self, Pawn)
-        -- Once progress is loaded for the local session, bypass repossession to eliminate mount/dismount stalls
-        if progressLoaded and not isDedicatedServer() then
-            return
-        end
-
         local controller = self
         pcall(function() controller = self:get() end)
         if not (controller and controller:IsValid()) then return end
 
-        -- If player's progress is already loaded in memory, do not re-run file reads on dismount!
-        local rawUid = realUid(fmtGuid(controller:GetPlayerUId()))
-        local uid = canonUid(rawUid)
-        if (uid and playerDefeated[uid]) or (rawUid and playerDefeated[rawUid]) then
+        -- If not server authority (multiplayer client), server drives LevelLock; client never touches save files
+        if not hasServerAuthority() then
+            return
+        end
+
+        -- Once a controller is initialized, never re-run possession on mount/dismount
+        if initializedControllers[controller] then
             return
         end
 
@@ -2298,6 +2307,8 @@ RegisterHook("/Script/Engine.PlayerController:ServerAcknowledgePossession",
                 return
             end
         end
+
+        initializedControllers[controller] = true
 
         ExecuteWithDelay(3000, function()
             local ok, err = pcall(function() onPossession(controller) end)
